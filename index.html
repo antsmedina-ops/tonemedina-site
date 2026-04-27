@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; }
@@ -20,7 +20,6 @@
       line-height: 1.7;
     }
 
-    /* NAV */
     nav {
       position: fixed;
       top: 0;
@@ -36,8 +35,8 @@
     }
 
     nav strong {
-      font-family: Playfair Display, serif;
-      letter-spacing: 1px;
+      font-family: Space Grotesk, sans-serif;
+      letter-spacing: 0.5px;
       font-weight: 600;
     }
 
@@ -48,11 +47,11 @@
       font-size: 0.85rem;
       letter-spacing: 1px;
       text-transform: uppercase;
+      font-family: Inter, sans-serif;
     }
 
     nav a:hover { color: white; }
 
-    /* LAYOUT */
     section {
       max-width: 900px;
       margin: auto;
@@ -66,7 +65,7 @@
     }
 
     .hero h1 {
-      font-family: Playfair Display, serif;
+      font-family: Space Grotesk, sans-serif;
       font-size: 3.4rem;
       font-weight: 600;
       margin-bottom: 10px;
@@ -76,63 +75,68 @@
       color: #b5b5b5;
       font-size: 1.1rem;
       max-width: 600px;
+      font-family: Inter, sans-serif;
     }
 
     .section-title {
-      font-family: Playfair Display, serif;
+      font-family: Space Grotesk, sans-serif;
       font-size: 1.8rem;
       margin-bottom: 40px;
       letter-spacing: 1px;
     }
 
-    /* ARCHIVE STYLE LIST */
     .archive-item {
       padding: 28px 0;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .archive-item h3 {
-      font-family: Playfair Display, serif;
+      font-family: Space Grotesk, sans-serif;
       font-size: 1.3rem;
       margin: 0 0 6px 0;
+      font-weight: 500;
     }
 
     .archive-item span {
       color: #9aa0a6;
       font-size: 0.9rem;
+      font-family: Inter, sans-serif;
     }
 
     .archive-item p {
       margin-top: 10px;
       color: #c7c7c7;
       max-width: 700px;
+      font-family: Inter, sans-serif;
     }
 
-    /* BLOG */
     .blog-entry {
       padding: 28px 0;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .blog-entry h3 {
-      font-family: Playfair Display, serif;
+      font-family: Space Grotesk, sans-serif;
       margin: 0;
+      font-weight: 500;
     }
 
     .blog-entry p {
       color: #c7c7c7;
       margin-top: 10px;
       max-width: 700px;
+      font-family: Inter, sans-serif;
     }
 
-    /* CONTACT */
     .contact p {
       color: #bdbdbd;
+      font-family: Inter, sans-serif;
     }
 
     .contact a {
       color: #cfcfcf;
       text-decoration: underline;
+      font-family: Inter, sans-serif;
     }
 
     footer {
@@ -141,6 +145,7 @@
       border-top: 1px solid rgba(255,255,255,0.06);
       color: #777;
       font-size: 0.85rem;
+      font-family: Inter, sans-serif;
     }
   </style>
 </head>
@@ -150,9 +155,9 @@
 <nav>
   <div><strong>Tone Medina Artist</strong></div>
   <div>
+    <a href="#works">Works</a>
     <a href="#home">Home</a>
-    <a href="#art">Works</a>
-    <a href="#blog">Notes</a>
+    <a href="#blog">Process</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -162,30 +167,8 @@
   <p>A living record, visual work, process, & reflections.</p>
 </section>
 
-<section id="art">
-  <h2 class="section-title">Works</h2>
-
-  <div class="archive-item">
-    <h3>Untitled Study I</h3>
-    <span>2026 — Mixed Media</span>
-    <p>Exploration of form, memory, and visual tension through layered composition.</p>
-  </div>
-
-  <div class="archive-item">
-    <h3>Untitled Study II</h3>
-    <span>2026 — Digital / Experimental</span>
-    <p>A study in contrast and reduction, focusing on negative space and rhythm.</p>
-  </div>
-
-  <div class="archive-item">
-    <h3>Untitled Study III</h3>
-    <span>2025 — Works on Paper</span>
-    <p>Early investigations into structure and gesture as narrative form.</p>
-  </div>
-</section>
-
 <section id="blog">
-  <h2 class="section-title">Notes</h2>
+  <h2 class="section-title">Process</h2>
 
   <div class="blog-entry">
     <h3>Process Entry I</h3>
