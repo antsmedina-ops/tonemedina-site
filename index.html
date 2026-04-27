@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tone Medina | Art</title>
+  <title>Tone Medina | Archive</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,14 +17,14 @@
       font-family: Inter, sans-serif;
       background: #0b0d10;
       color: #e5e5e5;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     nav {
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(11, 13, 16, 0.85);
+      background: rgba(11, 13, 16, 0.9);
       backdrop-filter: blur(10px);
       padding: 18px 40px;
       display: flex;
@@ -44,30 +44,28 @@
       color: #cfcfcf;
       text-decoration: none;
       margin-left: 24px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
-    nav a:hover {
-      color: white;
-    }
+    nav a:hover { color: white; }
 
     section {
-      max-width: 1100px;
+      max-width: 900px;
       margin: auto;
-      padding: 120px 24px;
+      padding: 140px 24px;
     }
 
     .hero {
-      text-align: center;
       padding-top: 180px;
-      padding-bottom: 140px;
+      padding-bottom: 120px;
+      text-align: left;
     }
 
     .hero h1 {
       font-family: Playfair Display, serif;
-      font-size: 3.2rem;
+      font-size: 3.4rem;
       font-weight: 600;
       margin-bottom: 10px;
     }
@@ -75,64 +73,66 @@
     .hero p {
       color: #b5b5b5;
       font-size: 1.1rem;
+      max-width: 600px;
     }
 
     .section-title {
       font-family: Playfair Display, serif;
-      font-size: 2rem;
-      margin-bottom: 30px;
+      font-size: 1.8rem;
+      margin-bottom: 40px;
+      letter-spacing: 1px;
     }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
+    .archive-item {
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    .card {
-      background: #12151a;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      min-height: 260px;
-      display: flex;
-      align-items: flex-end;
-      padding: 16px;
-      transition: transform 0.35s ease, border-color 0.35s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255,255,255,0.18);
-    }
-
-    .card span {
-      font-size: 0.85rem;
-      color: #c9c9c9;
-    }
-
-    .card-blog {
-      background: #12151a;
-      padding: 24px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .card-blog h3 {
+    .archive-item h3 {
       font-family: Playfair Display, serif;
-      margin-top: 0;
+      font-size: 1.3rem;
+      margin: 0 0 6px 0;
     }
 
-    .contact {
-      text-align: center;
+    .archive-item span {
+      color: #9aa0a6;
+      font-size: 0.9rem;
+    }
+
+    .archive-item p {
+      margin-top: 10px;
+      color: #c7c7c7;
+      max-width: 700px;
+    }
+
+    .blog-entry {
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .blog-entry h3 {
+      font-family: Playfair Display, serif;
+      margin: 0;
+    }
+
+    .blog-entry p {
+      color: #c7c7c7;
+      margin-top: 10px;
+      max-width: 700px;
     }
 
     .contact p {
       color: #bdbdbd;
     }
 
+    .contact a {
+      color: #cfcfcf;
+      text-decoration: underline;
+    }
+
     footer {
       text-align: center;
-      padding: 50px;
+      padding: 60px 24px;
       border-top: 1px solid rgba(255,255,255,0.06);
       color: #777;
       font-size: 0.85rem;
@@ -143,53 +143,64 @@
 <body>
 
 <nav>
-  <div><strong>Tone Medina</strong></div>
+  <div><strong>Tone Medina Archive</strong></div>
   <div>
     <a href="#home">Home</a>
-    <a href="#art">Art</a>
-    <a href="#blog">Blog</a>
+    <a href="#art">Works</a>
+    <a href="#blog">Notes</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
 
 <section id="home" class="hero">
-  <h1>Once Upon a Time</h1>
-  <p>A visual archive of thought, emotion, and form.</p>
+  <h1>Art as Archive</h1>
+  <p>A living record of visual work, process, and reflection.</p>
 </section>
 
 <section id="art">
-  <h2 class="section-title">Selected Works</h2>
+  <h2 class="section-title">Works</h2>
 
-  <div class="gallery-grid">
-    <div class="card"><span>Untitled I</span></div>
-    <div class="card"><span>Untitled II</span></div>
-    <div class="card"><span>Untitled III</span></div>
-    <div class="card"><span>Untitled IV</span></div>
+  <div class="archive-item">
+    <h3>Untitled Study I</h3>
+    <span>2026 — Mixed Media</span>
+    <p>Exploration of form, memory, and visual tension through layered composition.</p>
+  </div>
+
+  <div class="archive-item">
+    <h3>Untitled Study II</h3>
+    <span>2026 — Digital / Experimental</span>
+    <p>A study in contrast and reduction, focusing on negative space and rhythm.</p>
+  </div>
+
+  <div class="archive-item">
+    <h3>Untitled Study III</h3>
+    <span>2025 — Works on Paper</span>
+    <p>Early investigations into structure and gesture as narrative form.</p>
   </div>
 </section>
 
 <section id="blog">
   <h2 class="section-title">Notes</h2>
 
-  <div class="card-blog">
+  <div class="blog-entry">
     <h3>Process Entry I</h3>
-    <p>Reflections on practice, material, and visual thinking.</p>
+    <p>Thinking through material, repetition, and the idea of unfinished work as a valid state of practice.</p>
+  </div>
+
+  <div class="blog-entry">
+    <h3>On Making</h3>
+    <p>A reflection on how intuition and structure coexist in the studio environment.</p>
   </div>
 </section>
 
 <section id="contact" class="contact">
   <h2 class="section-title">Contact</h2>
   <p>Email: info@tonemedina.com</p>
-  <p>
-    Instagram:
-    <a href="https://www.instagram.com/tonemedina/" target="_blank" style="color:#cfcfcf; text-decoration:underline;">
-      @tonemedina
-    </a>
-  </p>
+  <p>Instagram: <a href="https://www.instagram.com/tonemedina/" target="_blank">@tonemedina</a></p>
 </section>
 
 <footer>
-  © 2026 Tone Medina — All works © the artist
+  © 2026 Tone Medina — Archive of Works
 </footer>
 
 </body>
