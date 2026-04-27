@@ -18,6 +18,37 @@
       background: #0b0d10;
       color: #e5e5e5;
       line-height: 1.7;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* NEON BACKGROUND "SIC" */
+    body::before {
+      content: "SIC";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
+      font-family: Space Grotesk, sans-serif;
+      font-size: 18vw;
+      font-weight: 600;
+      color: rgba(255, 0, 180, 0.18);
+      text-shadow:
+        0 0 12px rgba(255, 0, 180, 0.9),
+        0 0 35px rgba(255, 0, 180, 0.7),
+        0 0 90px rgba(255, 0, 180, 0.5),
+        0 0 160px rgba(255, 0, 180, 0.35);
+      mix-blend-mode: screen;
+      z-index: -1;
+      pointer-events: none;
+      will-change: transform, opacity;
+      animation: flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.35; }
+      50% { opacity: 0.55; }
+      100% { opacity: 0.3; }
     }
 
     nav {
@@ -195,5 +226,30 @@
   © 2026 Tone Medina — Archive of Works
 </footer>
 
+<script>
+    const root = document.documentElement;
+
+    // mouse parallax
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      root.style.setProperty('--mx', x + 'px');
+      root.style.setProperty('--my', y + 'px');
+    });
+
+    // subtle flicker glitch
+    function flickerGlitch() {
+      const intensity = Math.random();
+      const scale = intensity > 0.92 ? 1.05 : 1;
+      root.style.setProperty('--s', scale);
+
+      if (intensity > 0.95) {
+        root.style.setProperty('--mx', (Math.random() - 0.5) * 60 + 'px');
+        root.style.setProperty('--my', (Math.random() - 0.5) * 60 + 'px');
+      }
+    }
+
+    setInterval(flickerGlitch, 120);
+  </script>
 </body>
 </html>
