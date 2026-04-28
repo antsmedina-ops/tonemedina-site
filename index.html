@@ -1,4 +1,3 @@
-!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -56,7 +55,7 @@
         0 0 180px rgba(255, 0, 180, 0.4);
       mix-blend-mode: screen;
       filter: saturate(1.2);
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
       will-change: transform, opacity;
       animation: flicker 3s infinite alternate;
@@ -80,6 +79,14 @@
       backdrop-filter: blur(10px);
       background: rgba(15, 17, 21, 0.84);
       border-bottom: 1px solid var(--line);
+    }
+
+    nav,
+    header,
+    main,
+    footer {
+      position: relative;
+      z-index: 1;
     }
 
     .nav-inner {
@@ -236,16 +243,16 @@
         <a href="#works">Works</a>
         <a href="#news">News</a>
         <a href="#biography">Biography</a>
+        <a href="#blog">Blog</a>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
-        <a href="#Blog">Blog</a>
       </div>
     </div>
   </nav>
 
   <header id="home">
     <div class="wrap">
-      <h1>Art work rooted in story, texture, & process.</h1>
+      <h1>Visual work rooted in story, texture, and process.</h1>
       <p class="lead">This site is a living archive of selected pieces, studio notes, and current projects. Updated seasonally.</p>
       <div class="actions">
         <a class="btn primary" href="#works">View Selected Works</a>
@@ -260,14 +267,14 @@
         <h2 class="section-title">Selected Works</h2>
         <div class="grid">
           <article class="card">
-            <h3>Recent / Series</h3>
+            <h3>SIC / Signal Series</h3>
             <p class="meta">Mixed media + digital studies · 2026</p>
-            <p>Some of the most recent things I'm working on.</p>
+            <p>An ongoing body of work exploring contrast, interference, and minimal form through layered composition.</p>
           </article>
           <article class="card">
-            <h3>Art Archive</h3>
+            <h3>Archive Studies</h3>
             <p class="meta">Material experiments · 2025–2026</p>
-            <p>Once upon a time, these memories, never leave you.</p>
+            <p>Process-driven visual studies focused on repetition, sequencing, and image memory.</p>
           </article>
         </div>
       </div>
@@ -279,7 +286,7 @@
         <article class="card">
           <h3>Studio Update</h3>
           <p class="meta">April 2026</p>
-          <p>Interviews & media clips during production.</p>
+          <p>Current production centers on surface experimentation and short-form publication drafts.</p>
         </article>
       </div>
     </section>
@@ -288,22 +295,22 @@
       <div class="wrap stack">
         <h2 class="section-title">Biography</h2>
         <article class="card">
-          <p>Tone Medina is an artist based in Denver, CO, working empmerally, digital experimentation, and various medias.</p>
+          <p>Tone Medina is an artist based in the United States working across visual studies, digital experimentation, and archival practice.</p>
         </article>
       </div>
     </section>
 
-    <section id="process">
+    <section id="blog">
       <div class="wrap">
         <h2 class="section-title">Process</h2>
         <div class="grid">
           <article class="card">
             <h3>On Incomplete Work</h3>
-            <p>Notes on iteration, unfinished states.</p>
+            <p>Notes on iteration, unfinished states, and the role of repetition inside a sustained studio rhythm.</p>
           </article>
           <article class="card">
             <h3>Material + Structure</h3>
-            <p>Reflections on systems while developing a visual language.</p>
+            <p>Reflections on balancing intuition and systems while developing long-form visual language.</p>
           </article>
         </div>
       </div>
