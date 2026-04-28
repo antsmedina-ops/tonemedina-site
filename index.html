@@ -34,6 +34,38 @@
       color: var(--text);
       font-family: Inter, sans-serif;
       line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* GLOWING BACKGROUND "SIC" */
+    body::before {
+      content: "SIC";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
+      font-family: Space Grotesk, sans-serif;
+      font-size: 18vw;
+      font-weight: 700;
+      color: rgba(255, 0, 180, 0.24);
+      text-shadow:
+        0 0 14px rgba(255, 0, 180, 0.95),
+        0 0 42px rgba(255, 0, 180, 0.78),
+        0 0 110px rgba(255, 0, 180, 0.58),
+        0 0 180px rgba(255, 0, 180, 0.4);
+      mix-blend-mode: screen;
+      filter: saturate(1.2);
+      z-index: -1;
+      pointer-events: none;
+      will-change: transform, opacity;
+      animation: flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.5; }
+      50% { opacity: 0.75; }
+      100% { opacity: 0.45; }
     }
 
     .wrap {
@@ -291,5 +323,29 @@
   <footer>
     <div class="wrap">© 2026 Tone Medina — All rights reserved.</div>
   </footer>
+
+  <script>
+    const root = document.documentElement;
+
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      root.style.setProperty('--mx', x + 'px');
+      root.style.setProperty('--my', y + 'px');
+    });
+
+    function flickerGlitch() {
+      const intensity = Math.random();
+      const scale = intensity > 0.92 ? 1.05 : 1;
+      root.style.setProperty('--s', scale);
+
+      if (intensity > 0.95) {
+        root.style.setProperty('--mx', (Math.random() - 0.5) * 60 + 'px');
+        root.style.setProperty('--my', (Math.random() - 0.5) * 60 + 'px');
+      }
+    }
+
+    setInterval(flickerGlitch, 120);
+  </script>
 </body>
 </html>
