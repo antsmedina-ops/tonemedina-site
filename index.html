@@ -4,252 +4,292 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tone Medina | Artist</title>
+  <meta name="description" content="Tone Medina — visual artist portfolio, selected works, process notes, and contact." />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #161a22;
+      --text: #f1f3f5;
+      --muted: #a5adba;
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #ff3ea5;
+      --accent-soft: rgba(255, 62, 165, 0.18);
+      --max: 980px;
+    }
+
     * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
+      background: radial-gradient(circle at top right, #1b2030 0%, var(--bg) 52%);
+      color: var(--text);
       font-family: Inter, sans-serif;
-      background: #0b0d10;
-      color: #e5e5e5;
-      line-height: 1.7;
-      position: relative;
-      overflow-x: hidden;
+      line-height: 1.65;
     }
 
-    /* NEON BACKGROUND "SIC" */
-    body::before {
-      content: "SIC";
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
-      font-family: Space Grotesk, sans-serif;
-      font-size: 18vw;
-      font-weight: 600;
-      color: rgba(255, 0, 180, 0.18);
-      text-shadow:
-        0 0 12px rgba(255, 0, 180, 0.9),
-        0 0 35px rgba(255, 0, 180, 0.7),
-        0 0 90px rgba(255, 0, 180, 0.5),
-        0 0 160px rgba(255, 0, 180, 0.35);
-      mix-blend-mode: screen;
-      z-index: -1;
-      pointer-events: none;
-      will-change: transform, opacity;
-      animation: flicker 3s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 0.35; }
-      50% { opacity: 0.55; }
-      100% { opacity: 0.3; }
+    .wrap {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
     }
 
     nav {
-      position: fixed;
+      position: sticky;
       top: 0;
-      width: 100%;
-      background: rgba(11, 13, 16, 0.9);
+      z-index: 100;
       backdrop-filter: blur(10px);
-      padding: 18px 40px;
+      background: rgba(15, 17, 21, 0.84);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
       display: flex;
+      gap: 1rem;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      z-index: 1000;
+      padding: 0.95rem 0;
     }
 
-    nav strong {
+    .brand {
       font-family: Space Grotesk, sans-serif;
-      letter-spacing: 0.5px;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.4px;
     }
 
-    nav a {
-      color: #cfcfcf;
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    .links a {
+      color: var(--muted);
       text-decoration: none;
-      margin-left: 24px;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
+      font-size: 0.83rem;
       text-transform: uppercase;
-      font-family: Inter, sans-serif;
+      letter-spacing: 1px;
     }
 
-    nav a:hover { color: white; }
+    .links a:hover,
+    .links a:focus-visible {
+      color: var(--text);
+      outline: none;
+    }
+
+    header {
+      padding: 5.75rem 0 3.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Space Grotesk, sans-serif;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.35rem);
+      margin-bottom: 0.8rem;
+      max-width: 16ch;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 60ch;
+      font-size: 1.03rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.58rem 1rem;
+      border: 1px solid var(--line);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.92rem;
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--accent-soft), rgba(255, 62, 165, 0.06));
+      border-color: rgba(255, 62, 165, 0.6);
+    }
 
     section {
-      max-width: 900px;
-      margin: auto;
-      padding: 140px 24px;
-    }
-
-    .hero {
-      padding-top: 180px;
-      padding-bottom: 120px;
-      text-align: left;
-    }
-
-    .hero h1 {
-      font-family: Space Grotesk, sans-serif;
-      font-size: 3.4rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .hero p {
-      color: #b5b5b5;
-      font-size: 1.1rem;
-      max-width: 600px;
+      padding: 3.2rem 0;
+      border-bottom: 1px solid var(--line);
     }
 
     .section-title {
-      font-family: Space Grotesk, sans-serif;
-      font-size: 1.8rem;
-      margin-bottom: 40px;
-      letter-spacing: 1px;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
-    .block {
-      padding: 28px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
     }
 
-    .block h3 {
-      font-family: Space Grotesk, sans-serif;
-      font-size: 1.3rem;
-      margin: 0 0 6px 0;
-      font-weight: 500;
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem;
     }
 
-    .block span {
-      color: #9aa0a6;
-      font-size: 0.9rem;
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.35rem;
     }
 
-    .block p {
-      margin-top: 10px;
-      color: #c7c7c7;
-      max-width: 700px;
+    .meta {
+      color: var(--muted);
+      font-size: 0.89rem;
+      margin: 0 0 0.45rem;
     }
 
-    .contact p {
-      color: #bdbdbd;
+    p {
+      margin: 0;
+      color: #dde1e7;
+    }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
     }
 
     .contact a {
-      color: #cfcfcf;
-      text-decoration: underline;
+      color: #ffd0ea;
     }
 
     footer {
-      text-align: center;
-      padding: 60px 24px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      color: #777;
-      font-size: 0.85rem;
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .links {
+        gap: 0.7rem;
+      }
     }
   </style>
 </head>
 
 <body>
+  <nav>
+    <div class="wrap nav-inner">
+      <div class="brand">Tone Medina</div>
+      <div class="links">
+        <a href="#works">Works</a>
+        <a href="#news">News</a>
+        <a href="#biography">Biography</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
 
-<nav>
-  <div><strong>Tone Medina Artist</strong></div>
-  <div>
-    <a href="#works">Works</a>
-    <a href="#home">Home</a>
-    <a href="#news">News</a>
-    <a href="#biography">Biography</a>
-    <a href="#blog">Process</a>
-    <a href="#contact">Contact</a>
-  </div>
-</nav>
+  <header id="home">
+    <div class="wrap">
+      <h1>Visual work rooted in story, texture, and process.</h1>
+      <p class="lead">This site is a living archive of selected pieces, studio notes, and current projects. Updated seasonally.</p>
+      <div class="actions">
+        <a class="btn primary" href="#works">View Selected Works</a>
+        <a class="btn" href="#contact">Contact / Commissions</a>
+      </div>
+    </div>
+  </header>
 
-<section id="home" class="hero">
-  <h1>Art Stories</h1>
-  <p>A living record, visual work, process, & reflections.</p>
-</section>
+  <main>
+    <section id="works">
+      <div class="wrap">
+        <h2 class="section-title">Selected Works</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>SIC / Signal Series</h3>
+            <p class="meta">Mixed media + digital studies · 2026</p>
+            <p>An ongoing body of work exploring contrast, interference, and minimal form through layered composition.</p>
+          </article>
+          <article class="card">
+            <h3>Archive Studies</h3>
+            <p class="meta">Material experiments · 2025–2026</p>
+            <p>Process-driven visual studies focused on repetition, sequencing, and image memory.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<section id="works">
-  <h2 class="section-title">Works</h2>
-  <div class="block">
-    <h3>Selected Works</h3>
-    <span>Archive in progress</span>
-    <p>A developing body of work documenting visual studies and experimentation.</p>
-  </div>
-</section>
+    <section id="news">
+      <div class="wrap stack">
+        <h2 class="section-title">News</h2>
+        <article class="card">
+          <h3>Studio Update</h3>
+          <p class="meta">April 2026</p>
+          <p>Current production centers on surface experimentation and short-form publication drafts.</p>
+        </article>
+      </div>
+    </section>
 
-<section id="news">
-  <h2 class="section-title">News</h2>
-  <div class="block">
-    <h3>Studio Update</h3>
-    <span>2026</span>
-    <p>Current work focuses on material studies and expanding visual language.</p>
-  </div>
-</section>
+    <section id="biography">
+      <div class="wrap stack">
+        <h2 class="section-title">Biography</h2>
+        <article class="card">
+          <p>Tone Medina is an artist based in the United States working across visual studies, digital experimentation, and archival practice.</p>
+        </article>
+      </div>
+    </section>
 
-<section id="biography">
-  <h2 class="section-title">Biography</h2>
-  <div class="block">
-    <h3>Tone Medina</h3>
-    <p>Artist working across visual studies, digital experimentation, and archival practice. Based in the United States.</p>
-  </div>
-</section>
+    <section id="process">
+      <div class="wrap">
+        <h2 class="section-title">Process</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>On Incomplete Work</h3>
+            <p>Notes on iteration, unfinished states, and the role of repetition inside a sustained studio rhythm.</p>
+          </article>
+          <article class="card">
+            <h3>Material + Structure</h3>
+            <p>Reflections on balancing intuition and systems while developing long-form visual language.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<section id="blog">
-  <h2 class="section-title">Process</h2>
+    <section id="contact">
+      <div class="wrap stack contact">
+        <h2 class="section-title">Contact</h2>
+        <article class="card">
+          <p>Email: <a href="mailto:info@tonemedina.com">info@tonemedina.com</a></p>
+          <p>Instagram: <a href="https://www.instagram.com/tonemedina/" target="_blank" rel="noopener noreferrer">@tonemedina</a></p>
+          <p>Available for commissions, exhibitions, and collaborations.</p>
+        </article>
+      </div>
+    </section>
+  </main>
 
-  <div class="block">
-    <h3>Process Entry I</h3>
-    <p>Thinking through material, repetition, and the idea of unfinished work as a valid state of practice.</p>
-  </div>
-
-  <div class="block">
-    <h3>On Making</h3>
-    <p>A reflection on how intuition and structure coexist in the studio environment.</p>
-  </div>
-</section>
-
-<section id="contact" class="contact">
-  <h2 class="section-title">Contact</h2>
-  <p>Email: info@tonemedina.com</p>
-  <p>Instagram: <a href="https://www.instagram.com/tonemedina/" target="_blank">@tonemedina</a></p>
-</section>
-
-<footer>
-  © 2026 Tone Medina — Archive of Works
-</footer>
-
-<script>
-    const root = document.documentElement;
-
-    // mouse parallax
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
-      root.style.setProperty('--mx', x + 'px');
-      root.style.setProperty('--my', y + 'px');
-    });
-
-    // subtle flicker glitch
-    function flickerGlitch() {
-      const intensity = Math.random();
-      const scale = intensity > 0.92 ? 1.05 : 1;
-      root.style.setProperty('--s', scale);
-
-      if (intensity > 0.95) {
-        root.style.setProperty('--mx', (Math.random() - 0.5) * 60 + 'px');
-        root.style.setProperty('--my', (Math.random() - 0.5) * 60 + 'px');
-      }
-    }
-
-    setInterval(flickerGlitch, 120);
-  </script>
+  <footer>
+    <div class="wrap">© 2026 Tone Medina — All rights reserved.</div>
+  </footer>
 </body>
 </html>
