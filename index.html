@@ -1,13 +1,15 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tone Medina | Artist</title>
-  <meta name="description" content="Tone Medina — visual artist portfolio, selected works, process notes, and contact." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Added futuristic font ONLY -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oxanium:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -37,14 +39,17 @@
       overflow-x: hidden;
     }
 
-    /* GLOWING BACKGROUND "SIC" */
+    /* NEON BACKGROUND TEXT */
     body::before {
-      content: "SIC";
+      content: "Tone";
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
-      font-family: Space Grotesk, sans-serif;
+
+      /* ONLY CHANGE: FONT */
+      font-family: 'Oxanium', sans-serif;
+
       font-size: 18vw;
       font-weight: 700;
       color: rgba(255, 0, 180, 0.24);
@@ -91,97 +96,71 @@
 
     .nav-inner {
       display: flex;
-      gap: 1rem;
       justify-content: space-between;
       align-items: center;
       padding: 0.95rem 0;
     }
 
     .brand {
-      font-family: Space Grotesk, sans-serif;
+      font-family: Inter, sans-serif;
       font-weight: 700;
-      letter-spacing: 0.4px;
     }
 
     .links {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
+      gap: 1rem;
     }
 
     .links a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.83rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .links a:hover,
-    .links a:focus-visible {
-      color: var(--text);
-      outline: none;
-    }
-
     header {
-      padding: 5.75rem 0 3.4rem;
+      padding: 5rem 0 3rem;
       border-bottom: 1px solid var(--line);
     }
 
     h1, h2, h3 {
       margin: 0;
-      font-family: Space Grotesk, sans-serif;
-      line-height: 1.15;
+      font-family: Inter, sans-serif;
     }
 
     h1 {
-      font-size: clamp(2rem, 5vw, 3.35rem);
-      margin-bottom: 0.8rem;
-      max-width: 16ch;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1rem;
     }
 
     .lead {
       color: var(--muted);
-      max-width: 60ch;
-      font-size: 1.03rem;
+      max-width: 600px;
       margin-bottom: 1.5rem;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
     .btn {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 0.58rem 1rem;
+      padding: 0.6rem 1rem;
       border: 1px solid var(--line);
-      color: var(--text);
+      border-radius: 999px;
       text-decoration: none;
-      font-weight: 500;
-      font-size: 0.92rem;
+      color: var(--text);
     }
 
     .btn.primary {
-      background: linear-gradient(90deg, var(--accent-soft), rgba(255, 62, 165, 0.06));
-      border-color: rgba(255, 62, 165, 0.6);
+      background: var(--accent-soft);
+      border-color: var(--accent);
     }
 
     section {
-      padding: 3.2rem 0;
+      padding: 3rem 0;
       border-bottom: 1px solid var(--line);
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      margin-bottom: 1.2rem;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2,1fr);
       gap: 1rem;
     }
 
@@ -190,170 +169,140 @@
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 1rem;
+      transition: 0.25s;
     }
 
-    .card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.35rem;
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
     }
 
     .meta {
       color: var(--muted);
-      font-size: 0.89rem;
-      margin: 0 0 0.45rem;
+      font-size: 0.85rem;
     }
 
-    p {
-      margin: 0;
-      color: #dde1e7;
-    }
-
-    .stack {
-      display: grid;
+    .video-row {
+      display: flex;
       gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
     }
 
-    .contact a {
-      color: #ffd0ea;
+    .video-card {
+      min-width: 320px;
+      flex: 0 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .video-card iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      margin-top: 0.6rem;
     }
 
     footer {
-      padding: 2rem 0 3rem;
+      padding: 2rem 0;
       color: var(--muted);
-      font-size: 0.86rem;
+      font-size: 0.85rem;
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
-      }
-
-      .links {
-        gap: 0.7rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <nav>
-    <div class="wrap nav-inner">
-      <div class="brand">Tone Medina</div>
-      <div class="links">
-        <a href="#works">Works</a>
-        <a href="#news">News</a>
-        <a href="#biography">Biography</a>
-        <a href="#blog">Blog</a>
-        <a href="#process">Process</a>
-        <a href="#contact">Contact</a>
-      </div>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div>Tone Medina</div>
+    <div class="links">
+      <a href="#works">Works</a>
+      <a href="#news">News</a>
+      <a href="#biography">Biography</a>
+      <a href="#contact">Contact</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <header id="home">
-    <div class="wrap">
-      <h1>Art, rooted in story, finding ways to the infinate. in story, texture, and process.</h1>
-      <p class="lead">This site is a living archive of selected pieces, studio notes, and current projects. Updated seasonally.</p>
-      <div class="actions">
-        <a class="btn primary" href="#works">View Selected Works</a>
-        <a class="btn" href="#contact">Contact / Commissions</a>
-      </div>
+<header>
+  <div class="wrap">
+    <h1>Rooted in story, meaning through process.</h1>
+    <p class="lead">A living archive of selected work, experiments, and evolving ideas.</p>
+    <a class="btn primary" href="#works">View Work</a>
+  </div>
+</header>
+
+<main>
+
+<section id="works">
+  <div class="wrap grid">
+    <div class="card">
+      <h3>Current Series</h3>
+      <p class="meta">2026</p>
+      <p>Ongoing work exploring layered composition.</p>
     </div>
-  </header>
 
-  <main>
-    <section id="works">
-      <div class="wrap">
-        <h2 class="section-title">Selected Works</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Current Series Series</h3>
-            <p class="meta">Mixed media + digital studies · 2026</p>
-            <p>An ongoing body of work exploring contrast, interference, and minimal form through layered composition.</p>
-          </article>
-          <article class="card">
-            <h3>Archive Studies</h3>
-            <p class="meta">I did this · 2020–2026</p>
-            <p>Memories, ghosts live again.</p>
-          </article>
-        </div>
+    <div class="card">
+      <h3>Archives</h3>
+      <p class="meta">Art Memories</p>
+      <p>Where ghosts live again.</p>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <h2>News</h2>
+
+    <div class="video-row">
+
+      <div class="video-card">
+        <h3>TV Interview</h3>
+        <p class="meta">2026</p>
+        <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA" frameborder="0" allowfullscreen></iframe>
       </div>
-    </section>
 
-    <section id="news">
-      <div class="wrap stack">
-        <h2 class="section-title">News</h2>
-        <article class="card">
-          <h3>Studio Update</h3>
-          <p class="meta">April 2026</p>
-          <p>Where I am & what I'm doing today.</p>
-        </article>
+      <div class="video-card">
+        <h3>Artist Interview</h3>
+        <p class="meta">2025</p>
+        <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q" frameborder="0" allowfullscreen></iframe>
       </div>
-    </section>
 
-    <section id="biography">
-      <div class="wrap stack">
-        <h2 class="section-title">Biography</h2>
-        <article class="card">
-          <p>Tone Medina is an artist based in the United States working across visual studies, digital experimentation, and archival practice.</p>
-        </article>
-      </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section id="blog">
-      <div class="wrap">
-        <h2 class="section-title">Process</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>On Incomplete Work</h3>
-            <p>Notes on iteration, unfinished states, and the role of repetition inside a sustained studio rhythm.</p>
-          </article>
-          <article class="card">
-            <h3>Material + Structure</h3>
-            <p>Reflections on balancing intuition and systems while developing long-form visual language.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+<section id="biography">
+  <div class="wrap">
+    <div class="card">
+      <p>Tone Medina is an artist based in Denver, CO. BFA from Metropolitan State University of Denver.</p>
+    </div>
+  </div>
+</section>
 
-    <section id="contact">
-      <div class="wrap stack contact">
-        <h2 class="section-title">Contact</h2>
-        <article class="card">
-          <p>Email: <a href="mailto:info@tonemedina.com">info@tonemedina.com</a></p>
-          <p>Instagram: <a href="https://www.instagram.com/tonemedina/" target="_blank" rel="noopener noreferrer">@tonemedina</a></p>
-          <p>Available for commissions, exhibitions, and collaborations.</p>
-        </article>
-      </div>
-    </section>
-  </main>
+<section id="contact">
+  <div class="wrap">
+    <div class="card">
+      <p>Email: info@tonemedina.com</p>
+      <p>Instagram: @tonemedina</p>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    <div class="wrap">© 2026 Tone Medina — All rights reserved.</div>
-  </footer>
+</main>
 
-  <script>
-    const root = document.documentElement;
+<footer>
+  <div class="wrap">© 2026 Tone Medina</div>
+</footer>
 
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
-      root.style.setProperty('--mx', x + 'px');
-      root.style.setProperty('--my', y + 'px');
-    });
-
-    function flickerGlitch() {
-      const intensity = Math.random();
-      const scale = intensity > 0.92 ? 1.05 : 1;
-      root.style.setProperty('--s', scale);
-
-      if (intensity > 0.95) {
-        root.style.setProperty('--mx', (Math.random() - 0.5) * 60 + 'px');
-        root.style.setProperty('--my', (Math.random() - 0.5) * 60 + 'px');
-      }
-    }
-
-    setInterval(flickerGlitch, 120);
-  </script>
 </body>
 </html>
