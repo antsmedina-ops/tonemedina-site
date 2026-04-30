@@ -1,397 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tone Medina | Artist</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      --bg: #0f1115;
-      --panel: #161a22;
-      --text: #f1f3f5;
-      --muted: #a5adba;
-      --line: rgba(255, 255, 255, 0.12);
-      --accent: #5a0000;
-      --max: 980px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top right, #1b2030 0%, var(--bg) 52%);
-      color: var(--text);
-      font-family: Inter, sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* ===== BLOOD RED NEON ===== */
-    body::before { letter-spacing: 2px;
-text-transform: lowercase;
-      content: "Tone";
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
-      font-family: Orbitron, sans-serif;
-      font-size: 18vw;
-      font-weight: 700;
-      color: rgba(120, 0, 0, 0.28);
-      text-shadow:
-        0 0 8px rgba(120, 0, 0, 0.95),
-        0 0 25px rgba(90, 0, 0, 0.85),
-        0 0 60px rgba(60, 0, 0, 0.65),
-        0 0 120px rgba(30, 0, 0, 0.45);
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
-      animation: flicker 3s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 0.45; }
-      50% { opacity: 0.75; }
-      100% { opacity: 0.35; }
-    }
-
-    .wrap {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      background: rgba(15, 17, 21, 0.85);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.95rem 0;
-    }
-
-    .links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .links a:hover { color: var(--text); }
-
-    header {
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin: 0 0 1rem 0;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      margin: 0 0 1.5rem 0;
-    }
-
-    h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.1rem;
-    }
-
-    .lead {
-      color: var(--muted);
-      max-width: 600px;
-      margin: 1rem 0 0 0;
-    }
-
-    section {
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1rem;
-      transition: 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin: 0 0 0.5rem 0;
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.6;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* ===== VIDEO SYSTEM ===== */
-    .video-row {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-      scroll-snap-type: x mandatory;
-    }
-
-    .video-card {
-      min-width: 340px;
-      flex: 0 0 auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1rem;
-      position: relative;
-      scroll-snap-align: start;
-      transition: 0.25s;
-    }
-
-    .video-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      border-color: var(--accent);
-      filter: contrast(1.2) saturate(1.4);
-    }
-
-    .video-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 12px;
-      opacity: 0;
-      pointer-events: none;
-      background: rgba(90, 0, 0, 0.15);
-    }
-
-    .video-card:hover::after {
-      opacity: 1;
-      animation: glitch 0.2s infinite;
-    }
-
-    @keyframes glitch {
-      0% { transform: translate(0, 0); opacity: 0.2; }
-      50% { transform: translate(1px, -1px); opacity: 0.4; }
-      100% { transform: translate(-1px, 1px); opacity: 0.2; }
-    }
-
-    iframe {
-      width: 100%;
-      height: 210px;
-      border-radius: 10px;
-      border: none;
-      margin-top: 0.5rem;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    footer {
-      padding: 2rem 0;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 800px) {
-      .grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-
-<body>
-
-<nav>
-  <div class="wrap nav-inner">
-    <div>Tone Medina</div>
-    <div class="links">
-      <a href="#works">Works</a>
-      <a href="#news">News</a>
-      <a href="#biography">Biography</a>
-      <a href="#contact">Contact</a>
-      <a href="#links">Links</a>
-    </div>
-  </div>
-</nav>
-
-<header>
-  <div class="wrap">
-    <h1>Art, eye to eye [sic].</h1>
-    <p class="lead">A living archive of selected work, experiments, and evolving ideas.</p>
-  </div>
-</header>
-
-<main>
-
-<section id="works">
-  <div class="wrap grid">
-    <div class="card">
-      <h3>Current Series</h3>
-      <p class="meta">2026</p>
-      <p>Ongoing work exploring layered composition.</p>
-    </div>
-    <div class="card">
-      <h3>Archives</h3>
-      <p class="meta">Art Memories</p>
-      <p>Where ghosts live again.</p>
-    </div>
-  </div>
-</section>
-
-<section id="news">
-  <div class="wrap">
-    <h2>News</h2>
-    <div class="video-row">
-      <div class="video-card hover-sound">
-        <h3>CBS Colorado Interview</h3>
-        <p class="meta">2026</p>
-        <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>Featured extra for "Desperado A Mile High Noir".</h3>
-        <p class="meta">2026</p>
-        <iframe src="https://www.youtube.com/embed/iSCss2GVh4M"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>9News Interview</h3>
-        <p class="meta">2025</p>
-        <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="biography">
-  <div class="wrap">
-    <h2>Biography</h2>
-    <div class="card">
-      <p>Tone Medina is an artist based in Denver, CO. BFA from Metropolitan State University of Denver.</p>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="wrap">
-    <h2>Contact</h2>
-    <div class="contact-grid">
-      <div class="card">
-        <h3>Get in Touch</h3>
-        <p>Email: <a href="mailto:info@tonemedina.com">info@tonemedina.com</a></p>
-        <p>Instagram: <a href="https://instagram.com/tonemedina" target="_blank">@tonemedina</a></p>
-      </div>
-      <div class="card">
-        <h3>Calendar of Events</h3>
-        <iframe src="https://calendar.google.com/calendar/embed?src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&ctz=America%2FDenver" style="border: 0; width: 100%; height: 400px; background: var(--panel); margin-top: 0.5rem; border-radius: 8px;" frameborder="0" scrolling="no"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="links">
-  <div class="wrap grid">
-    <div class="card">
-      <h3>Collaborators</h3>
-      <p class="meta">Creative Network</p>
-    </div>
-    <div class="card">
-      <h3>Resources</h3>
-      <p class="meta">Links & References</p>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <div class="wrap">© 2026 Tone Medina</div>
-</footer>
-
 <script>
-const root = document.documentElement;
+let audioCtx;
 
-document.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 30;
-  const y = (e.clientY / window.innerHeight - 0.5) * 30;
-  root.style.setProperty('--mx', x + 'px');
-  root.style.setProperty('--my', y + 'px');
-});
-
-function glitch() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const bufferSize = ctx.sampleRate * 0.05;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-
-    const gain = ctx.createGain();
-    gain.gain.value = 0.08;
-
-    noise.connect(gain);
-    gain.connect(ctx.destination);
-
-    noise.start();
-    noise.stop(ctx.currentTime + 0.05);
-  } catch (e) {
-    console.log('Audio context not available');
+/* unlock audio properly (browser requirement) */
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
   }
 }
 
-document.querySelectorAll(".hover-sound").forEach(el => {
-  el.addEventListener("mouseenter", glitch);
+/* glitch burst sound */
+function glitch() {
+  initAudio();
+  if (!audioCtx) return;
+
+  const bufferSize = audioCtx.sampleRate * 0.05;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.8;
+  }
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+
+  const gain = audioCtx.createGain();
+  gain.gain.value = 0.1;
+
+  noise.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  noise.start();
+  noise.stop(audioCtx.currentTime + 0.05);
+}
+
+/* unlock on first interaction */
+document.body.addEventListener("pointerdown", initAudio, { once: true });
+
+/* attach to video cards */
+document.querySelectorAll(".video-card").forEach(card => {
+  card.addEventListener("mouseenter", glitch);
 });
 </script>
-
-</body>
-</html>
