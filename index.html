@@ -1,243 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tone Medina | Artist</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tone Medina | Artist</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
-  <style>
-    :root {
-      --bg: #0f1115;
-      --panel: #161a22;
-      --text: #f1f3f5;
-      --muted: #a5adba;
-      --line: rgba(255, 255, 255, 0.12);
-      --accent: #5a0000;
-      --max: 980px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top right, #1b2030 0%, var(--bg) 52%);
-      color: var(--text);
-      font-family: Inter, sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* ===== BLOOD RED NEON ===== */
-    body::before {
-      letter-spacing: 2px;
-      text-transform: lowercase;
-      content: "Tone";
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
-      font-family: Orbitron, sans-serif;
-      font-size: 18vw;
-      font-weight: 700;
-      color: rgba(120, 0, 0, 0.28);
-      text-shadow:
-        0 0 8px rgba(120, 0, 0, 0.95),
-        0 0 25px rgba(90, 0, 0, 0.85),
-        0 0 60px rgba(60, 0, 0, 0.65),
-        0 0 120px rgba(30, 0, 0, 0.45);
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
-      animation: flicker 3s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 0.45; }
-      50% { opacity: 0.75; }
-      100% { opacity: 0.35; }
-    }
-
-    .wrap {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      background: rgba(15, 17, 21, 0.85);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.95rem 0;
-    }
-
-    .links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .links a:hover { color: var(--text); }
-
-    header {
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin: 0 0 1rem 0;
-    }
-
-    h2 {
-      margin: 0 0 1.5rem 0;
-    }
-
-    section {
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1rem;
-      position: relative;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    /* subtle base glow layer */
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 12px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      box-shadow: 0 0 0 rgba(0,0,0,0);
-    }
-
-    /* HOVER STATE */
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow:
-        0 0 12px rgba(58, 0, 0, 0.25),
-        0 0 28px rgba(58, 0, 0, 0.15);
-    }
-
-    /* glow activation */
-    .card:hover::after {
-      opacity: 1;
-      box-shadow:
-        inset 0 0 20px rgba(58, 0, 0, 0.15),
-        0 0 30px rgba(58, 0, 0, 0.25);
-    }
-
-    /* ===== VIDEO SECTION ===== */
-    .video-row {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
-
-    .video-card {
-      min-width: 340px;
-      flex: 0 0 auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1rem;
-    }
-
-    iframe {
-      width: 100%;
-      height: 210px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 0.5rem;
-    }
-
-    /* ===== CONTACT LAYOUT ===== */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 1rem;
-    }
-
-    .calendar-card {
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .calendar-card h3 {
-      margin: 0;
-      padding: 1rem;
-    }
-
-    .calendar-card iframe {
-      width: 100%;
-      height: 420px;
-      border: none;
-      filter: invert(0.9) hue-rotate(180deg) contrast(0.9) saturate(0.8);
-    }
-
-    footer {
-      padding: 2rem 0;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 800px) {
-      .grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-
-    /* FIX INSTAGRAM EMBED INSIDE CARD */
-.instagram-media {
-  max-width: 100% !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  margin: 1rem 0 !important;
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --text: #f1f3f5;
+  --muted: #a5adba;
+  --line: rgba(255,255,255,0.12);
+  --accent: #5a0000;
+  --max: 980px;
 }
 
-.card iframe,
-.card .instagram-media {
-  display: block;
-  width: 100% !important;
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top right, #1b2030 0%, var(--bg) 52%);
+  color: var(--text);
+  font-family: Inter, sans-serif;
+  overflow-x: hidden;
 }
 
-  </style>
+/* ===== WRAP ===== */
+.wrap {
+  width: min(var(--max), calc(100% - 2rem));
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(15, 17, 21, 0.85);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.95rem 0;
+}
+
+.links a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1rem;
+  font-size: 0.8rem;
+}
+
+/* ===== SECTIONS ===== */
+section {
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: 0.25s;
+  position: relative;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 25px rgba(90,0,0,0.4);
+  transform: translateY(-3px);
+}
+
+/* ===== VIDEO ROW ===== */
+.video-row, .ig-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.video-card, .ig-card {
+  min-width: 340px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  flex: 0 0 auto;
+}
+
+/* iframe */
+iframe {
+  width: 100%;
+  height: 210px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+}
+
+/* ===== CONTACT GRID ===== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s;
+  z-index: 999;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 340px;
+  background: #0f1115;
+  border: 1px solid rgba(90,0,0,0.6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(90,0,0,0.6);
+}
+
+.selectable {
+  user-select: all;
+  background: rgba(255,255,255,0.05);
+  padding: 0.4rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.close-btn {
+  margin-top: 1rem;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* ===== TEXT ===== */
+h1,h2,h3 { margin: 0 0 0.5rem 0; }
+
+p {
+  margin: 0;
+  color: var(--muted);
+}
+
+footer {
+  padding: 2rem 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 800px) {
+  .grid, .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -255,74 +205,80 @@
   </div>
 </nav>
 
-<header>
-  <div class="wrap">
-    <h1>Art, eye to eye [sic].</h1>
-  </div>
+<header class="wrap">
+  <h1>Art, eye to eye [sic].</h1>
 </header>
 
 <main>
 
+<!-- WORKS -->
 <section id="works">
   <div class="wrap grid">
 
-    <!-- CURRENT SERIES (Instagram) -->
     <div class="card">
-      <h3>Recent Projects</h3>
-      <p>Select Works.</p>
+      <h3>Digital Series</h3>
+      <p>Selected works from my Instagram.</p>
 
-       <blockquote 
-        class="instagram-media" 
-        data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" 
-        data-instgrm-version="14"
-        style="margin: 1rem 0;">
-      </blockquote>
-      
-      <blockquote 
-        class="instagram-media" 
-        data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/" 
-        data-instgrm-version="14"
-        style="margin: 1rem 0;">
-      </blockquote>
+      <!-- IG SCROLL (2 POSTS) -->
+      <div class="ig-row">
+
+        <div class="ig-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
+            data-instgrm-version="14"></blockquote>
+        </div>
+
+        <div class="ig-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+            data-instgrm-version="14"></blockquote>
+        </div>
+
+        <div class="ig-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+            data-instgrm-version="14"></blockquote>
 
 
-
+        
+      </div>
     </div>
 
-    <!-- ARCHIVES (RESTORED) -->
     <div class="card">
       <h3>Archives</h3>
-      <p class="meta">Art Memories</p>
-      <p>Where ghosts live again.</p>
+      <p>Chalk Art, where ghosts live again.</p>
     </div>
 
   </div>
 </section>
-</section>
 
+<!-- NEWS -->
 <section id="news">
   <div class="wrap">
     <h2>News</h2>
 
     <div class="video-row">
-      <div class="video-card">
+
+      <div class="video-card hover-sound">
         <h3>CBS Colorado Interview</h3>
         <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA"></iframe>
       </div>
 
-      <div class="video-card">
-        <h3>Featured extra for "Desperado A Mile High Noir".</h3>
+      <div class="video-card hover-sound">
+        <h3>Desperado A Mile High Noir</h3>
         <iframe src="https://www.youtube.com/embed/iSCss2GVh4M"></iframe>
       </div>
 
-      <div class="video-card">
+      <div class="video-card hover-sound">
         <h3>9News Interview</h3>
         <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q"></iframe>
       </div>
+
     </div>
   </div>
 </section>
 
+<!-- BIOGRAPHY (RESTORED) -->
 <section id="biography">
   <div class="wrap">
     <h2>Biography</h2>
@@ -332,123 +288,137 @@
   </div>
 </section>
 
+<!-- CONTACT -->
 <section id="contact">
-  <div class="wrap">
-    <h2>Contact</h2>
+  <div class="wrap contact-grid">
 
-    <div class="contact-grid">
+    <div class="card contact-card" id="contactCard">
+      <h2>Contact</h2>
+      <p>Email: info@tonemedina.com</p>
+      <p>Instagram: @tonemedina</p>
+    </div>
 
-      <div class="card">
-        <h3>Get in Touch</h3>
+    <div class="card">
+      <h3>Art Calendar / Events</h3>
 
-        <p>Email: info@tonemedina.com</p>
-        <p>Instagram: @tonemedina</p>
-      </div>
-
-      <div class="card calendar-card">
-        <h3>Art Calendar / Events</h3>
-
-        <iframe
-          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=AGENDA&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com"
-          scrolling="no">
-        </iframe>
-
-      </div>
+      <!-- DO NOT CHANGE -->
+      <iframe
+        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
+        width="100%"
+        height="400"
+        style="border:0;">
+      </iframe>
 
     </div>
+
   </div>
 </section>
 
+<!-- LINKS -->
 <section id="links">
   <div class="wrap grid">
+
     <div class="card">
       <h3>Collaborators</h3>
       <p>Creative Network</p>
     </div>
+
     <div class="card">
       <h3>Resources</h3>
       <p>Links & References</p>
     </div>
+
   </div>
 </section>
 
 </main>
 
-<footer>
-  <div class="wrap">© 2026 Tone Medina</div>
+<footer class="wrap">
+  © 2026 Tone Medina
 </footer>
 
+<!-- CONTACT MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>Contact</h3>
+
+    <div class="selectable" onclick="copyText('info@tonemedina.com')">
+      info@tonemedina.com
+    </div>
+
+    <div class="selectable" onclick="copyText('7202968296')">
+      720 296 8296
+    </div>
+
+    <div class="close-btn" onclick="closeModal()">Close ✕</div>
+  </div>
+</div>
+
+<script src="//www.instagram.com/embed.js"></script>
+
 <script>
-let audioCtx;
+const card = document.getElementById("contactCard");
+const modal = document.getElementById("modal");
 
-// unlock audio (required by browsers)
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
+card.addEventListener("mouseenter", () => modal.classList.add("active"));
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
+
+function closeModal() {
+  modal.classList.remove("active");
 }
 
-document.addEventListener("click", initAudio);
-document.addEventListener("touchstart", initAudio);
+function copyText(text) {
+  navigator.clipboard.writeText(text);
 
-/* ===== GLITCH SOUND ENGINE ===== */
+  const flash = document.createElement("div");
+  flash.textContent = "Copied!";
+  flash.style.position = "fixed";
+  flash.style.bottom = "20px";
+  flash.style.left = "50%";
+  flash.style.transform = "translateX(-50%)";
+  flash.style.background = "#5a0000";
+  flash.style.color = "white";
+  flash.style.padding = "8px 12px";
+  flash.style.borderRadius = "6px";
+  flash.style.zIndex = "9999";
 
-function playGlitch(type) {
-  if (!audioCtx) return;
+  document.body.appendChild(flash);
 
-  const duration = 0.05;
-  const bufferSize = audioCtx.sampleRate * duration;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-
-  for (let i = 0; i < bufferSize; i++) {
-    let noise = (Math.random() * 2 - 1);
-
-    // TYPE 1: deep rumble (Video 1)
-    if (type === 1) {
-      noise *= Math.sin(i * 0.01) * 0.8;
-    }
-
-    // TYPE 2: chaotic mid static (Video 2)
-    if (type === 2) {
-      noise *= (Math.random() > 0.5 ? 1 : -1) * 0.9;
-    }
-
-    // TYPE 3: sharp high crackle (Video 3)
-    if (type === 3) {
-      noise *= Math.pow(Math.random(), 3) * 1.2;
-    }
-
-    data[i] = noise * 0.5;
-  }
-
-  const source = audioCtx.createBufferSource();
-  source.buffer = buffer;
-
-  const gain = audioCtx.createGain();
-  gain.gain.value = 0.06;
-
-  source.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  source.start();
-  source.stop(audioCtx.currentTime + duration);
+  setTimeout(() => flash.remove(), 900);
 }
 
-/* ===== ATTACH PER VIDEO ===== */
-const videos = document.querySelectorAll(".video-card");
+/* VIDEO AUDIO GLITCH (RESTORED) */
+function glitch() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const bufferSize = ctx.sampleRate * 0.05;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
 
-videos.forEach((card, index) => {
-  card.addEventListener("mouseenter", () => {
-    playGlitch(index + 1); // 1, 2, 3
-  });
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const gain = ctx.createGain();
+    gain.gain.value = 0.08;
+
+    noise.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start();
+    noise.stop(ctx.currentTime + 0.05);
+  } catch (e) {}
+}
+
+document.querySelectorAll(".hover-sound").forEach(el => {
+  el.addEventListener("mouseenter", glitch);
 });
 </script>
-
-<script async src="https://www.instagram.com/embed.js"></script>
 
 </body>
 </html>
