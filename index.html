@@ -30,7 +30,24 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== WRAP ===== */
+/* ===== GLASS EFFECT ===== */
+body.modal-open .wrap,
+body.modal-open section,
+body.modal-open header,
+body.modal-open nav,
+body.modal-open footer {
+  filter: blur(6px);
+  transition: filter 0.2s ease;
+}
+
+body.modal-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 998;
+}
+
 .wrap {
   width: min(var(--max), calc(100% - 2rem));
   margin: 0 auto;
@@ -54,11 +71,50 @@ nav {
   padding: 0.95rem 0;
 }
 
+/* ===== NAV LINKS BASE ===== */
 .links a {
   color: var(--muted);
   text-decoration: none;
   margin-left: 1rem;
   font-size: 0.8rem;
+  transition: 0.2s ease;
+  position: relative;
+}
+
+/* ===== NAV HOVER EFFECT ===== */
+.links a:hover {
+  color: #5a0000;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(90,0,0,0.5);
+}
+
+/* underline glow */
+.links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 1px;
+  background: #5a0000;
+  box-shadow: 0 0 8px rgba(90,0,0,0.6);
+  transition: 0.25s ease;
+}
+
+.links a:hover::after {
+  width: 100%;
+}
+
+/* ===== BRAND HOVER ===== */
+.nav-inner > div:first-child {
+  transition: 0.25s ease;
+  cursor: default;
+}
+
+.nav-inner > div:first-child:hover {
+  color: #5a0000;
+  text-shadow: 0 0 14px rgba(90,0,0,0.6);
+  letter-spacing: 0.5px;
 }
 
 /* ===== SECTIONS ===== */
@@ -67,14 +123,12 @@ section {
   border-bottom: 1px solid var(--line);
 }
 
-/* ===== GRID ===== */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-/* ===== CARDS ===== */
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -90,7 +144,6 @@ section {
   transform: translateY(-3px);
 }
 
-/* ===== VIDEO ROW ===== */
 .video-row, .ig-row {
   display: flex;
   gap: 1rem;
@@ -107,7 +160,6 @@ section {
   flex: 0 0 auto;
 }
 
-/* iframe */
 iframe {
   width: 100%;
   height: 210px;
@@ -116,7 +168,6 @@ iframe {
   margin-top: 0.5rem;
 }
 
-/* ===== CONTACT GRID ===== */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -168,7 +219,6 @@ iframe {
   font-size: 0.8rem;
 }
 
-/* ===== TEXT ===== */
 h1,h2,h3 { margin: 0 0 0.5rem 0; }
 
 p {
@@ -205,23 +255,20 @@ footer {
   </div>
 </nav>
 
-<header class="wrap">
-  <h1>Art, eye to eye [sic].</h1>
+<header class="wrap" style="padding: 2.5rem 0 1.5rem;">
+  <h3 style="margin-top: 0;">Art lives eye to eye. [sic].</h3>
 </header>
 
 <main>
 
-<!-- WORKS -->
 <section id="works">
   <div class="wrap grid">
 
     <div class="card">
       <h3>Digital Series</h3>
-      <p>Selected works from my Instagram.</p>
+      <p>Selected Works</p>
 
-      <!-- IG SCROLL (2 POSTS) -->
       <div class="ig-row">
-
         <div class="ig-card">
           <blockquote class="instagram-media"
             data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
@@ -230,17 +277,15 @@ footer {
 
         <div class="ig-card">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
             data-instgrm-version="14"></blockquote>
         </div>
 
         <div class="ig-card">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
             data-instgrm-version="14"></blockquote>
-
-
-        
+        </div>
       </div>
     </div>
 
@@ -252,7 +297,6 @@ footer {
   </div>
 </section>
 
-<!-- NEWS -->
 <section id="news">
   <div class="wrap">
     <h2>News</h2>
@@ -278,7 +322,6 @@ footer {
   </div>
 </section>
 
-<!-- BIOGRAPHY (RESTORED) -->
 <section id="biography">
   <div class="wrap">
     <h2>Biography</h2>
@@ -288,44 +331,41 @@ footer {
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <div class="wrap contact-grid">
 
     <div class="card contact-card" id="contactCard">
       <h2>Contact</h2>
+      <p>Phone: 720.296.8296</p>
       <p>Email: info@tonemedina.com</p>
       <p>Instagram: @tonemedina</p>
+      <p>Bluesky: @tonemedina.com</p>
     </div>
 
     <div class="card">
       <h3>Art Calendar / Events</h3>
-
-      <!-- DO NOT CHANGE -->
       <iframe
         src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
         width="100%"
         height="400"
         style="border:0;">
       </iframe>
-
     </div>
 
   </div>
 </section>
 
-<!-- LINKS -->
 <section id="links">
   <div class="wrap grid">
 
     <div class="card">
       <h3>Collaborators</h3>
-      <p>Creative Network</p>
+      <p>Friends & Collectives</p>
     </div>
 
     <div class="card">
       <h3>Resources</h3>
-      <p>Links & References</p>
+      <p>Links & Supplies</p>
     </div>
 
   </div>
@@ -333,11 +373,8 @@ footer {
 
 </main>
 
-<footer class="wrap">
-  © 2026 Tone Medina
-</footer>
+<footer class="wrap">© 2026 Tone Medina</footer>
 
-<!-- CONTACT MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3>Contact</h3>
@@ -360,64 +397,43 @@ footer {
 const card = document.getElementById("contactCard");
 const modal = document.getElementById("modal");
 
-card.addEventListener("mouseenter", () => modal.classList.add("active"));
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
+card.addEventListener("mouseenter", () => {
+  modal.classList.add("active");
+  document.body.classList.add("modal-open");
 });
 
 function closeModal() {
   modal.classList.remove("active");
+  document.body.classList.remove("modal-open");
 }
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
 
 function copyText(text) {
   navigator.clipboard.writeText(text);
 
   const flash = document.createElement("div");
-  flash.textContent = "Copied!";
+  flash.textContent = "> copied: " + text;
+
   flash.style.position = "fixed";
   flash.style.bottom = "20px";
   flash.style.left = "50%";
   flash.style.transform = "translateX(-50%)";
-  flash.style.background = "#5a0000";
-  flash.style.color = "white";
+  flash.style.background = "#050805";
+  flash.style.color = "#00ff66";
+  flash.style.fontFamily = "monospace";
+  flash.style.fontSize = "12px";
   flash.style.padding = "8px 12px";
+  flash.style.border = "1px solid #00ff66";
+  flash.style.boxShadow = "0 0 12px rgba(0,255,102,0.4)";
   flash.style.borderRadius = "6px";
   flash.style.zIndex = "9999";
 
   document.body.appendChild(flash);
-
-  setTimeout(() => flash.remove(), 900);
+  setTimeout(() => flash.remove(), 1200);
 }
-
-/* VIDEO AUDIO GLITCH (RESTORED) */
-function glitch() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const bufferSize = ctx.sampleRate * 0.05;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-
-    const gain = ctx.createGain();
-    gain.gain.value = 0.08;
-
-    noise.connect(gain);
-    gain.connect(ctx.destination);
-
-    noise.start();
-    noise.stop(ctx.currentTime + 0.05);
-  } catch (e) {}
-}
-
-document.querySelectorAll(".hover-sound").forEach(el => {
-  el.addEventListener("mouseenter", glitch);
-});
 </script>
 
 </body>
