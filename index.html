@@ -34,38 +34,32 @@
 
     /* ===== BLOOD RED NEON ===== */
     body::before {
+      letter-spacing: 2px;
+      text-transform: lowercase;
       content: "Tone";
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(calc(-50% + var(--mx, 0px)), calc(-50% + var(--my, 0px))) scale(var(--s, 1));
-
       font-family: Orbitron, sans-serif;
       font-size: 18vw;
       font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: lowercase;
-
-      color: rgba(120, 0, 0, 0.25);
-
+      color: rgba(120, 0, 0, 0.28);
       text-shadow:
-        0 0 8px rgba(120, 0, 0, 0.9),
-        0 0 25px rgba(90, 0, 0, 0.8),
-        0 0 60px rgba(60, 0, 0, 0.6),
-        0 0 140px rgba(30, 0, 0, 0.35);
-
+        0 0 8px rgba(120, 0, 0, 0.95),
+        0 0 25px rgba(90, 0, 0, 0.85),
+        0 0 60px rgba(60, 0, 0, 0.65),
+        0 0 120px rgba(30, 0, 0, 0.45);
       mix-blend-mode: screen;
       pointer-events: none;
       z-index: 0;
-
-      animation: breathe 6s infinite ease-in-out;
-      will-change: transform, opacity, filter;
+      animation: flicker 3s infinite alternate;
     }
 
-    @keyframes breathe {
-      0%   { opacity: 0.35; }
-      50%  { opacity: 0.7; }
-      100% { opacity: 0.4; }
+    @keyframes flicker {
+      0% { opacity: 0.45; }
+      50% { opacity: 0.75; }
+      100% { opacity: 0.35; }
     }
 
     .wrap {
@@ -112,24 +106,12 @@
     }
 
     h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: 2.5rem;
       margin: 0 0 1rem 0;
     }
 
     h2 {
-      font-size: 1.5rem;
       margin: 0 0 1.5rem 0;
-    }
-
-    h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.1rem;
-    }
-
-    .lead {
-      color: var(--muted);
-      max-width: 600px;
-      margin: 1rem 0 0 0;
     }
 
     section {
@@ -148,32 +130,45 @@
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 1rem;
-      transition: 0.2s;
+      position: relative;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
+    /* subtle base glow layer */
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+
+    /* HOVER STATE */
     .card:hover {
-      transform: translateY(-4px);
       border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow:
+        0 0 12px rgba(58, 0, 0, 0.25),
+        0 0 28px rgba(58, 0, 0, 0.15);
     }
 
-    .meta {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin: 0 0 0.5rem 0;
+    /* glow activation */
+    .card:hover::after {
+      opacity: 1;
+      box-shadow:
+        inset 0 0 20px rgba(58, 0, 0, 0.15),
+        0 0 30px rgba(58, 0, 0, 0.25);
     }
 
-    p {
-      margin: 0;
-      line-height: 1.6;
-    }
-
-    /* ===== VIDEO SYSTEM ===== */
+    /* ===== VIDEO SECTION ===== */
     .video-row {
       display: flex;
       gap: 1rem;
       overflow-x: auto;
       padding-bottom: 1rem;
-      scroll-snap-type: x mandatory;
     }
 
     .video-card {
@@ -183,67 +178,38 @@
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 1rem;
-      position: relative;
-      scroll-snap-align: start;
-      overflow: hidden;
-      transition: 0.25s;
-    }
-
-    .video-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      border-color: var(--accent);
-      filter: saturate(1.3) contrast(1.1);
     }
 
     iframe {
       width: 100%;
       height: 210px;
-      border-radius: 10px;
       border: none;
+      border-radius: 10px;
       margin-top: 0.5rem;
     }
 
-    /* ===== VIDEO HOVER GLITCH LAYER ===== */
-    .video-card::before,
-    .video-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
+    /* ===== CONTACT LAYOUT ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 1rem;
     }
 
-    .video-card::after {
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(90, 0, 0, 0),
-        rgba(90, 0, 0, 0) 2px,
-        rgba(90, 0, 0, 0.08) 3px
-      );
+    .calendar-card {
+      padding: 0;
+      overflow: hidden;
     }
 
-    .video-card:hover::after {
-      opacity: 1;
-      animation: scan 0.7s linear infinite;
+    .calendar-card h3 {
+      margin: 0;
+      padding: 1rem;
     }
 
-    .video-card:hover::before {
-      opacity: 1;
-      background: rgba(120, 0, 0, 0.08);
-      animation: glitch 0.15s infinite;
-    }
-
-    @keyframes scan {
-      0% { transform: translateY(-10%); }
-      100% { transform: translateY(10%); }
-    }
-
-    @keyframes glitch {
-      0% { transform: translate(0,0); }
-      25% { transform: translate(1px,-1px); }
-      50% { transform: translate(-1px,1px); }
-      75% { transform: translate(1px,1px); }
-      100% { transform: translate(0,0); }
+    .calendar-card iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+      filter: invert(0.9) hue-rotate(180deg) contrast(0.9) saturate(0.8);
     }
 
     footer {
@@ -254,7 +220,23 @@
 
     @media (max-width: 800px) {
       .grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
     }
+
+    /* FIX INSTAGRAM EMBED INSIDE CARD */
+.instagram-media {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 1rem 0 !important;
+}
+
+.card iframe,
+.card .instagram-media {
+  display: block;
+  width: 100% !important;
+}
+
   </style>
 </head>
 
@@ -276,7 +258,6 @@
 <header>
   <div class="wrap">
     <h1>Art, eye to eye [sic].</h1>
-    <p class="lead">A living archive of selected work, experiments, and evolving ideas.</p>
   </div>
 </header>
 
@@ -284,17 +265,39 @@
 
 <section id="works">
   <div class="wrap grid">
+
+    <!-- CURRENT SERIES (Instagram) -->
     <div class="card">
-      <h3>Current Series</h3>
-      <p class="meta">2026</p>
-      <p>Ongoing work exploring layered composition.</p>
+      <h3>Recent Projects</h3>
+      <p>Select Works.</p>
+
+       <blockquote 
+        class="instagram-media" 
+        data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" 
+        data-instgrm-version="14"
+        style="margin: 1rem 0;">
+      </blockquote>
+      
+      <blockquote 
+        class="instagram-media" 
+        data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/" 
+        data-instgrm-version="14"
+        style="margin: 1rem 0;">
+      </blockquote>
+
+
+
     </div>
+
+    <!-- ARCHIVES (RESTORED) -->
     <div class="card">
       <h3>Archives</h3>
       <p class="meta">Art Memories</p>
       <p>Where ghosts live again.</p>
     </div>
+
   </div>
+</section>
 </section>
 
 <section id="news">
@@ -304,19 +307,16 @@
     <div class="video-row">
       <div class="video-card">
         <h3>CBS Colorado Interview</h3>
-        <p class="meta">2026</p>
         <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA"></iframe>
       </div>
 
       <div class="video-card">
         <h3>Featured extra for "Desperado A Mile High Noir".</h3>
-        <p class="meta">2026</p>
         <iframe src="https://www.youtube.com/embed/iSCss2GVh4M"></iframe>
       </div>
 
       <div class="video-card">
         <h3>9News Interview</h3>
-        <p class="meta">2025</p>
         <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q"></iframe>
       </div>
     </div>
@@ -327,7 +327,7 @@
   <div class="wrap">
     <h2>Biography</h2>
     <div class="card">
-      <p>Tone Medina is an artist based in Denver, CO. BFA from Metropolitan State University of Denver.</p>
+      <p>Tone Medina is a Denver-based artist with a B.F.A. Communication Design fromMetropolitan State University with over 20 years of experience as a professional chalk artist. While deeply rooted in the traditional and ephemeral world of street painting, he has expanded his practice to include digital creation and immersive new media, such as VR and AR. By blending two decades of physical artistry with modern technology, He explores how digital tools can enhance the visual narrative of community-focused art. He is currently dedicated to pushing the boundaries of perception, using mixed reality to bridge the gap between traditional techniques and digital art.</p>
     </div>
   </div>
 </section>
@@ -335,9 +335,26 @@
 <section id="contact">
   <div class="wrap">
     <h2>Contact</h2>
-    <div class="card">
-      <p>Email: info@tonemedina.com</p>
-      <p>Instagram: @tonemedina</p>
+
+    <div class="contact-grid">
+
+      <div class="card">
+        <h3>Get in Touch</h3>
+
+        <p>Email: info@tonemedina.com</p>
+        <p>Instagram: @tonemedina</p>
+      </div>
+
+      <div class="card calendar-card">
+        <h3>Art Calendar / Events</h3>
+
+        <iframe
+          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=AGENDA&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com"
+          scrolling="no">
+        </iframe>
+
+      </div>
+
     </div>
   </div>
 </section>
@@ -346,11 +363,11 @@
   <div class="wrap grid">
     <div class="card">
       <h3>Collaborators</h3>
-      <p class="meta">Creative Network</p>
+      <p>Creative Network</p>
     </div>
     <div class="card">
       <h3>Resources</h3>
-      <p class="meta">Links & References</p>
+      <p>Links & References</p>
     </div>
   </div>
 </section>
@@ -364,7 +381,7 @@
 <script>
 let audioCtx;
 
-/* unlock audio properly (browser requirement) */
+// unlock audio (required by browsers)
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -374,40 +391,64 @@ function initAudio() {
   }
 }
 
-/* glitch burst sound */
-function glitch() {
-  initAudio();
+document.addEventListener("click", initAudio);
+document.addEventListener("touchstart", initAudio);
+
+/* ===== GLITCH SOUND ENGINE ===== */
+
+function playGlitch(type) {
   if (!audioCtx) return;
 
-  const bufferSize = audioCtx.sampleRate * 0.05;
+  const duration = 0.05;
+  const bufferSize = audioCtx.sampleRate * duration;
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
   const data = buffer.getChannelData(0);
 
   for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * 0.8;
+    let noise = (Math.random() * 2 - 1);
+
+    // TYPE 1: deep rumble (Video 1)
+    if (type === 1) {
+      noise *= Math.sin(i * 0.01) * 0.8;
+    }
+
+    // TYPE 2: chaotic mid static (Video 2)
+    if (type === 2) {
+      noise *= (Math.random() > 0.5 ? 1 : -1) * 0.9;
+    }
+
+    // TYPE 3: sharp high crackle (Video 3)
+    if (type === 3) {
+      noise *= Math.pow(Math.random(), 3) * 1.2;
+    }
+
+    data[i] = noise * 0.5;
   }
 
-  const noise = audioCtx.createBufferSource();
-  noise.buffer = buffer;
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
 
   const gain = audioCtx.createGain();
-  gain.gain.value = 0.1;
+  gain.gain.value = 0.06;
 
-  noise.connect(gain);
+  source.connect(gain);
   gain.connect(audioCtx.destination);
 
-  noise.start();
-  noise.stop(audioCtx.currentTime + 0.05);
+  source.start();
+  source.stop(audioCtx.currentTime + duration);
 }
 
-/* unlock on first interaction */
-document.body.addEventListener("pointerdown", initAudio, { once: true });
+/* ===== ATTACH PER VIDEO ===== */
+const videos = document.querySelectorAll(".video-card");
 
-/* attach to video cards */
-document.querySelectorAll(".video-card").forEach(card => {
-  card.addEventListener("mouseenter", glitch);
+videos.forEach((card, index) => {
+  card.addEventListener("mouseenter", () => {
+    playGlitch(index + 1); // 1, 2, 3
+  });
 });
 </script>
+
+<script async src="https://www.instagram.com/embed.js"></script>
 
 </body>
 </html>
