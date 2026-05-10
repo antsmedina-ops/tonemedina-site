@@ -154,6 +154,7 @@ nav {
   font-size: 0.8rem;
   transition: 0.2s ease;
   position: relative;
+  cursor: pointer;
 }
 
 /* ===== NAV HOVER EFFECT ===== */
@@ -299,6 +300,12 @@ iframe {
   transform: scale(1) translateY(0);
 }
 
+/* Spotify Modal specific sizing */
+#spotifyModal .modal-content {
+  width: 450px;
+  padding: 1.5rem;
+}
+
 .selectable {
   user-select: all;
   background: rgba(255, 255, 255, 0.03);
@@ -354,6 +361,9 @@ footer {
     width: 90%;
     padding: 1.5rem;
   }
+  #spotifyModal .modal-content {
+    width: 90%;
+  }
 }
 </style>
 </head>
@@ -365,6 +375,7 @@ footer {
     <div>Tone Medina</div>
 
     <div class="links">
+      <a onclick="openSpotify()">Music</a>
       <a href="#works">Works</a>
       <a href="#news">News</a>
       <a href="#contact">Contact</a>
@@ -411,7 +422,7 @@ footer {
   <div class="wrap">
     <div class="card">
       <h3>Archives</h3>
-      <p>Chalk Art | Where ghosts live again.</p>
+      <p>Chalk Art, where ghosts live again.</p>
     </div>
   </div>
 </section>
@@ -498,6 +509,7 @@ footer {
   © 2026 Tone Medina
 </footer>
 
+<!-- Contact Modal -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3>Contact</h3>
@@ -511,11 +523,21 @@ footer {
   </div>
 </div>
 
+<!-- Spotify Modal -->
+<div class="modal" id="spotifyModal">
+  <div class="modal-content">
+    <h3 style="margin-bottom: 1rem;">Now Playing</h3>
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div class="close-btn" onclick="closeSpotify( )">Close ✕</div>
+  </div>
+</div>
+
 <script async src="//www.instagram.com/embed.js"></script>
 
 <script>
 const contactTrigger = document.getElementById("contactCard");
 const modal = document.getElementById("modal");
+const spotifyModal = document.getElementById("spotifyModal");
 
 // Open modal on mouse hover (mouseenter)
 contactTrigger.addEventListener("mouseenter", () => {
@@ -528,9 +550,20 @@ function closeModal() {
   document.body.classList.remove("modal-open");
 }
 
+function openSpotify() {
+  spotifyModal.classList.add("active");
+  document.body.classList.add("modal-open");
+}
+
+function closeSpotify() {
+  spotifyModal.classList.remove("active");
+  document.body.classList.remove("modal-open");
+}
+
 // Close on clicking outside the content
-modal.addEventListener("click", (e) => {
+window.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
+  if (e.target === spotifyModal) closeSpotify();
 });
 
 // Copy text function with visual feedback
