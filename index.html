@@ -182,12 +182,14 @@ nav {
 }
 
 /* ===== BRAND HOVER ===== */
-.nav-inner > div:first-child {
+.nav-brand {
   transition: 0.25s ease;
-  cursor: default;
+  cursor: pointer;
+  color: var(--text);
+  text-decoration: none;
 }
 
-.nav-inner > div:first-child:hover {
+.nav-brand:hover {
   color: #5a0000;
   text-shadow: 0 0 14px rgba(90,0,0,0.6);
   letter-spacing: 0.5px;
@@ -347,6 +349,22 @@ footer {
   padding: 2rem 0;
   color: var(--muted);
   font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-admin {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.footer-admin:hover {
+  opacity: 1;
+  color: var(--accent);
 }
 
 @media (max-width: 800px) {
@@ -368,11 +386,11 @@ footer {
 </style>
 </head>
 
-<body>
+<body id="top">
 
 <nav>
   <div class="wrap nav-inner">
-    <div>Tone Medina</div>
+    <a href="#top" class="nav-brand">Tone Medina</a>
 
     <div class="links">
       <a onclick="openSpotify()">Music</a>
@@ -386,7 +404,7 @@ footer {
 </nav>
 
 <header class="wrap" style="padding: 2.5rem 0 1.5rem;">
-  <h3 style="margin-top: 0;">Art lives eye to eye. [sic].</h3>
+  <h3 style="margin-top: 0;">I am free, therefore I am [sic]</h3>
 </header>
 
 <main>
@@ -429,7 +447,7 @@ footer {
 
 <section id="news">
   <div class="wrap">
-    <h2>News</h2>
+    <h2>In the media</h2>
 
     <div class="video-row">
       <div class="video-card hover-sound">
@@ -506,7 +524,8 @@ footer {
 </main>
 
 <footer class="wrap">
-  © 2026 Tone Medina
+  <div>© 2026 Tone Medina</div>
+  <a href="https://github.com/login" target="_blank" class="footer-admin">admin. login</a>
 </footer>
 
 <!-- Contact Modal -->
