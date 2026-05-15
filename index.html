@@ -593,11 +593,6 @@ contactTrigger.addEventListener("mouseenter", () => {
   document.body.classList.add("modal-open");
 });
 
-// Close modal on mouse leave (mouseleave)
-contactTrigger.addEventListener("mouseleave", () => {
-  closeModal();
-});
-
 function closeModal() {
   modal.classList.remove("active");
   document.body.classList.remove("modal-open");
@@ -606,11 +601,6 @@ function closeModal() {
 calendarCard.addEventListener("mouseenter", () => {
   calendarModal.classList.add("active");
   document.body.classList.add("modal-open");
-});
-
-// Close calendar modal on mouse leave (mouseleave)
-calendarCard.addEventListener("mouseleave", () => {
-  closeCalendar();
 });
 
 function closeCalendar() {
