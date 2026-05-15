@@ -266,6 +266,7 @@ iframe {
   gap: 1rem;
 }
 
+
 /* ===== ENHANCED MODAL ===== */
 .modal {
   position: fixed;
@@ -423,8 +424,8 @@ footer {
 <section id="works">
   <div class="wrap">
     <div class="card">
-      <h3>Recent Projects</h3>
-      <p>What I've been working on.</p>
+      <h3>Digital Series</h3>
+      <p>Selected Works</p>
 
       <div class="ig-row">
         <div class="ig-card">
@@ -451,7 +452,7 @@ footer {
   <div class="wrap">
     <div class="card">
       <h3>Archives</h3>
-      <p>Where ghosts live again.</p>
+      <p>Chalk Art, where ghosts live again.</p>
     </div>
   </div>
 </section>
@@ -480,9 +481,7 @@ footer {
 <section id="contact">
   <div class="wrap contact-grid">
     <div class="card contact-card" id="contactCard">
-      <h3>Contact</h3>
-      <p>Info:</p>
-      <p> </p>
+      <h2>Contact</h2>
       <p>Phone: 720.296.8296</p>
       <p>Email: info@tonemedina.com</p>
       <p>Instagram: @tonemedina</p>
@@ -505,11 +504,11 @@ footer {
   <div class="wrap grid">
     <div class="card">
       <h3>Collaborators</h3>
-      <p>COMING SOON ~ Friends & Collectives</p>
+      <p>Friends & Collectives</p>
     </div>
     <div class="card">
       <h3>Resources</h3>
-      <p>COMING SOON ~ Links & Supplies</p>
+      <p>Links & Supplies</p>
     </div>
   </div>
 </section>
@@ -545,7 +544,7 @@ footer {
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3>Contact</h3>
-        <p style="margin-bottom: 1rem;">Click or long press</p>
+    <p style="margin-bottom: 1rem;">Click or long press</p>
     <div class="selectable" onclick="copyText('info@tonemedina.com'  )">
       info@tonemedina.com
     </div>
@@ -559,7 +558,8 @@ footer {
 <!-- Calendar Modal -->
 <div class="modal" id="calendarModal">
   <div class="modal-content">
-    <h3 style="margin-bottom: 1rem;">Art Calendar / Events</h3>
+    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
+    <p style="margin-bottom: 1rem;">see you soon.</p>
     <iframe
       src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
       width="100%"
@@ -586,11 +586,17 @@ const modal = document.getElementById("modal");
 const spotifyModal = document.getElementById("spotifyModal");
 const calendarCard = document.getElementById("calendarCard");
 const calendarModal = document.getElementById("calendarModal");
+const contactModalContent = modal.querySelector(".modal-content");
+const calendarModalContent = calendarModal.querySelector(".modal-content");
 
 // Open modal on mouse hover (mouseenter)
 contactTrigger.addEventListener("mouseenter", () => {
   modal.classList.add("active");
   document.body.classList.add("modal-open");
+});
+
+contactModalContent.addEventListener("mouseleave", () => {
+  closeModal();
 });
 
 function closeModal() {
@@ -601,6 +607,10 @@ function closeModal() {
 calendarCard.addEventListener("mouseenter", () => {
   calendarModal.classList.add("active");
   document.body.classList.add("modal-open");
+});
+
+calendarModalContent.addEventListener("mouseleave", () => {
+  closeCalendar();
 });
 
 function closeCalendar() {
@@ -624,6 +634,7 @@ window.addEventListener("click", (e) => {
   if (e.target === spotifyModal) closeSpotify();
   if (e.target === calendarModal) closeCalendar();
 });
+
 
 // Copy text function with visual feedback
 function copyText(text) {
