@@ -114,28 +114,50 @@
             transition: transform 0.4s ease;
         }
 
-        /* ===== NAV ===== */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(15, 17, 21, 0.85);
-            border-bottom: 1px solid var(--line);
-        }
-
-        .nav-inner {
+        /* ===== HEADER / NAVIGATION COMBO ===== */
+        header {
+            padding: 4rem 0 2rem;
             display: flex;
             justify-content: space-between;
-            padding: 0.95rem 0;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        header h3 {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--muted);
+            margin: 0.3rem 0 0 0;
+            text-transform: none;
+            opacity: 0;
+            animation: cinematicReveal 2.5s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        nav .links {
+            display: flex;
+            gap: 1.5rem;
         }
 
         /* ===== NAV LINKS BASE ===== */
         .links a {
             color: var(--muted);
             text-decoration: none;
-            margin-left: 1rem;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             transition: 0.2s ease;
             position: relative;
             cursor: pointer;
@@ -143,9 +165,9 @@
 
         /* ===== NAV HOVER EFFECT ===== */
         .links a:hover {
-            color: #5a0000;
+            color: #ff3333;
             letter-spacing: 0.3px;
-            text-shadow: 0 0 10px rgba(90,0,0,0.5);
+            text-shadow: 0 0 10px rgba(255,51,51,0.5);
         }
 
         .links a::after {
@@ -155,8 +177,8 @@
             bottom: -4px;
             width: 0%;
             height: 1px;
-            background: #5a0000;
-            box-shadow: 0 0 8px rgba(90,0,0,0.6);
+            background: #ff3333;
+            box-shadow: 0 0 8px rgba(255,51,51,0.6);
             transition: 0.25s ease;
         }
 
@@ -164,30 +186,9 @@
             width: 100%;
         }
 
-        /* ===== BRAND HOVER ===== */
-        .nav-brand {
-            transition: 0.25s ease;
-            cursor: pointer;
-            color: var(--text);
-            text-decoration: none;
-        }
-
-        .nav-brand:hover {
-            color: #5a0000;
-            text-shadow: 0 0 14px rgba(90,0,0,0.6);
-            letter-spacing: 0.5px;
-        }
-
         /* ===== GOOGLE CALENDAR DARK MODE ===== */
         iframe[src*="calendar.google.com"] {
             filter: invert(0.9) hue-rotate(180deg);
-        }
-
-        /* ===== HEADER TEXT ANIMATION ===== */
-        header h3 {
-            opacity: 0;
-            animation: cinematicReveal 2.5s ease-out forwards;
-            animation-delay: 0.3s;
         }
 
         @keyframes cinematicReveal {
@@ -400,6 +401,14 @@
         }
 
         @media (max-width: 800px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            nav .links {
+                gap: 1rem;
+            }
             .grid, .contact-grid {
                 grid-template-columns: 1fr;
             }
@@ -418,16 +427,20 @@
 </head>
 <body id="top">
 
-    <nav>
-        <a href="#archives">Archives</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#links">Links</a>
-        <a href="bio.html">Biography</a>
-    </nav>
-
-    <header class="wrap" style="padding: 2.5rem 0 1.5rem;">
-        <h3>I am free, therefore I am [sic]</h3>
-    </header>
+    <div class="wrap">
+        <header>
+            <div class="logo-area">
+                <h1>Tone Medina</h1>
+                <h3>I am free, therefore I am [sic]</h3>
+            </div>
+            <nav class="links">
+                <a href="#archives">Archives</a>
+                <a href="#contact">Calendar</a>
+                <a href="#links">Links</a>
+                <a href="bio.html">Biography</a>
+            </nav>
+        </header>
+    </div>
 
     <main>
         <section id="works">
@@ -511,78 +524,3 @@
 
     <footer class="wrap">
         <div>© 2026 Tone Medina</div>
-        <a href="https://github.com/login" target="_blank" class="footer-admin">admin. login</a>
-    </footer>
-
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h3>Contact</h3>
-            <p style="margin-bottom: 1rem;">Click or long press</p>
-            <div class="selectable" onclick="copyText('info@tonemedina.com')">info@tonemedina.com</div>
-            <div class="selectable" onclick="copyText('7202968296')">720 296 8296</div>
-            <div class="close-btn" onclick="closeModal()">Close ✕</div>
-        </div>
-    </div>
-
-    <div class="modal" id="calendarModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
-            <p style="margin-bottom: 1rem;">Events around the city, see you soon.</p>
-            <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688" width="100%" style="border:0;"></iframe>
-            <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
-        </div>
-    </div>
-
-    <div class="modal" id="spotifyModal">
-        <div class="modal-content">
-            <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            <div class="close-btn" onclick="closeSpotify()">Close ✕</div>
-        </div>
-    </div>
-
-    <script async src="//www.instagram.com/embed.js"></script>
-    <script>
-        const contactTrigger = document.getElementById("contactCard");
-        const modal = document.getElementById("modal");
-        const spotifyModal = document.getElementById("spotifyModal");
-        const calendarCard = document.getElementById("calendarCard");
-        const calendarModal = document.getElementById("calendarModal");
-        const contactModalContent = modal.querySelector(".modal-content");
-        const calendarModalContent = calendarModal.querySelector(".modal-content");
-
-        contactTrigger.addEventListener("mouseenter", () => {
-            modal.classList.add("active");
-            document.body.classList.add("modal-open");
-        });
-        contactModalContent.addEventListener("mouseleave", () => { closeModal(); });
-
-        function closeModal() {
-            modal.classList.remove("active");
-            document.body.classList.remove("modal-open");
-        }
-
-        calendarCard.addEventListener("mouseenter", () => {
-            calendarModal.classList.add("active");
-            document.body.classList.add("modal-open");
-        });
-        calendarModalContent.addEventListener("mouseleave", () => { closeCalendar(); });
-
-        function closeCalendar() {
-            calendarModal.classList.remove("active");
-            document.body.classList.remove("modal-open");
-        }
-
-        function openSpotify() {
-            spotifyModal.classList.add("active");
-            document.body.classList.add("modal-open");
-        }
-        function closeSpotify() {
-            spotifyModal.classList.remove("active");
-            document.body.classList.remove("modal-open");
-        }
-
-        window.addEventListener("click", (e) => {
-            if (e.target === modal) closeModal();
-            if (e.target === spotifyModal) closeSpotify();
-            if (e.target === calendarModal)
