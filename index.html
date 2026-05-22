@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tone Medina | Artist</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
 
 <style>
 :root {
@@ -13,191 +13,53 @@
   --panel: #161a22;
   --text: #f1f3f5;
   --muted: #a5adba;
-  --line: rgba(255,255,255,0.12  );
+  --line: rgba(255,255,255,0.12);
   --accent: #5a0000;
   --max: 980px;
 }
 
 * { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
 body {
   margin: 0;
-  background: radial-gradient(circle at top right, rgba(27, 32, 48, 0.4) 0%, rgba(15, 17, 21, 0.85) 52%), 
-              url('aztec background sans text.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: #0f1115;
   color: var(--text);
   font-family: Inter, sans-serif;
-  overflow-x: hidden;
-  position: relative;
 }
 
-/* ===== DYING NEON BACKGROUND ===== */
-body::before {
-  content: "tone";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Oswald', 'Arial Black', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 21vw;
-  line-height: 0.8;
-  color: rgba(120,0,0,0.18);
-  text-shadow: 0 0 6px rgba(120,0,0,0.95), 0 0 18px rgba(120,0,0,0.9), 0 0 40px rgba(90,0,0,0.8), 0 0 80px rgba(60,0,0,0.7), 0 0 140px rgba(30,0,0,0.55);
-  pointer-events: none;
-  z-index: 0;
-  /* Slower overall cycle but with rapid internal flickers */
-  animation: neonDying 8s infinite;
-}
-
-@keyframes neonDying {
-  0%, 2%, 4%, 10%, 32%, 34%, 40%, 72%, 74%, 100% {
-    opacity: 1;
-    filter: brightness(1);
-    text-shadow: 0 0 6px rgba(120,0,0,0.95), 0 0 18px rgba(120,0,0,0.9), 0 0 40px rgba(90,0,0,0.8);
-  }
-  
-  /* Rapid stuttering */
-  1%, 3%, 5%, 33%, 73% {
-    opacity: 0.2;
-    filter: brightness(0.3);
-    text-shadow: none;
-  }
-
-  /* Longer brown-out */
-  50%, 60% {
-    opacity: 0.4;
-    filter: brightness(0.6);
-    text-shadow: 0 0 4px rgba(120,0,0,0.4);
-  }
-
-  /* Near death */
-  85%, 92% {
-    opacity: 0.1;
-    filter: brightness(0.2);
-    text-shadow: none;
-  }
-  
-  90% {
-    opacity: 0.8;
-    filter: brightness(0.9);
-  }
-}
-
-/* ===== ENHANCED GLASS EFFECT ===== */
-body.modal-open .wrap,
-body.modal-open section,
-body.modal-open header,
-body.modal-open nav,
-body.modal-open footer {
-  filter: blur(12px) grayscale(0.5);
-  transform: scale(0.98);
-  transition: filter 0.4s ease, transform 0.4s ease;
-}
-
-body.modal-open::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  z-index: 998;
-  animation: fadeIn 0.3s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
+/* ===== LAYOUT ===== */
 .wrap {
   width: min(var(--max), calc(100% - 2rem));
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.4s ease;
+}
+
+section {
+  padding: 3rem 0;
 }
 
 /* ===== NAV ===== */
 nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  background: rgba(15, 17, 21, 0.85);
+  background: #111;
   border-bottom: 1px solid var(--line);
 }
 
 .nav-inner {
   display: flex;
   justify-content: space-between;
-  padding: 0.95rem 0;
+  padding: 1rem 0;
 }
 
-/* ===== NAV LINKS BASE ===== */
 .links a {
   color: var(--muted);
-  text-decoration: none;
   margin-left: 1rem;
-  font-size: 0.8rem;
-  transition: 0.2s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-/* ===== NAV HOVER EFFECT ===== */
-.links a:hover {
-  color: #5a0000;
-  letter-spacing: 0.3px;
-  text-shadow: 0 0 10px rgba(90,0,0,0.5);
-}
-
-/* underline glow */
-.links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 1px;
-  background: #5a0000;
-  box-shadow: 0 0 8px rgba(90,0,0,0.6);
-  transition: 0.25s ease;
-}
-
-.links a:hover::after {
-  width: 100%;
-}
-
-/* ===== BRAND HOVER ===== */
-.nav-brand {
-  transition: 0.25s ease;
-  cursor: pointer;
-  color: var(--text);
   text-decoration: none;
 }
 
-.nav-brand:hover {
-  color: #5a0000;
-  text-shadow: 0 0 14px rgba(90,0,0,0.6);
-  letter-spacing: 0.5px;
-}
-
-/* ===== GOOGLE CALENDAR DARK MODE ===== */
-iframe[src*="calendar.google.com"] {
-    filter: invert(0.9) hue-rotate(180deg);
-}
-
-/* ===== SECTIONS ===== */
-section {
-  padding: 3rem 0;
-  border-bottom: 1px solid var(--line);
+/* ===== CARDS ===== */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
 }
 
 .grid {
@@ -206,636 +68,49 @@ section {
   gap: 1rem;
 }
 
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem;
-  transition: 0.25s;
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 25px rgba(90,0,0,0.4);
-  transform: translateY(-3px);
-}
-
-.video-row, .ig-row {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent) transparent;
-}
-
-.video-row::-webkit-scrollbar, .ig-row::-webkit-scrollbar {
-  height: 6px;
-}
-
-.video-row::-webkit-scrollbar-thumb, .ig-row::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 10px;
-}
-
-.video-card, .ig-card {
-  min-width: 300px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem;
-  flex: 0 0 auto;
-}
-
-iframe {
-  width: 100%;
-  height: 210px;
-  border: none;
-  border-radius: 10px;
-  margin-top: 0.5rem;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-
-/* ===== ENHANCED MODAL ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ===== TEXT FADE ANIMATION (THIS WAS THE MISSING PIECE) ===== */
+.fade-text {
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-  z-index: 999;
+  animation: fadeTextIn 1.6s ease forwards;
 }
 
-.modal.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-content {
-  width: 380px;
-  background: rgba(22, 26, 34, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 2.5rem;
-  text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(90, 0, 0, 0.3);
-  transform: scale(0.8) translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.modal.active .modal-content {
-  transform: scale(1) translateY(0);
-}
-
-/* Spotify Modal specific sizing */
-#spotifyModal .modal-content {
-  width: 450px;
-  padding: 1.5rem;
-}
-
-/* Calendar Modal specific sizing */
-#calendarModal .modal-content {
-  width: min(1000px, 92vw);
-  padding: 1.25rem;
-}
-
-#calendarModal iframe {
-  height: 70vh;
-  margin-top: 0;
-}
-
-.selectable {
-  user-select: all;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0.8rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--text);
-}
-
-.selectable:hover {
-  background: rgba(90, 0, 0, 0.2);
-  border-color: rgba(90, 0, 0, 0.5);
-  transform: scale(1.02);
-}
-
-.close-btn {
-  margin-top: 1.5rem;
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 0.85rem;
-  transition: color 0.2s;
-}
-
-.close-btn:hover {
-  color: var(--text);
-}
-
-h1,h2,h3 { margin: 0 0 0.5rem 0; }
-
-p {
-  margin: 0;
-  color: var(--muted);
-}
-
-footer {
-  padding: 2rem 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-admin {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.75rem;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-
-.footer-admin:hover {
-  opacity: 1;
-  color: var(--accent);
-}
-
-@keyframes livePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-
-#spotifyModal.active .now-playing-live {
-  color: #00ff66;
-  animation: livePulse 2.4s ease-in-out infinite;
-  text-shadow: 0 0 8px rgba(0,255,102,0.4);
-}
-
-@media (max-width: 800px) {
-  .grid, .contact-grid {
-    grid-template-columns: 1fr;
+@keyframes fadeTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  
-  .video-card, .ig-card {
-    min-width: 260px;
-  }
-  .modal-content {
-    width: 90%;
-    padding: 1.5rem;
-  }
-  #spotifyModal .modal-content {
-    width: 90%;
-  }
-}
-
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tone Medina | Artist</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
-
-<style>
-:root {
-  --bg: #0f1115;
-  --panel: #161a22;
-  --text: #f1f3f5;
-  --muted: #a5adba;
-  --line: rgba(255,255,255,0.12  );
-  --accent: #5a0000;
-  --max: 980px;
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  background: radial-gradient(circle at top right, rgba(27, 32, 48, 0.4) 0%, rgba(15, 17, 21, 0.85) 52%), 
-              url('aztec background sans text.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: var(--text);
-  font-family: Inter, sans-serif;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* ===== DYING NEON BACKGROUND ===== */
-body::before {
-  content: "tone";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Oswald', 'Arial Black', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 21vw;
-  line-height: 0.8;
-  color: rgba(120,0,0,0.18);
-  text-shadow: 0 0 6px rgba(120,0,0,0.95), 0 0 18px rgba(120,0,0,0.9), 0 0 40px rgba(90,0,0,0.8), 0 0 80px rgba(60,0,0,0.7), 0 0 140px rgba(30,0,0,0.55);
-  pointer-events: none;
-  z-index: 0;
-  /* Slower overall cycle but with rapid internal flickers */
-  animation: neonDying 8s infinite;
-}
-
-@keyframes neonDying {
-  0%, 2%, 4%, 10%, 32%, 34%, 40%, 72%, 74%, 100% {
+  to {
     opacity: 1;
-    filter: brightness(1);
-    text-shadow: 0 0 6px rgba(120,0,0,0.95), 0 0 18px rgba(120,0,0,0.9), 0 0 40px rgba(90,0,0,0.8);
-  }
-  
-  /* Rapid stuttering */
-  1%, 3%, 5%, 33%, 73% {
-    opacity: 0.2;
-    filter: brightness(0.3);
-    text-shadow: none;
-  }
-
-  /* Longer brown-out */
-  50%, 60% {
-    opacity: 0.4;
-    filter: brightness(0.6);
-    text-shadow: 0 0 4px rgba(120,0,0,0.4);
-  }
-
-  /* Near death */
-  85%, 92% {
-    opacity: 0.1;
-    filter: brightness(0.2);
-    text-shadow: none;
-  }
-  
-  90% {
-    opacity: 0.8;
-    filter: brightness(0.9);
+    transform: translateY(0);
   }
 }
 
-/* ===== ENHANCED GLASS EFFECT ===== */
-body.modal-open .wrap,
-body.modal-open section,
-body.modal-open header,
-body.modal-open nav,
-body.modal-open footer {
-  filter: blur(12px) grayscale(0.5);
-  transform: scale(0.98);
-  transition: filter 0.4s ease, transform 0.4s ease;
-}
-
-body.modal-open::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  z-index: 998;
-  animation: fadeIn 0.3s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.wrap {
-  width: min(var(--max), calc(100% - 2rem));
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.4s ease;
-}
-
-/* ===== NAV ===== */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  background: rgba(15, 17, 21, 0.85);
-  border-bottom: 1px solid var(--line);
-}
-
-.nav-inner {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.95rem 0;
-}
-
-/* ===== NAV LINKS BASE ===== */
-.links a {
-  color: var(--muted);
-  text-decoration: none;
-  margin-left: 1rem;
-  font-size: 0.8rem;
-  transition: 0.2s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-/* ===== NAV HOVER EFFECT ===== */
-.links a:hover {
-  color: #5a0000;
-  letter-spacing: 0.3px;
-  text-shadow: 0 0 10px rgba(90,0,0,0.5);
-}
-
-/* underline glow */
-.links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 1px;
-  background: #5a0000;
-  box-shadow: 0 0 8px rgba(90,0,0,0.6);
-  transition: 0.25s ease;
-}
-
-.links a:hover::after {
-  width: 100%;
-}
-
-/* ===== BRAND HOVER ===== */
-.nav-brand {
-  transition: 0.25s ease;
-  cursor: pointer;
-  color: var(--text);
+/* ===== LINKS FIX ===== */
+#links .card a {
+  color: #fff;
+  font-weight: 600;
   text-decoration: none;
 }
 
-.nav-brand:hover {
-  color: #5a0000;
-  text-shadow: 0 0 14px rgba(90,0,0,0.6);
-  letter-spacing: 0.5px;
+#links .card a:hover {
+  text-decoration: underline;
 }
-
-/* ===== GOOGLE CALENDAR DARK MODE ===== */
-iframe[src*="calendar.google.com"] {
-    filter: invert(0.9) hue-rotate(180deg);
-}
-
-/* ===== SECTIONS ===== */
-section {
-  padding: 3rem 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem;
-  transition: 0.25s;
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 25px rgba(90,0,0,0.4);
-  transform: translateY(-3px);
-}
-
-.video-row, .ig-row {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent) transparent;
-}
-
-.video-row::-webkit-scrollbar, .ig-row::-webkit-scrollbar {
-  height: 6px;
-}
-
-.video-row::-webkit-scrollbar-thumb, .ig-row::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 10px;
-}
-
-.video-card, .ig-card {
-  min-width: 300px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem;
-  flex: 0 0 auto;
-}
-
-iframe {
-  width: 100%;
-  height: 210px;
-  border: none;
-  border-radius: 10px;
-  margin-top: 0.5rem;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-
-/* ===== ENHANCED MODAL ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-  z-index: 999;
-}
-
-.modal.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-content {
-  width: 380px;
-  background: rgba(22, 26, 34, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 2.5rem;
-  text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(90, 0, 0, 0.3);
-  transform: scale(0.8) translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.modal.active .modal-content {
-  transform: scale(1) translateY(0);
-}
-
-/* Spotify Modal specific sizing */
-#spotifyModal .modal-content {
-  width: 450px;
-  padding: 1.5rem;
-}
-
-/* Calendar Modal specific sizing */
-#calendarModal .modal-content {
-  width: min(1000px, 92vw);
-  padding: 1.25rem;
-}
-
-#calendarModal iframe {
-  height: 70vh;
-  margin-top: 0;
-}
-
-.selectable {
-  user-select: all;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0.8rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--text);
-}
-
-.selectable:hover {
-  background: rgba(90, 0, 0, 0.2);
-  border-color: rgba(90, 0, 0, 0.5);
-  transform: scale(1.02);
-}
-
-.close-btn {
-  margin-top: 1.5rem;
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 0.85rem;
-  transition: color 0.2s;
-}
-
-.close-btn:hover {
-  color: var(--text);
-}
-
-h1,h2,h3 { margin: 0 0 0.5rem 0; }
-
-p {
-  margin: 0;
-  color: var(--muted);
-}
-
-footer {
-  padding: 2rem 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-admin {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.75rem;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-
-.footer-admin:hover {
-  opacity: 1;
-  color: var(--accent);
-}
-
-@keyframes livePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-
-#spotifyModal.active .now-playing-live {
-  color: #00ff66;
-  animation: livePulse 2.4s ease-in-out infinite;
-  text-shadow: 0 0 8px rgba(0,255,102,0.4);
-}
-
-@media (max-width: 800px) {
-  .grid, .contact-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .video-card, .ig-card {
-    min-width: 260px;
-  }
-  .modal-content {
-    width: 90%;
-    padding: 1.5rem;
-  }
-  #spotifyModal .modal-content {
-    width: 90%;
-  }
-}
-
-  
-  
 </style>
 </head>
 
-<body id="top">
+<body>
 
 <nav>
   <div class="wrap nav-inner">
-    <a href="#top" class="nav-brand">Tone Medina</a>
-
+    <div>Tone Medina</div>
     <div class="links">
-      <a onclick="openSpotify()">Music</a>
       <a href="#works">Works</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
       <a href="#links">Links</a>
-      <a href="bio.html">Biography</a>
     </div>
   </div>
 </nav>
 
+<!-- ✅ THIS NOW FADES IN -->
 <header class="wrap" style="padding: 2.5rem 0 1.5rem;">
   <h3 class="fade-text">I am free, therefore I am [sic]</h3>
 </header>
@@ -846,531 +121,47 @@ footer {
   <div class="wrap">
     <div class="card">
       <h3>Recent Projects</h3>
-      <p>Where I m now.</p>
-
-      <div class="ig-row">
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-      </div>
+      <p>Where I am now.</p>
     </div>
   </div>
 </section>
-
-<section id="archives">
-  <div class="wrap">
-    <div class="card">
-      <h3>Archives</h3>
-      <p>COMING SOON | Where ghosts live</p>
-    </div>
-  </div>
-</section>
-
-<section id="news">
-  <div class="wrap">
-    <h2>In the media</h2>
-
-    <div class="video-row">
-      <div class="video-card hover-sound">
-        <h3>CBS Colorado Interview</h3>
-        <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>Desperado A Mile High Noir</h3>
-        <iframe src="https://www.youtube.com/embed/iSCss2GVh4M"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>9News Interview</h3>
-        <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="wrap contact-grid">
-    <div class="card contact-card" id="contactCard">
-      <h2>Contact</h2>
-      <p>Phone: 720.296.8296</p>
-      <p>Email: info@tonemedina.com</p>
-      <p>Instagram: @tonemedina</p>
-      <p>Bluesky: @tonemedina.com</p>
-    </div>
-
-    <div class="card" id="calendarCard">
-      <h2>Art Calendar / Events</h2>
-      <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
-        width="100%"
-        height="400"
-        style="border:0;">
-      </iframe>
-    </div>
-  </div>
-</section>
-
 
 <section id="links">
   <div class="wrap grid">
 
-    <!-- Collaborators -->
     <div class="card">
       <h3>Collaborators</h3>
 
       <p>
-        <a href="https://digilandgrab.com/">Corrina Espinosa</a><br>
+        <a href="https://digilandgrab.com/" target="_blank">Corrina Espinosa</a><br>
         A Denver based artist and curator.
       </p>
 
       <p>
         <a href="https://www.instagram.com/redrum_ley/" target="_blank">Iam Rummley</a><br>
-        Denver based tattoo artist & educator. Owner of Singularity Tattoo Studio.
+        Denver based tattoo artist & educator.
       </p>
 
       <p>
         <a href="https://www.lenguajevulgar.com/" target="_blank">Javier Flores</a><br>
         Socio driven Denver artist, educator & activist.
       </p>
+
     </div>
 
-    <!-- Resources -->
     <div class="card">
       <h3>Resources</h3>
-      <p>COMING SOON | Links &amp; Supplies</p>
+      <p>COMING SOON | Links & Supplies</p>
     </div>
 
   </div>
 </section>
-``
-
 
 </main>
 
-<footer class="wrap">
-  <div>© 2026 Tone Medina</div>
-  <a href="https://github.com/login" target="_blank" class="footer-admin">admin. login</a>
+<footer class="wrap" style="padding: 2rem 0; color: var(--muted);">
+  © 2026 Tone Medina
 </footer>
-
-<!-- Contact Modal -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>Contact</h3>
-    <p style="margin-bottom: 1rem;">Click or long press</p>
-    <div class="selectable" onclick="copyText('info@tonemedina.com'  )">
-      info@tonemedina.com
-    </div>
-    <div class="selectable" onclick="copyText('7202968296')">
-      720 296 8296
-    </div>
-    <div class="close-btn" onclick="closeModal()">Close ✕</div>
-  </div>
-</div>
-
-<!-- Calendar Modal -->
-<div class="modal" id="calendarModal">
-  <div class="modal-content">
-    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
-    <p style="margin-bottom: 1rem;">see you soon.</p>
-    <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
-      width="100%"
-      style="border:0;">
-    </iframe>
-    <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
-  </div>
-</div>
-
-<!-- Spotify Modal -->
-<div class="modal" id="spotifyModal">
-  <div class="modal-content">
-    <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&amp;theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    <div class="close-btn" onclick="closeSpotify( )">Close ✕</div>
-  </div>
-</div>
-
-<script async src="//www.instagram.com/embed.js"></script>
-
-<script>
-const contactTrigger = document.getElementById("contactCard");
-const modal = document.getElementById("modal");
-const spotifyModal = document.getElementById("spotifyModal");
-const calendarCard = document.getElementById("calendarCard");
-const calendarModal = document.getElementById("calendarModal");
-const contactModalContent = modal.querySelector(".modal-content");
-const calendarModalContent = calendarModal.querySelector(".modal-content");
-
-// Open modal on mouse hover (mouseenter)
-contactTrigger.addEventListener("mouseenter", () => {
-  modal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-contactModalContent.addEventListener("mouseleave", () => {
-  closeModal();
-});
-
-function closeModal() {
-  modal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-calendarCard.addEventListener("mouseenter", () => {
-  calendarModal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-calendarModalContent.addEventListener("mouseleave", () => {
-  closeCalendar();
-});
-
-function closeCalendar() {
-  calendarModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-function openSpotify() {
-  spotifyModal.classList.add("active");
-  document.body.classList.add("modal-open");
-}
-
-function closeSpotify() {
-  spotifyModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-// Close on clicking outside the content
-window.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-  if (e.target === spotifyModal) closeSpotify();
-  if (e.target === calendarModal) closeCalendar();
-});
-
-// Re-process Instagram embeds after page load
-window.addEventListener("load", () => {
-  if (window.instgrm) {
-    window.instgrm.Embeds.process();
-  }
-});
-
-// Copy text function with visual feedback
-function copyText(text) {
-  navigator.clipboard.writeText(text);
-  const flash = document.createElement("div");
-  flash.textContent = "> copied: " + text;
-  flash.style.position = "fixed";
-  flash.style.bottom = "20px";
-  flash.style.left = "50%";
-  flash.style.transform = "translateX(-50%)";
-  flash.style.background = "#050805";
-  flash.style.color = "#00ff66";
-  flash.style.fontFamily = "monospace";
-  flash.style.fontSize = "12px";
-  flash.style.padding = "8px 12px";
-  flash.style.border = "1px solid #00ff66";
-  flash.style.boxShadow = "0 0 12px rgba(0,255,102,0.4)";
-  flash.style.borderRadius = "6px";
-  flash.style.zIndex = "9999";
-  document.body.appendChild(flash);
-  setTimeout(() => {
-    flash.style.opacity = "0";
-    flash.style.transition = "opacity 0.5s ease";
-    setTimeout(() => flash.remove(), 500);
-  }, 1200);
-}
-</script>
-
-</body>
-</html>
- 
-  
-</style>
-</head>
-
-<body id="top">
-
-<nav>
-  <div class="wrap nav-inner">
-    <a href="#top" class="nav-brand">Tone Medina</a>
-
-    <div class="links">
-      <a onclick="openSpotify()">Music</a>
-      <a href="#works">Works</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a href="#links">Links</a>
-      <a href="bio.html">Biography</a>
-    </div>
-  </div>
-</nav>
-
-<header class="wrap" style="padding: 2.5rem 0 1.5rem;">
-  <h3 class="fade-text">I am free, therefore I am [sic]</h3>
-</header>
-
-<main>
-
-<section id="works">
-  <div class="wrap">
-    <div class="card">
-      <h3>Recent Projects</h3>
-      <p>Where I m now.</p>
-
-      <div class="ig-row">
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="archives">
-  <div class="wrap">
-    <div class="card">
-      <h3>Archives</h3>
-      <p>COMING SOON | Where ghosts live</p>
-    </div>
-  </div>
-</section>
-
-<section id="news">
-  <div class="wrap">
-    <h2>In the media</h2>
-
-    <div class="video-row">
-      <div class="video-card hover-sound">
-        <h3>CBS Colorado Interview</h3>
-        <iframe src="https://www.youtube.com/embed/B0I_qy2mrHA"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>Desperado A Mile High Noir</h3>
-        <iframe src="https://www.youtube.com/embed/iSCss2GVh4M"></iframe>
-      </div>
-      <div class="video-card hover-sound">
-        <h3>9News Interview</h3>
-        <iframe src="https://www.youtube.com/embed/z4t8C3TUu8Q"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="wrap contact-grid">
-    <div class="card contact-card" id="contactCard">
-      <h2>Contact</h2>
-      <p>Phone: 720.296.8296</p>
-      <p>Email: info@tonemedina.com</p>
-      <p>Instagram: @tonemedina</p>
-      <p>Bluesky: @tonemedina.com</p>
-    </div>
-
-    <div class="card" id="calendarCard">
-      <h2>Art Calendar / Events</h2>
-      <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
-        width="100%"
-        height="400"
-        style="border:0;">
-      </iframe>
-    </div>
-  </div>
-</section>
-
-
-<section id="links">
-  <div class="wrap grid">
-
-    <!-- Collaborators -->
-    <div class="card">
-      <h3>Collaborators</h3>
-
-      <p>
-        <a href="https://digilandgrab.com/">Corrina Espinosa</a><br>
-        A Denver based artist and curator.
-      </p>
-
-      <p>
-        <a href="https://www.instagram.com/redrum_ley/" target="_blank">Iam Rummley</a><br>
-        Denver based tattoo artist & educator. Owner of Singularity Tattoo Studio.
-      </p>
-
-      <p>
-        <a href="https://www.lenguajevulgar.com/" target="_blank">Javier Flores</a><br>
-        Socio driven Denver artist, educator & activist.
-      </p>
-    </div>
-
-    <!-- Resources -->
-    <div class="card">
-      <h3>Resources</h3>
-      <p>COMING SOON | Links &amp; Supplies</p>
-    </div>
-
-  </div>
-</section>
-``
-
-
-</main>
-
-<footer class="wrap">
-  <div>© 2026 Tone Medina</div>
-  <a href="https://github.com/login" target="_blank" class="footer-admin">admin. login</a>
-</footer>
-
-<!-- Contact Modal -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>Contact</h3>
-    <p style="margin-bottom: 1rem;">Click or long press</p>
-    <div class="selectable" onclick="copyText('info@tonemedina.com'  )">
-      info@tonemedina.com
-    </div>
-    <div class="selectable" onclick="copyText('7202968296')">
-      720 296 8296
-    </div>
-    <div class="close-btn" onclick="closeModal()">Close ✕</div>
-  </div>
-</div>
-
-<!-- Calendar Modal -->
-<div class="modal" id="calendarModal">
-  <div class="modal-content">
-    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
-    <p style="margin-bottom: 1rem;">see you soon.</p>
-    <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
-      width="100%"
-      style="border:0;">
-    </iframe>
-    <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
-  </div>
-</div>
-
-<!-- Spotify Modal -->
-<div class="modal" id="spotifyModal">
-  <div class="modal-content">
-    <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&amp;theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    <div class="close-btn" onclick="closeSpotify( )">Close ✕</div>
-  </div>
-</div>
-
-<script async src="//www.instagram.com/embed.js"></script>
-
-<script>
-const contactTrigger = document.getElementById("contactCard");
-const modal = document.getElementById("modal");
-const spotifyModal = document.getElementById("spotifyModal");
-const calendarCard = document.getElementById("calendarCard");
-const calendarModal = document.getElementById("calendarModal");
-const contactModalContent = modal.querySelector(".modal-content");
-const calendarModalContent = calendarModal.querySelector(".modal-content");
-
-// Open modal on mouse hover (mouseenter)
-contactTrigger.addEventListener("mouseenter", () => {
-  modal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-contactModalContent.addEventListener("mouseleave", () => {
-  closeModal();
-});
-
-function closeModal() {
-  modal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-calendarCard.addEventListener("mouseenter", () => {
-  calendarModal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-calendarModalContent.addEventListener("mouseleave", () => {
-  closeCalendar();
-});
-
-function closeCalendar() {
-  calendarModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-function openSpotify() {
-  spotifyModal.classList.add("active");
-  document.body.classList.add("modal-open");
-}
-
-function closeSpotify() {
-  spotifyModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-// Close on clicking outside the content
-window.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-  if (e.target === spotifyModal) closeSpotify();
-  if (e.target === calendarModal) closeCalendar();
-});
-
-// Re-process Instagram embeds after page load
-window.addEventListener("load", () => {
-  if (window.instgrm) {
-    window.instgrm.Embeds.process();
-  }
-});
-
-// Copy text function with visual feedback
-function copyText(text) {
-  navigator.clipboard.writeText(text);
-  const flash = document.createElement("div");
-  flash.textContent = "> copied: " + text;
-  flash.style.position = "fixed";
-  flash.style.bottom = "20px";
-  flash.style.left = "50%";
-  flash.style.transform = "translateX(-50%)";
-  flash.style.background = "#050805";
-  flash.style.color = "#00ff66";
-  flash.style.fontFamily = "monospace";
-  flash.style.fontSize = "12px";
-  flash.style.padding = "8px 12px";
-  flash.style.border = "1px solid #00ff66";
-  flash.style.boxShadow = "0 0 12px rgba(0,255,102,0.4)";
-  flash.style.borderRadius = "6px";
-  flash.style.zIndex = "9999";
-  document.body.appendChild(flash);
-  setTimeout(() => {
-    flash.style.opacity = "0";
-    flash.style.transition = "opacity 0.5s ease";
-    setTimeout(() => flash.remove(), 500);
-  }, 1200);
-}
-</script>
 
 </body>
 </html>
