@@ -419,7 +419,7 @@ footer {
       <a href="#news">News</a>
       <a href="#contact">Contact</a>
       <a href="#links">Links</a>
-      <a href="#biography">Biography</a>
+      <a href="bio.html">Biography</a>
     </div>
   </div>
 </nav>
@@ -500,7 +500,7 @@ footer {
     <div class="card" id="calendarCard">
       <h2>Art Calendar / Events</h2>
       <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
+        src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
         width="100%"
         height="400"
         style="border:0;">
@@ -513,30 +513,11 @@ footer {
   <div class="wrap grid">
     <div class="card">
       <h3>Collaborators</h3>
-      <p>COMING SOON | Friends & Collectives</p>
+      <p>COMING SOON | Friends &amp; Collectives</p>
     </div>
     <div class="card">
       <h3>Resources</h3>
-      <p>COMING SOON | Links & Supplies</p>
-    </div>
-  </div>
-</section>
-
-<section id="biography">
-  <div class="wrap">
-    <div class="card">
-      <h2>Biography</h2>
-      <p>
-        Tone Medina is a Denver-based artist.
-        with over 20 years of experience as a professional artist. 
-        With a background in communication design, my art tends to stay rooted in the traditional
-        with a focus on the ephemeral world of street painting. I've
-        since expanded to include digital creations as well as the immersive new media.
-        By blending physical artistry with modern technology. Currently exploring
-        how digital tools can enhance the visual narrative of community-focused art.
-        I'm Interested pushing the boundaries of perception.
-        
-      </p>
+      <p>COMING SOON | Links &amp; Supplies</p>
     </div>
   </div>
 </section>
@@ -569,7 +550,7 @@ footer {
     <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
     <p style="margin-bottom: 1rem;">see you soon.</p>
     <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
+      src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
       width="100%"
       style="border:0;">
     </iframe>
@@ -581,95 +562,4 @@ footer {
 <div class="modal" id="spotifyModal">
   <div class="modal-content">
     <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    <div class="close-btn" onclick="closeSpotify( )">Close ✕</div>
-  </div>
-</div>
-
-<script async src="//www.instagram.com/embed.js"></script>
-
-<script>
-const contactTrigger = document.getElementById("contactCard");
-const modal = document.getElementById("modal");
-const spotifyModal = document.getElementById("spotifyModal");
-const calendarCard = document.getElementById("calendarCard");
-const calendarModal = document.getElementById("calendarModal");
-const contactModalContent = modal.querySelector(".modal-content");
-const calendarModalContent = calendarModal.querySelector(".modal-content");
-
-// Open modal on mouse hover (mouseenter)
-contactTrigger.addEventListener("mouseenter", () => {
-  modal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-contactModalContent.addEventListener("mouseleave", () => {
-  closeModal();
-});
-
-function closeModal() {
-  modal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-calendarCard.addEventListener("mouseenter", () => {
-  calendarModal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
-
-calendarModalContent.addEventListener("mouseleave", () => {
-  closeCalendar();
-});
-
-function closeCalendar() {
-  calendarModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-function openSpotify() {
-  spotifyModal.classList.add("active");
-  document.body.classList.add("modal-open");
-}
-
-function closeSpotify() {
-  spotifyModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
-}
-
-// Close on clicking outside the content
-window.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-  if (e.target === spotifyModal) closeSpotify();
-  if (e.target === calendarModal) closeCalendar();
-});
-
-
-// Copy text function with visual feedback
-function copyText(text) {
-  navigator.clipboard.writeText(text);
-  const flash = document.createElement("div");
-  flash.textContent = "> copied: " + text;
-  flash.style.position = "fixed";
-  flash.style.bottom = "20px";
-  flash.style.left = "50%";
-  flash.style.transform = "translateX(-50%)";
-  flash.style.background = "#050805";
-  flash.style.color = "#00ff66";
-  flash.style.fontFamily = "monospace";
-  flash.style.fontSize = "12px";
-  flash.style.padding = "8px 12px";
-  flash.style.border = "1px solid #00ff66";
-  flash.style.boxShadow = "0 0 12px rgba(0,255,102,0.4)";
-  flash.style.borderRadius = "6px";
-  flash.style.zIndex = "9999";
-  document.body.appendChild(flash);
-  setTimeout(() => {
-    flash.style.opacity = "0";
-    flash.style.transition = "opacity 0.5s ease";
-    setTimeout(() => flash.remove(), 500);
-  }, 1200);
-}
-</script>
-
-</body>
-</html>
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&amp;theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
