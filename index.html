@@ -37,29 +37,25 @@ body {
     position: relative;
 }
 
-/* ===== DYING NEON BACKGROUND ===== */
+//* ===== DYING NEON BACKGROUND ===== */
 body::before {
-  content: "TONE";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  font-family: Impact, Haettenschweiler, 'Arial Black', sans-serif;
-  font-weight: 200;
-  letter-spacing: .19em;
-
-  font-size: 21vw;
-  line-height: 0.8;
-
-  color: rgba(120,0,0,0.18);
-
-  text-shadow:
-    0 0 6px rgba(120,0,0,0.95),
-    0 0 18px rgba(120,0,0,0.9),
-    0 0 40px rgba(90,0,0,0.8),
-    0 0 80px rgba(60,0,0,0.7),
-    0 0 140px rgba(30,0,0,0.55);
+    content: "TONE";
+    position: fixed;
+    
+    /* 🛠️ ADJUST THESE TWO TO MOVE THE TEXT */
+    top: 45%;  /* Decrease to move UP, increase to move DOWN */
+    left: 50%; /* Decrease to move LEFT, increase to move RIGHT */
+    
+    transform: translate(-50%, -50%);
+    font-family: Impact, Haettenschweiler, 'Arial Black', sans-serif;
+    font-weight: 200;
+    
+    /* 🛠️ ADJUST THESE TO MATCH THE SIZE OF THE IMAGE TEXT */
+    letter-spacing: .19em; 
+    font-size: 21vw; 
+    
+    line-height: 0.8;
+    color: rgba(120,0,0,0.18);
 
   pointer-events: none;
   z-index: 0;
