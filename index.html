@@ -193,6 +193,28 @@ nav {
 iframe[src*="calendar.google.com"] {
     filter: invert(0.9) hue-rotate(180deg);
 }
+
+/* ===== HEADER TEXT ANIMATION ===== */
+header h3 {
+    opacity: 0; /* Keeps it hidden until the animation starts */
+    animation: cinematicReveal 2.5s ease-out forwards;
+    animation-delay: 0.3s; /* Waits a split second after the page loads */
+}
+
+@keyframes cinematicReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+        filter: blur(8px);
+        letter-spacing: 0em;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+        letter-spacing: 0.05em; /* Gently spaces the letters out as it fades in */
+    }
+}  
 /* ===== SECTIONS ===== */
 section {
   padding: 3rem 0;
