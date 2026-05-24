@@ -224,7 +224,8 @@ section {
   transform: translateY(-3px);
 }
 
-.video-row, .ig-row {
+/* Updated rows to separate video and ig layouts */
+.video-row {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
@@ -233,13 +234,36 @@ section {
   scrollbar-color: var(--accent) transparent;
 }
 
-.video-row::-webkit-scrollbar, .ig-row::-webkit-scrollbar {
+.video-row::-webkit-scrollbar {
   height: 6px;
 }
 
-.video-row::-webkit-scrollbar-thumb, .ig-row::-webkit-scrollbar-thumb {
+.video-row::-webkit-scrollbar-thumb {
   background: var(--accent);
   border-radius: 10px;
+}
+
+/* Rolling Gallery Classes for IG Row */
+.ig-row {
+  overflow: hidden;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+.ig-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  animation: rollingGallery 30s linear infinite;
+}
+
+.ig-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes rollingGallery {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 0.5rem)); }
 }
 
 .video-card, .ig-card {
@@ -264,7 +288,6 @@ iframe {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-
 
 /* ===== ENHANCED MODAL ===== */
 .modal {
@@ -407,22 +430,21 @@ footer {
 }
 
 /* Collaborator Links Animation */
-  .card a {
-    color: var(--text); /* Uses your site's bright off-white */
-    text-decoration: none; 
-    font-weight: 600; 
-    font-size: 1.1rem; 
-    display: inline-block; 
-    /* Changed from ease-in-out to linear for a smooth, constant spin */
-    transition: all 0.5s linear; 
-  }
-  
-.card a:hover {
-    color: #ff3333; /* I recommend a bright red here so it pops against the dark background while spinning! */
-    transform: rotateX(360deg); 
-  }
+.card a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: inline-block;
+  transition: all 0.5s linear;
+}
 
-  /* Add space between each link entry */
+.card a:hover {
+  color: #ff3333;
+  transform: rotateX(360deg);
+}
+
+/* Add space between each link entry */
 #links .card p {
   margin-bottom: 1.2rem;
 }
@@ -432,8 +454,6 @@ footer {
   margin-bottom: 0;
 }
 </style> 
-
-
 </head>
 
 <body id="top">
@@ -466,20 +486,37 @@ footer {
       <p>Where I m now.</p>
 
       <div class="ig-row">
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="ig-card">
-          <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
-            data-instgrm-version="14"></blockquote>
+        <div class="ig-track">
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
+              data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
+              data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
+              data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/DP8Gn0-DMlC/"
+              data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/DWz96ouDEWx/"
+              data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="ig-card">
+            <blockquote class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/CwI_0gBv7oL/"
+              data-instgrm-version="14"></blockquote>
+          </div>
         </div>
       </div>
     </div>
@@ -529,7 +566,7 @@ footer {
     <div class="card" id="calendarCard">
       <h2>Art Calendar / Events</h2>
       <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
+        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
         width="100%"
         height="400"
         style="border:0;">
@@ -538,13 +575,12 @@ footer {
   </div>
 </section>
 
-
 <section id="links">
   <div class="wrap grid">
 
-    <!-- Collaborators -->
     <div class="card">
       <h3>Collaborators</h3>
+
       <p style="margin-bottom: 1.5rem;">Friends & Collaborators. | Click each name to learn more.</p>
 
       <p>
@@ -563,7 +599,6 @@ footer {
       </p>
     </div>
 
-    <!-- Resources -->
     <div class="card">
       <h3>Resources</h3>
       <p style="margin-bottom: 1.5rem;">Festivals | Art Resources</p>
@@ -571,12 +606,12 @@ footer {
        <p>
         <a href="https://denverchalk.art/">The Denver Chalk Art Festival</a><br>
         Voted Denvers "Best Festival"Voted "Best Festival" in the Westword Best of Denver reachers choice.
-
-         <p>
-        <a href="https://terryludwig.com/">Terry Ludwig Pastels</a><br>
-        Handmade Soft Pastels, handmade pastels since 2005.
-
-         
+       </p>
+       
+       <p> 
+        <a href="https://terryludwig.com/">Terry Ludwig Pastels</a><br> 
+        Handmade Soft Pastels, handmade pastels since 2005. 
+       </p>
     </div>
 
   </div>
@@ -590,7 +625,6 @@ footer {
   <a href="https://github.com/login" target="_blank" class="footer-admin">admin. login</a>
 </footer>
 
-<!-- Contact Modal -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3>Contact</h3>
@@ -605,13 +639,12 @@ footer {
   </div>
 </div>
 
-<!-- Calendar Modal -->
 <div class="modal" id="calendarModal">
   <div class="modal-content">
     <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
     <p style="margin-bottom: 1rem;">see you soon.</p>
     <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688"
+      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
       width="100%"
       style="border:0;">
     </iframe>
@@ -619,7 +652,6 @@ footer {
   </div>
 </div>
 
-<!-- Spotify Modal -->
 <div class="modal" id="spotifyModal">
   <div class="modal-content">
     <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
