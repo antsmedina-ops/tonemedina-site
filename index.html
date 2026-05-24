@@ -413,7 +413,8 @@ footer {
     font-weight: 600; 
     font-size: 1.1rem; 
     display: inline-block; 
-    transition: all 0.5s ease-in-out; 
+    /* Changed from ease-in-out to linear for a smooth, constant spin */
+    transition: all 0.5s linear; 
   }
   
 .card a:hover {
