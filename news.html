@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tone Medina | Artist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body id="top">
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-brand">Tone Medina</a>
+    <div class="links">
+      <a onclick="openSpotify()">Music</a>
+      <a href="works.html">Works</a>
+      <a href="news.html">News</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="links.html">Links</a>
+      <a href="bio.html">Biography</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  
+  </main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Tone Medina</div>
+    <a href="https://github.com/antsmedina-ops" target="_blank" class="footer-admin">admin.login</a>
+  </div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h2>Connect</h2>
+    <p style="margin-bottom: 1.5rem;">Reach out for collaborations.</p>
+    <div class="selectable" onclick="copyText('info@tonemedina.com')">info@tonemedina.com</div>
+    <div class="selectable" onclick="copyText('720.296.8296')">720.296.8296</div>
+    <div class="selectable" onclick="window.open('https://instagram.com/tonemedina','_blank')">@tonemedina (IG)</div>
+    <div class="selectable" onclick="window.open('https://bsky.app/profile/tonemedina.com','_blank')">@tonemedina.com (Bluesky)</div>
+    <div class="close-btn" onclick="closeModal()">[ close ]</div>
+  </div>
+</div>
+
+<div class="modal" id="spotifyModal">
+  <div class="modal-content">
+    <h2 class="now-playing-live">● LIVE FEED</h2>
+    <p style="margin-bottom: 1rem; color: #00ff66;">Currently hacking the mainframe...</p>
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/14aQfFjC22S4xR43T65xM1?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div class="close-btn" onclick="closeSpotify()">[ close ]</div>
+  </div>
+</div>
+
+<div class="modal" id="calendarModal">
+  <div class="modal-content">
+    <h2>Art Calendar / Events</h2>
+    <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688" width="100%" height="400" style="border:0;"></iframe>
+    <div class="close-btn" onclick="closeCalendar()">[ close ]</div>
+  </div>
+</div>
+
+<script async src="//www.instagram.com/embed.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
