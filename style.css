@@ -461,9 +461,8 @@ footer {
   max-width: 700px;
   opacity: 0.65;
   text-align: center;
-  
-  /* The entire block fades out at the 8-second mark */
-  animation: vanish 2s ease-in-out 8s forwards;
+  /* Fades everything out after all lines finish */
+  animation: vanish 2s ease-in-out 7.5s forwards;
 }
 
 .fade-text span {
@@ -471,17 +470,22 @@ footer {
   width: fit-content; 
   margin: 0 auto;
   clip-path: inset(0 100% 0 0);
-  white-space: nowrap; /* Ensures the text stays on one line per span */
+  white-space: nowrap;
 }
 
 .fade-text .line-1 {
-  /* Line 1 has 45 characters */
-  animation: typeLine 2.5s steps(45) forwards;
+  /* 20 characters */
+  animation: typeLine 1.5s steps(20) forwards;
 }
 
 .fade-text .line-2 {
-  /* Waits 2.5 seconds for line 1, then types line 2 (40 characters) */
-  animation: typeLine 2.5s steps(40) 2.5s forwards;
+  /* 28 characters, starts after 1.5s */
+  animation: typeLine 1.5s steps(28) 1.5s forwards;
+}
+
+.fade-text .line-3 {
+  /* 40 characters, starts after 3s */
+  animation: typeLine 2s steps(40) 3s forwards;
 }
 
 @keyframes typeLine {
