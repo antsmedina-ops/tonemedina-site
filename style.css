@@ -493,3 +493,15 @@ footer {
   from { opacity: 0.65; filter: blur(0px); }
   to { opacity: 0; filter: blur(4px); transform: translateY(-5px); }
 }
+
+/* ===== INSTAGRAM CARD HOVER EFFECT ===== */
+.ig-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.ig-card:hover {
+  transform: scale(1.05); 
+  z-index: 10;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
