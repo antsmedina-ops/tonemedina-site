@@ -513,3 +513,28 @@ footer {
 .ig-row:hover .ig-track {
   animation-play-state: paused;
 }
+
+/* ===== TERMINAL LINK SCROLL ===== */
+.link-scroll-container {
+  height: 400px; /* Fixed height for the window */
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.link-track {
+  display: flex;
+  flex-direction: column;
+  animation: scrollLinks 20s linear infinite;
+}
+
+@keyframes scrollLinks {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); } /* Scrolls half the content */
+}
+
+.link-track:hover {
+  animation-play-state: paused; /* Allows user to stop and click */
+}
