@@ -515,20 +515,6 @@ footer {
 }
 
 /* ===== TERMINAL LINK SCROLL ===== */
-.link-scroll-container {
-  height: 400px; /* Fixed height for the window */
-  overflow: hidden;
-  position: relative;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
-}
-
-.link-track {
-  display: flex;
-  flex-direction: column;
-  animation: scrollLinks 20s linear infinite;
-}
 
 @keyframes scrollLinks {
   0% { transform: translateY(0); }
@@ -538,3 +524,15 @@ footer {
 .link-track:hover {
   animation-play-state: paused; /* Allows user to stop and click */
 }
+
+.link-scroll-container {
+  height: 500px; /* Adjust this to the exact height you want */
+  overflow: hidden; /* This hides the cards that are "off screen" */
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  /* Ensure it doesn't grow */
+  flex-shrink: 0;
+}
+
