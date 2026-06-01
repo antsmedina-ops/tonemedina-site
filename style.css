@@ -503,6 +503,7 @@ footer {
 .ig-card:hover {
   transform: scale(1.25); /* Slightly larger zoom */
   z-index: 10;
+  overflow: visible;
   cursor: pointer;
   filter: brightness(1.1) grayscale(0); /* Brighten and remove grayscale */
   box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* Deeper shadow for "lift" */
