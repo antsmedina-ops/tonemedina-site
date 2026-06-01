@@ -508,4 +508,8 @@ footer {
   filter: brightness(1.1) grayscale(0); /* Brighten and remove grayscale */
   box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* Deeper shadow for "lift" */
   border-color: rgba(90, 0, 0, 0.8); /* Crimson border on hover */
+} /* <--- ADD THIS BRACE HERE */
+
+.ig-row:hover .ig-track {
+  animation-play-state: paused;
 }
