@@ -24,8 +24,15 @@ body {
   font-family: Inter, sans-serif;
   overflow-x: hidden;
   position: relative;
-}
 
+  /* ⚡ ADD THESE THREE LINES TO STICK THE FOOTER */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1;
+}
 /* ===== DYING NEON BACKGROUND ===== */
 body::before {
   content: "tone";
