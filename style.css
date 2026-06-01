@@ -465,32 +465,30 @@ footer {
   line-height: 1.6;
   margin: 0 auto;
   
-  /* Starts fully hidden by cropping the right side all the way to the left */
+  /* Restored the subtle, dimmed look */
+  opacity: 0.65; 
+  
+  /* Starts fully hidden */
   clip-path: inset(0 100% 0 0); 
   
-  /* Runs the animation once over 8 seconds and stops at the end state */
-  animation: typeAndVanish 8s ease-in-out forwards;
+  /* Splits the animation: Typewriter runs first, Vanish runs later */
+  animation: 
+    typeWriter 4s steps(91) forwards,
+    vanish 2s ease-in-out 7.5s forwards;
 }
 
-@keyframes typeAndVanish {
-  0% {
-    clip-path: inset(0 100% 0 0); /* Starts hidden */
-    opacity: 1;
-    filter: blur(0px);
+@keyframes typeWriter {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes vanish {
+  from { 
+    opacity: 0.65; 
+    filter: blur(0px); 
   }
-  35% {
-    clip-path: inset(0 0 0 0); /* Fully revealed from left to right */
-    opacity: 1;
-    filter: blur(0px);
-  }
-  75% {
-    clip-path: inset(0 0 0 0);
-    opacity: 1; /* Holds steady so the user has time to read it */
-    filter: blur(0px);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    opacity: 0; /* Fades out completely */
-    filter: blur(4px); /* Adds a ghost-like dissolve effect as it vanishes */
+  to { 
+    opacity: 0; 
+    filter: blur(4px); 
+    transform: translateY(-5px); 
   }
 }
