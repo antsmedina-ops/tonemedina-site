@@ -462,7 +462,7 @@ footer {
   opacity: 0.65;
   text-align: center;
   /* Fades everything out after all lines finish */
-  animation: vanish 2s ease-in-out 7.5s forwards;
+  animation: vanish 2s ease-in-out 10s forwards;
 }
 
 .fade-text span {
@@ -474,18 +474,18 @@ footer {
 }
 
 .fade-text .line-1 {
-  /* 20 characters */
-  animation: typeLine 1.5s steps(20) forwards;
+  /* 20 characters, slower pace */
+  animation: typeLine 2.5s steps(20) forwards;
 }
 
 .fade-text .line-2 {
-  /* 28 characters, starts after 1.5s */
-  animation: typeLine 1.5s steps(28) 1.5s forwards;
+  /* 28 characters, starts after 2.5s */
+  animation: typeLine 2.5s steps(28) 2.5s forwards;
 }
 
 .fade-text .line-3 {
-  /* 40 characters, starts after 3s */
-  animation: typeLine 2s steps(40) 3s forwards;
+  /* 40 characters, starts after 5s */
+  animation: typeLine 3s steps(40) 5s forwards;
 }
 
 @keyframes typeLine {
