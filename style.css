@@ -457,37 +457,38 @@ footer {
 
 /* ===== HOMEPAGE EPHEMERAL QUOTE ===== */
 .fade-text {
-    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-  font-weight: 300;
-  color: var(--text);
-  max-width: 700px;
-  line-height: 1.6;
   margin: 0 auto;
+  max-width: 700px;
+  opacity: 0.65;
+  text-align: center;
   
-  /* Restored the subtle, dimmed look */
-  opacity: 0.65; 
-  
-  /* Starts fully hidden */
-  clip-path: inset(0 100% 0 0); 
-  
-  /* Splits the animation: Typewriter runs first, Vanish runs later */
-  animation: 
-    typeWriter 4s steps(91) forwards,
-    vanish 2s ease-in-out 7.5s forwards;
+  /* The entire block fades out at the 8-second mark */
+  animation: vanish 2s ease-in-out 8s forwards;
 }
 
-@keyframes typeWriter {
+.fade-text span {
+  display: block; 
+  width: fit-content; 
+  margin: 0 auto;
+  clip-path: inset(0 100% 0 0);
+  white-space: nowrap; /* Ensures the text stays on one line per span */
+}
+
+.fade-text .line-1 {
+  /* Line 1 has 45 characters */
+  animation: typeLine 2.5s steps(45) forwards;
+}
+
+.fade-text .line-2 {
+  /* Waits 2.5 seconds for line 1, then types line 2 (40 characters) */
+  animation: typeLine 2.5s steps(40) 2.5s forwards;
+}
+
+@keyframes typeLine {
   to { clip-path: inset(0 0 0 0); }
 }
 
 @keyframes vanish {
-  from { 
-    opacity: 0.65; 
-    filter: blur(0px); 
-  }
-  to { 
-    opacity: 0; 
-    filter: blur(4px); 
-    transform: translateY(-5px); 
-  }
+  from { opacity: 0.65; filter: blur(0px); }
+  to { opacity: 0; filter: blur(4px); transform: translateY(-5px); }
 }
