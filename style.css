@@ -455,32 +455,42 @@ footer {
   margin-bottom: 0;
 }
 
-/* ===== HOME PAGE TEXT SUBTLETY ===== */
+/* ===== HOMEPAGE EPHEMERAL QUOTE ===== */
 .fade-text {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(1.1rem, 2.5vw, 1.6rem); /* Clean, elegant sizing */
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   font-weight: 300;
   color: var(--text);
   max-width: 700px;
   line-height: 1.6;
+  margin: 0 auto;
   
-  /* 1. Baseline subtlety: starts out half-hidden */
-  opacity: 0.45; 
+  /* Starts fully hidden by cropping the right side all the way to the left */
+  clip-path: inset(0 100% 0 0); 
   
-  /* 2. Scroll Magic: Automatically fades out as the user scrolls down */
-  animation: fadeOutOnScroll linear both;
-  animation-timeline: scroll(root);
-  animation-range: 0px 150px; /* Complete fade-out by 150px of scrolling */
+  /* Runs the animation once over 8 seconds and stops at the end state */
+  animation: typeAndVanish 8s ease-in-out forwards;
 }
 
-@keyframes fadeOutOnScroll {
+@keyframes typeAndVanish {
   0% {
-    opacity: 0.45;
+    clip-path: inset(0 100% 0 0); /* Starts hidden */
+    opacity: 1;
+    filter: blur(0px);
+  }
+  35% {
+    clip-path: inset(0 0 0 0); /* Fully revealed from left to right */
+    opacity: 1;
+    filter: blur(0px);
+  }
+  75% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1; /* Holds steady so the user has time to read it */
     filter: blur(0px);
   }
   100% {
-    opacity: 0;
-    filter: blur(4px); /* Adds a ghost-like dissolve effect */
-    transform: translateY(-10px);
+    clip-path: inset(0 0 0 0);
+    opacity: 0; /* Fades out completely */
+    filter: blur(4px); /* Adds a ghost-like dissolve effect as it vanishes */
   }
 }
