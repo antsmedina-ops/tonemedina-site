@@ -454,3 +454,33 @@ footer {
 #links .card p:last-child {
   margin-bottom: 0;
 }
+
+/* ===== HOME PAGE TEXT SUBTLETY ===== */
+.fade-text {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem); /* Clean, elegant sizing */
+  font-weight: 300;
+  color: var(--text);
+  max-width: 700px;
+  line-height: 1.6;
+  
+  /* 1. Baseline subtlety: starts out half-hidden */
+  opacity: 0.45; 
+  
+  /* 2. Scroll Magic: Automatically fades out as the user scrolls down */
+  animation: fadeOutOnScroll linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0px 150px; /* Complete fade-out by 150px of scrolling */
+}
+
+@keyframes fadeOutOnScroll {
+  0% {
+    opacity: 0.45;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(4px); /* Adds a ghost-like dissolve effect */
+    transform: translateY(-10px);
+  }
+}
