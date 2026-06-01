@@ -456,17 +456,16 @@ footer {
 }
 
 /* ===== HOMEPAGE EPHEMERAL QUOTE ===== */
-.fade-text {
+.home-page .fade-text {
   margin: 0 auto;
   max-width: 700px;
   opacity: 0.65;
   text-align: center;
-  font-family: 'Special Elite', monospace; /* Add this line! */
-  /* Fades everything out after all lines finish */
+  font-family: 'Special Elite', monospace;
   animation: vanish 2s ease-in-out 10s forwards;
 }
 
-.fade-text span {
+.home-page .fade-text span {
   display: block; 
   width: fit-content; 
   margin: 0 auto;
@@ -474,18 +473,15 @@ footer {
   white-space: nowrap;
 }
 
-.fade-text .line-1 {
-  /* 20 characters, slower pace */
+.home-page .fade-text .line-1 {
   animation: typeLine 2.5s steps(20) forwards;
 }
 
-.fade-text .line-2 {
-  /* 28 characters, starts after 2.5s */
+.home-page .fade-text .line-2 {
   animation: typeLine 2.5s steps(28) 2.5s forwards;
 }
 
-.fade-text .line-3 {
-  /* 40 characters, starts after 5s */
+.home-page .fade-text .line-3 {
   animation: typeLine 3s steps(40) 5s forwards;
 }
 
