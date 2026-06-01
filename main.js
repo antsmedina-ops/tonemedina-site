@@ -3,53 +3,72 @@ const modal = document.getElementById("modal");
 const spotifyModal = document.getElementById("spotifyModal");
 const calendarCard = document.getElementById("calendarCard");
 const calendarModal = document.getElementById("calendarModal");
-const contactModalContent = modal.querySelector(".modal-content");
-const calendarModalContent = calendarModal.querySelector(".modal-content");
 
-// Open modal on mouse hover (mouseenter)
-contactTrigger.addEventListener("mouseenter", () => {
-  modal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
+// Open/Close Contact Modal (Only runs if elements exist on the current page)
+if (contactTrigger && modal) {
+  const contactModalContent = modal.querySelector(".modal-content");
+  
+  contactTrigger.addEventListener("mouseenter", () => {
+    modal.classList.add("active");
+    document.body.classList.add("modal-open");
+  });
 
-contactModalContent.addEventListener("mouseleave", () => {
-  closeModal();
-});
-
-function closeModal() {
-  modal.classList.remove("active");
-  document.body.classList.remove("modal-open");
+  if (contactModalContent) {
+    contactModalContent.addEventListener("mouseleave", () => {
+      closeModal();
+    });
+  }
 }
 
-calendarCard.addEventListener("mouseenter", () => {
-  calendarModal.classList.add("active");
-  document.body.classList.add("modal-open");
-});
+function closeModal() {
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+  }
+}
 
-calendarModalContent.addEventListener("mouseleave", () => {
-  closeCalendar();
-});
+// Open/Close Calendar Modal (Only runs if elements exist on the current page)
+if (calendarCard && calendarModal) {
+  const calendarModalContent = calendarModal.querySelector(".modal-content");
+
+  calendarCard.addEventListener("mouseenter", () => {
+    calendarModal.classList.add("active");
+    document.body.classList.add("modal-open");
+  });
+
+  if (calendarModalContent) {
+    calendarModalContent.addEventListener("mouseleave", () => {
+      closeCalendar();
+    });
+  }
+}
 
 function closeCalendar() {
-  calendarModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
+  if (calendarModal) {
+    calendarModal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+  }
 }
 
 function openSpotify() {
-  spotifyModal.classList.add("active");
-  document.body.classList.add("modal-open");
+  if (spotifyModal) {
+    spotifyModal.classList.add("active");
+    document.body.classList.add("modal-open");
+  }
 }
 
 function closeSpotify() {
-  spotifyModal.classList.remove("active");
-  document.body.classList.remove("modal-open");
+  if (spotifyModal) {
+    spotifyModal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+  }
 }
 
-// Close on clicking outside the content
+// Close on clicking outside the content windows
 window.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-  if (e.target === spotifyModal) closeSpotify();
-  if (e.target === calendarModal) closeCalendar();
+  if (modal && e.target === modal) closeModal();
+  if (spotifyModal && e.target === spotifyModal) closeSpotify();
+  if (calendarModal && e.target === calendarModal) closeCalendar();
 });
 
 // Re-process Instagram embeds after page load
