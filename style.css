@@ -461,6 +461,7 @@ footer {
   max-width: 700px;
   opacity: 0.65;
   text-align: center;
+  font-family: 'Special Elite', monospace; /* Add this line! */
   /* Fades everything out after all lines finish */
   animation: vanish 2s ease-in-out 10s forwards;
 }
