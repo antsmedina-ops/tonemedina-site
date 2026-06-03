@@ -28,16 +28,23 @@
   <section id="contact">
     <div class="wrap grid">
       
-      <div class="card">
+      <div class="card" id="contactCard">
         <h3>Contact</h3>
-        <p style="margin-bottom: 1.5rem;">Reach out directly.</p>
-        <p>Phone: 720.296.8296</p>
-        <p>Email: info@tonemedina.com</p>
-        <p>Instagram: @tonemedina</p>
+        <p style="margin-bottom: 1.5rem;">Click to copy.</p>
+        
+        <div class="selectable" onclick="copyText('7202968296')">
+          Phone: 720.296.8296
+        </div>
+        
+        <div class="selectable" onclick="copyText('info@tonemedina.com')">
+          Email: info@tonemedina.com
+        </div>
+        
+        <p style="margin-top: 1rem;">Instagram: @tonemedina</p>
         <p>Bluesky: @tonemedina.com</p>
       </div>
 
-      <div class="card">
+      <div class="card" id="calendarCard">
         <h3>Art Calendar / Events</h3>
         <p style="margin-bottom: 1.5rem;">Where I'll be next.</p>
         <iframe
@@ -56,6 +63,33 @@
   <div>© 2026 Tone Medina</div>
   <a href="https://github.com/antsmedina-ops" target="_blank" class="footer-admin">admin.login</a>
 </footer>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>Contact</h3>
+    <p style="margin-bottom: 1rem;">Click | Long Press </p>
+    <div class="selectable" onclick="copyText('info@tonemedina.com')">
+      info@tonemedina.com
+    </div>
+    <div class="selectable" onclick="copyText('7202968296')">
+      720 296 8296
+    </div>
+    <div class="close-btn" onclick="closeModal()">Close ✕</div>
+  </div>
+</div>
+
+<div class="modal" id="calendarModal">
+  <div class="modal-content">
+    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
+    <p style="margin-bottom: 1rem;">see you soon.</p>
+    <iframe
+      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
+      width="100%"
+      style="border:0;">
+    </iframe>
+    <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
+  </div>
+</div>
 
 <div class="modal" id="spotifyModal">
   <div class="modal-content">
