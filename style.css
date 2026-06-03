@@ -223,3 +223,19 @@ iframe[src*="calendar.google.com"] {
   height: 70vh;
   margin-top: 0;
 }
+
+/* ===== RED GLOW HOVER EFFECTS ===== */
+
+/* Gives navigation links a red neon text glow */
+nav .links a:hover {
+    color: #ff3333 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Gives cards and clickable items a red glowing box shadow */
+.card:hover, .selectable:hover {
+    border-color: #ff3333 !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
