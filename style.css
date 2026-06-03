@@ -291,52 +291,39 @@ nav .links a:hover {
         blink .75s step-end infinite;
 }
 
-/* TEXT REVEAL TIMELINE
-   Uses a transparent gradient mask instead of a colored block.
-   NOTE: If "meant" cuts off a letter too early or late, just tweak '24ch' up or down!
-*/
-@keyframes textRevealSequence {
-    /* 1. INITIAL DELAY: Text is completely hidden while the cursor flashes at the start */
-    0%, 15% {
-        -webkit-mask-image: linear-gradient(to right, #000 0ch, transparent 0ch);
-        mask-image: linear-gradient(to right, #000 0ch, transparent 0ch);
-    }
+/* ===== THE CORRECTED TIMELINES ===== */
+
+/* Invisible Clip-Path: Reveals text up to "meant" and then LOCKS it */
+@keyframes revealSequence {
+    /* 1. INITIAL DELAY: Text stays 100% hidden while cursor flashes at the start */
+    0%, 15% { clip-path: inset(0 100% 0 0); }
     
-    /* 2. INTENTIONAL TYPING: Slowly reveals text letter-by-letter right up to "meant" */
-    65% {
-        -webkit-mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
-        mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
-    }
+    /* 2. INTENTIONAL TYPING: Slowly unclips text up to the end of the word "meant" */
+    65% { clip-path: inset(0 7% 0 0); }
     
-    /* 3. THINKING & SPACING FORWARD: The text reveal STOPS at 24ch permanently. 
-          The rest of the line remains completely invisible. */
-    75%, 100% {
-        -webkit-mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
-        mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
-    }
+    /* 3. THINKING PAUSE: Holds perfectly still at the word "meant" */
+    75% { clip-path: inset(0 7% 0 0); }
+    
+    /* 4. THE FIX: Keeps the text locked at 7%. The rest of the line stays completely hidden */
+    85%, 100% { clip-path: inset(0 7% 0 0); }
 }
 
-/* CURSOR MOVEMENT TIMELINE
-   Moves perfectly with the text, then breaks free to simulate human thinking.
-*/
+/* Cursor Movement: Moves with the text, then breaks free into empty air */
 @keyframes cursorMoveSequence {
-    /* 1. INITIAL DELAY: Cursor blinks in place before typing begins */
-    0%, 15% { left: 0ch; }
+    /* 1. INITIAL DELAY: Cursor blinks patiently at the very beginning */
+    0%, 15% { left: 0%; }
     
-    /* 2. INTENTIONAL TYPING: Creeps steadily across the screen with the letters */
-    65% { left: 24ch; }
+    /* 2. INTENTIONAL TYPING: Cursor drifts steadily right along with the letters */
+    65% { left: 93%; }
     
-    /* 3. THINKING PAUSE: Holds perfectly still at the end of the word "meant" */
-    75% { left: 24ch; }
+    /* 3. THINKING PAUSE: Cursor stays flashing exactly at the end of "meant" */
+    75% { left: 93%; }
     
-    /* 4. SPACING FORWARD: Clicks forward 4 spaces into empty air while text stays hidden */
-    85% { left: 28ch; }
-    
-    /* 5. FINAL HOLD: Pauses at its final position before fading */
-    100% { left: 28ch; }
+    /* 4. SPACING FORWARD: Cursor clicks forward into the empty air, mimicking thought */
+    85%, 100% { left: 100%; }
 }
 
-/* Smoothly dissolves the entire element completely off the screen at the end */
+/* Smoothly dissolves both the text and cursor entirely from the screen at the end */
 @keyframes fadeOutSequence {
     0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
