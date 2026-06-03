@@ -224,18 +224,19 @@ iframe[src*="calendar.google.com"] {
   margin-top: 0;
 }
 
-/* ===== RED GLOW HOVER EFFECTS ===== */
+/*/* ===== RED GLOW & EXPAND HOVER EFFECTS ===== */
 
-/* Gives navigation links a red neon text glow */
+/* Navigation links: Red neon glow */
 nav .links a:hover {
     color: #ff3333 !important;
     text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
     transition: all 0.3s ease;
 }
 
-/* Gives cards and clickable items a red glowing box shadow */
+/* Artist/Name cards: Glow, Border, and slight Expansion */
 .card:hover, .selectable:hover {
     border-color: #ff3333 !important;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.2);
+    transform: scale(1.02); /* This creates the "expand" effect */
     transition: all 0.3s ease;
 }
