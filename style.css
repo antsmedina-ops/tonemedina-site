@@ -255,7 +255,7 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (THE CLIP-PATH LOCK FIX) ===== */
+/* ===== TYPEWRITER EFFECT (PURE PERCENTAGE FIXED LOCK) ===== */
 
 .typewriter {
     display: block;
@@ -266,7 +266,7 @@ nav .links a:hover {
     white-space: nowrap;
     position: relative;
     background: transparent;
-    padding-right: 4ch; /* Creates the empty air space for the cursor to jump into */
+    padding-right: 8px; /* Gives the cursor a tiny bit of clean breathing room at the very end */
     
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
@@ -276,7 +276,7 @@ nav .links a:hover {
         fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Cursor Line */
+/* The Cursor Line: Tracks the percentage lock perfectly */
 .typewriter::after {
     content: "";
     position: absolute;
@@ -290,44 +290,50 @@ nav .links a:hover {
         blink .75s step-end infinite;
 }
 
-/* ===== ANIMATION TIMELINES (PERFECTLY SYNCHRONIZED) ===== */
+/* ===== ANIMATION TIMELINES (PERFECTLY SYNCHRONIZED PERCENTAGES) ===== */
 
-/* TEXT REVEAL: Uses clip-path to smoothly un-clip the text from left to right */
+/* TEXT REVEAL: Smoothly un-clips from 100% hidden down to 0% hidden */
 @keyframes textRevealSequence {
     0%, 15% {
         clip-path: inset(0 100% 0 0); /* 100% hidden from the right edge */
     }
-    65% {
-        clip-path: inset(0 4ch 0 0);  /* Un-clips all the way up to the 4ch padding */
+    70% {
+        clip-path: inset(0 0% 0 0);   /* Smoothly types all the way to the absolute end */
     }
-    75% {
-        clip-path: inset(0 4ch 0 0);  /* Holds during the thinking pause */
+    85% {
+        clip-path: inset(0 0% 0 0);   /* Perfect pause to let the user finish reading */
     }
-    85%, 100% {
-        clip-path: inset(0 0 0 0);    /* Completely revealed */
+    100% {
+        clip-path: inset(0 0% 0 0);   /* Holds text wide open until fade out completes */
     }
 }
 
-/* CURSOR MOVEMENT: Tracks the exact same pixel coordinates as the clip-path edge */
+/* CURSOR MOVEMENT: Mirrors the exact percentage coordinates of the text clip */
 @keyframes cursorMoveSequence {
     0%, 15% {
-        left: 0;
+        left: 0;                      /* Sits flush at the start line */
     }
-    65% {
-        left: calc(100% - 4ch); /* Glued perfectly to the end of the text sentence */
+    70% {
+        left: 100%;                   /* Sweeps fluidly across to follow the last letter */
     }
-    75% {
-        left: calc(100% - 4ch); /* Holds position during the pause */
+    85% {
+        left: 100%;                   /* Pauses tightly at the end of the sentence */
     }
-    85%, 100% {
-        left: calc(100% - 2px); /* Moves out cleanly into the empty air padding */
+    100% {
+        left: 100%;                   /* Holds position through the exit fade */
     }
 }
 
-/* Fades the entire element away smoothly at the very end */
+/* Fades the entire element away cleanly at the very end */
 @keyframes fadeOutSequence {
-    0%, 90% { opacity: 1; visibility: visible; }
-    100% { opacity: 0; visibility: hidden; }
+    0%, 85% { 
+        opacity: 1; 
+        visibility: visible; 
+    }
+    100% { 
+        opacity: 0; 
+        visibility: hidden; 
+    }
 }
 
 /* Clean cursor blinking rhythm */
