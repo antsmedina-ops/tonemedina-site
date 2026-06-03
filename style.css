@@ -255,89 +255,73 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (PURE PERCENTAGE FIXED LOCK) ===== */
+/* ===== MULTI-LINE TYPEWRITER EFFECT ===== */
 
-.typewriter {
-    display: block;
+.typewriter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Keeps text left-aligned inside its block */
+    margin: 0 auto;
     width: max-content;
     max-width: 100%;
-    margin: 0 auto;
-    text-align: left;
-    white-space: nowrap;
-    position: relative;
-    background: transparent;
-    padding-right: 8px; /* Gives the cursor a tiny bit of clean breathing room at the very end */
     
+    /* Fades the entire phrase away smoothly at the very end */
+    animation: fadeOutSequence 10s ease-in-out forwards;
+}
+
+.typewriter-container h3 {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    width: 0;
+    line-height: 1.6;
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
-    
+}
+
+/* Line 1: Types out instantly, then turns off its cursor right as Line 2 starts */
+.line-1 {
+    border-right: 2px solid #fff;
     animation: 
-        textRevealSequence 16s ease-in-out forwards,
-        fadeOutSequence 16s ease-in-out forwards;
+        typeLine1 2.5s steps(46) 0.5s forwards,
+        killCursor 0s linear 3s forwards,
+        blink 0.75s step-end infinite;
 }
 
-/* The Cursor Line: Tracks the percentage lock perfectly */
-.typewriter::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: #fff; 
-    
+/* Line 2: Waits exactly 3 seconds for Line 1 to finish, then starts typing */
+.line-2 {
+    border-right: 2px solid #fff;
     animation: 
-        cursorMoveSequence 16s ease-in-out forwards,
-        blink .75s step-end infinite;
+        typeLine2 1.8s steps(26) 3s forwards,
+        blink 0.75s step-end infinite;
 }
 
-/* ===== ANIMATION TIMELINES (PERFECTLY SYNCHRONIZED PERCENTAGES) ===== */
+/* ===== ANIMATION TIMELINES (EXACT CHARACTER LOCKS) ===== */
 
-/* TEXT REVEAL: Smoothly un-clips from 100% hidden down to 0% hidden */
-@keyframes textRevealSequence {
-    0%, 15% {
-        clip-path: inset(0 100% 0 0); /* 100% hidden from the right edge */
-    }
-    70% {
-        clip-path: inset(0 0% 0 0);   /* Smoothly types all the way to the absolute end */
-    }
-    85% {
-        clip-path: inset(0 0% 0 0);   /* Perfect pause to let the user finish reading */
-    }
-    100% {
-        clip-path: inset(0 0% 0 0);   /* Holds text wide open until fade out completes */
-    }
+@keyframes typeLine1 {
+    from { width: 0; opacity: 1; }
+    to { width: 46ch; opacity: 1; } /* Character count length */
 }
 
-/* CURSOR MOVEMENT: Mirrors the exact percentage coordinates of the text clip */
-@keyframes cursorMoveSequence {
-    0%, 15% {
-        left: 0;                      /* Sits flush at the start line */
-    }
-    70% {
-        left: 100%;                   /* Sweeps fluidly across to follow the last letter */
-    }
-    85% {
-        left: 100%;                   /* Pauses tightly at the end of the sentence */
-    }
-    100% {
-        left: 100%;                   /* Holds position through the exit fade */
-    }
+@keyframes typeLine2 {
+    from { width: 0; opacity: 1; }
+    to { width: 26ch; opacity: 1; } /* Character count length */
 }
 
-/* Fades the entire element away cleanly at the very end */
+/* Turns off the line 1 cursor right when line 2 begins */
+@keyframes killCursor {
+    to { border-right-color: transparent; }
+}
+
+/* Holds the completed text on screen for reading, then fades out */
 @keyframes fadeOutSequence {
-    0%, 85% { 
-        opacity: 1; 
-        visibility: visible; 
-    }
-    100% { 
-        opacity: 0; 
-        visibility: hidden; 
-    }
+    0%, 85% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
 }
 
-/* Clean cursor blinking rhythm */
+/* Classic rhythmic cursor blink */
 @keyframes blink {
-    from, to { background-color: transparent; }
-    50% { background-color: #fff; }
+    from, to { border-color: transparent; }
+    50% { border-color: #fff; }
 }
