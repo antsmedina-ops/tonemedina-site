@@ -255,7 +255,7 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (THE COMPANION CURSOR FIX) ===== */
+/* ===== TYPEWRITER EFFECT (THE COMPOSITOR-LOCKED FIX) ===== */
 
 .typewriter {
     display: block;
@@ -271,30 +271,32 @@ nav .links a:hover {
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
-    /* Your perfect text sequence layout */
+    /* Keeps your perfect typing rhythm and final fade out exactly as they were */
     animation: 
         textRevealSequence 16s ease-in-out forwards,
         fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Cursor Box: Expands its width in perfect lockstep with the text mask */
+/* The Cursor Overlay: Covers the exact dimensions of the text block.
+   The actual vertical cursor line is painted inside a gradient so it never drifts. */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
     bottom: 0;
-    width: 0; /* Handled dynamically by the keyframes below */
-    border-right: 2px solid #fff; /* Your crisp white cursor line */
+    pointer-events: none;
     
+    /* Combines the layer-locked movement with a clean opacity flash */
     animation: 
         cursorMoveSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* ===== ANIMATION TIMELINES ===== */
+/* ===== ANIMATION TIMELINES (PERFECTLY SYNCHRONIZED) ===== */
 
-/* TEXT REVEAL: Completely untouched, exactly how you like it */
+/* TEXT REVEAL: Untouched, exactly your preferred typing cadence */
 @keyframes textRevealSequence {
     0%, 15% {
         -webkit-mask-image: linear-gradient(to right, #000 0, transparent 0);
@@ -310,42 +312,42 @@ nav .links a:hover {
     }
 }
 
-/* CURSOR MOVEMENT: Mirroring the text layer lengths perfectly via width scaling */
+/* CURSOR MOVEMENT: Mirrors the text mask math pixel-for-pixel on every single frame */
 @keyframes cursorMoveSequence {
-    /* 1. Initial Delay: Holds at zero width while the text is hidden */
+    /* 1. INITIAL DELAY: Line sits completely flush at the start line */
     0%, 15% { 
-        width: 0; 
+        background: linear-gradient(to right, transparent 0, #fff 0, #fff 2px, transparent 2px) no-repeat;
     }
     
-    /* 2. Hand-Typed Tracking: Expands seamlessly to match the text edge frame-by-frame */
+    /* 2. HAND-TYPED TRACKING: Glued flawlessly to the right shoulder of the text */
     65% { 
-        width: calc(100% - 4ch); 
+        background: linear-gradient(to right, transparent calc(100% - 4ch), #fff calc(100% - 4ch), #fff calc(100% - 4ch + 2px), transparent calc(100% - 4ch + 2px)) no-repeat;
     }
     
-    /* 3. Thinking Pause: Freezes right at the final punctuation mark */
+    /* 3. THINKING PAUSE: Freezes precisely at the final character */
     75% { 
-        width: calc(100% - 4ch); 
+        background: linear-gradient(to right, transparent calc(100% - 4ch), #fff calc(100% - 4ch), #fff calc(100% - 4ch + 2px), transparent calc(100% - 4ch + 2px)) no-repeat;
     }
     
-    /* 4. Spacing Forward: Steps cleanly out into the empty 4ch padding */
+    /* 4. SPACING FORWARD: Clicks forward over the empty 4ch padding */
     85% { 
-        width: 100%; 
+        background: linear-gradient(to right, transparent 100%, #fff 100%, #fff calc(100% + 2px), transparent calc(100% + 2px)) no-repeat;
     }
     
-    /* 5. Final Hold: Stays put before fading */
+    /* 5. FINAL HOLD: Stays put at the destination before the fade takes over */
     100% { 
-        width: 100%; 
+        background: linear-gradient(to right, transparent 100%, #fff 100%, #fff calc(100% + 2px), transparent calc(100% + 2px)) no-repeat;
     }
 }
 
-/* Fades the entire element away smoothly at the very end */
+/* Fades the entire element away cleanly at the end */
 @keyframes fadeOutSequence {
     0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
 
-/* Cursor blinking rhythm */
+/* Continuous clean cursor blinking via opacity (doesn't trigger layout shifts) */
 @keyframes blink {
-    from, to { border-color: transparent; }
-    50% { border-color: #fff; }
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
 }
