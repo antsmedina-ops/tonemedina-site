@@ -255,43 +255,7 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (THE ULTIMATE FLOATING FIX) ===== */
-.typewriter {
-    display: block;
-    width: max-content;
-    max-width: 100%;
-    margin: 0 auto;
-    text-align: left;
-    white-space: nowrap;
-    position: relative;
-    background: transparent; /* 100% transparent so it floats naturally on your page */
-    
-    /* Responsive font scaling */
-    font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
-    
-    /* Dual animation: controls the transparent text reveal and the final slow fade-out */
-    animation: 
-        textRevealSequence 16s ease-in-out forwards,
-        fadeOutSequence 16s ease-in-out forwards;
-}
-
-/* The Cursor: A clean, sharp line with absolutely NO background box block behind it */
-.typewriter::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: #fff; /* Crisp white cursor line */
-    
-    /* Moves the cursor independently of the text visibility */
-    animation: 
-        cursorMoveSequence 16s ease-in-out forwards,
-        blink .75s step-end infinite;
-}
-
-/* ===== TYPEWRITER EFFECT (CONSOLIDATED & FIXED) ===== */
+/* ===== TYPEWRITER EFFECT (THE COMPANION CURSOR FIX) ===== */
 
 .typewriter {
     display: block;
@@ -307,29 +271,30 @@ nav .links a:hover {
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
+    /* Your perfect text sequence layout */
     animation: 
         textRevealSequence 16s ease-in-out forwards,
         fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Cursor: Fixed with left:0 and guided by transform to prevent dragging/drift */
+/* The Cursor Box: Expands its width in perfect lockstep with the text mask */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
-    left: 0; /* Anchors the cursor perfectly at the starting line */
+    left: 0;
     bottom: 0;
-    width: 2px;
-    background-color: #fff; 
+    width: 0; /* Handled dynamically by the keyframes below */
+    border-right: 2px solid #fff; /* Your crisp white cursor line */
     
     animation: 
         cursorMoveSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* ===== ANIMATION TIMELINES (UNTOUCHED TEXT, LOCKED CURSOR) ===== */
+/* ===== ANIMATION TIMELINES ===== */
 
-/* TEXT REVEAL: Keeps your exact typing flow untouched */
+/* TEXT REVEAL: Completely untouched, exactly how you like it */
 @keyframes textRevealSequence {
     0%, 15% {
         -webkit-mask-image: linear-gradient(to right, #000 0, transparent 0);
@@ -345,42 +310,42 @@ nav .links a:hover {
     }
 }
 
-/* CURSOR MOVEMENT: Digitally tracked to mirror the text layer pixel-for-pixel */
+/* CURSOR MOVEMENT: Mirroring the text layer lengths perfectly via width scaling */
 @keyframes cursorMoveSequence {
-    /* 1. Flashes at the start while person hesitates */
+    /* 1. Initial Delay: Holds at zero width while the text is hidden */
     0%, 15% { 
-        transform: translateX(0); 
+        width: 0; 
     }
     
-    /* 2. Follows the hand-typed text flawlessly to the last letter */
+    /* 2. Hand-Typed Tracking: Expands seamlessly to match the text edge frame-by-frame */
     65% { 
-        transform: translateX(calc(100% - 4ch)); 
+        width: calc(100% - 4ch); 
     }
     
-    /* 3. Pauses at the end of the sentence (thinking) */
+    /* 3. Thinking Pause: Freezes right at the final punctuation mark */
     75% { 
-        transform: translateX(calc(100% - 4ch)); 
+        width: calc(100% - 4ch); 
     }
     
-    /* 4. Spaces forward into thin air */
+    /* 4. Spacing Forward: Steps cleanly out into the empty 4ch padding */
     85% { 
-        transform: translateX(100%); 
+        width: 100%; 
     }
     
-    /* 5. Holds position before the final vanish */
+    /* 5. Final Hold: Stays put before fading */
     100% { 
-        transform: translateX(100%); 
+        width: 100%; 
     }
 }
 
-/* FADES EVERYTHING AWAY */
+/* Fades the entire element away smoothly at the very end */
 @keyframes fadeOutSequence {
     0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
 
-/* CURSOR BLINK */
+/* Cursor blinking rhythm */
 @keyframes blink {
-    from, to { background-color: transparent; }
-    50% { background-color: #fff; }
+    from, to { border-color: transparent; }
+    50% { border-color: #fff; }
 }
