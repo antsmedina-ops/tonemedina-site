@@ -265,19 +265,19 @@ nav .links a:hover {
     max-width: none !important;
 
     /* Chained animations: 
-       1. typing: 9.5s smooth ease-in-out human glide
+       1. typing: 9.5s smooth human glide
        2. blink: makes the cursor caret flash naturally
-       3. fadeOut: pauses for a few seconds, then takes 1.5s to completely vanish */
+       3. fadeOut: stays totally still, then takes 2s to smoothly fade to black */
     animation: 
         typing 9.5s ease-in-out forwards,
         blink .75s step-end infinite,
-        fadeOut 1.5s ease-in-out 14s forwards;
+        fadeOut 2s ease-in-out 13s forwards;
 }
 
 /* Smoothly glides open past the text to create a "thinking" pause space */
 @keyframes typing {
     from { width: 0; }
-    to { width: calc(max-content + 6ch); } /* Glides the cursor exactly 6 character spaces past the period */
+    to { width: calc(max-content + 6ch); } 
 }
 
 /* Makes the cursor flash */
@@ -286,11 +286,11 @@ nav .links a:hover {
     50% { border-color: #fff; }
 }
 
-/* Makes the text elegantly drift up and vanish completely */
+/* Pure fade to black (Zero movement) */
 @keyframes fadeOut {
+    from { opacity: 1; }
     to {
         opacity: 0;
-        transform: translateY(-5px);
-        visibility: hidden; /* Hides it from the page layout entirely */
+        visibility: hidden; /* Keeps it completely invisible after fading */
     }
 }
