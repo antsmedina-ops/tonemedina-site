@@ -255,73 +255,88 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (REBUILT & FLOATING) ===== */
+/* ===== TYPEWRITER EFFECT (THE ULTIMATE FLOATING FIX) ===== */
 .typewriter {
     display: block;
-    width: max-content; /* Automatically locks onto the exact width of your text */
+    width: max-content;
     max-width: 100%;
-    margin: 0 auto; /* Centers the floating text block on your page */
+    margin: 0 auto;
     text-align: left;
     white-space: nowrap;
     position: relative;
-    padding-right: 4ch; /* The extra "thinking space" padding for the cursor at the end */
+    background: transparent; /* 100% transparent so it floats naturally on your page */
     
-    /* Responsive font sizing */
+    /* Responsive font scaling */
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
-    /* Handles the transparent text reveal and the final slow fade-out */
+    /* Dual animation: controls the transparent text reveal and the final slow fade-out */
     animation: 
-        revealSequence 16s ease-in-out forwards,
+        textRevealSequence 16s ease-in-out forwards,
         fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Cursor: A pure floating line with absolutely NO background box block */
+/* The Cursor: A clean, sharp line with absolutely NO background box block behind it */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
     width: 2px;
-    background-color: #fff; /* White cursor lines up beautifully on your dark layout */
+    background-color: #fff; /* Crisp white cursor line */
     
-    /* Slides the cursor across the screen and keeps it blinking */
+    /* Moves the cursor independently of the text visibility */
     animation: 
         cursorMoveSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* Invisible Clip-Path Timeline: Perfectly reveals text left-to-right */
-@keyframes revealSequence {
-    /* 1. INITIAL DELAY: Text stays 100% hidden while cursor flashes at the start */
-    0%, 15% { clip-path: inset(0 100% 0 0); }
+/* TEXT REVEAL TIMELINE
+   Uses a transparent gradient mask instead of a colored block.
+   NOTE: If "meant" cuts off a letter too early or late, just tweak '24ch' up or down!
+*/
+@keyframes textRevealSequence {
+    /* 1. INITIAL DELAY: Text is completely hidden while the cursor flashes at the start */
+    0%, 15% {
+        -webkit-mask-image: linear-gradient(to right, #000 0ch, transparent 0ch);
+        mask-image: linear-gradient(to right, #000 0ch, transparent 0ch);
+    }
     
-    /* 2. INTENTIONAL TYPING: Slowly unclips text up to the end of the words (93% width) */
-    65% { clip-path: inset(0 7% 0 0); }
+    /* 2. INTENTIONAL TYPING: Slowly reveals text letter-by-letter right up to "meant" */
+    65% {
+        -webkit-mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
+        mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
+    }
     
-    /* 3. THINKING PAUSE: Holds perfectly still at the period */
-    75% { clip-path: inset(0 7% 0 0); }
-    
-    /* 4. SPACING FORWARD: Unclips the remaining 7% of empty padding space */
-    85%, 100% { clip-path: inset(0 0% 0 0); }
+    /* 3. THINKING & SPACING FORWARD: The text reveal STOPS at 24ch permanently. 
+          The rest of the line remains completely invisible. */
+    75%, 100% {
+        -webkit-mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
+        mask-image: linear-gradient(to right, #000 24ch, transparent 24ch);
+    }
 }
 
-/* Cursor Movement Timeline: Locked perfectly to the invisible clip-path above */
+/* CURSOR MOVEMENT TIMELINE
+   Moves perfectly with the text, then breaks free to simulate human thinking.
+*/
 @keyframes cursorMoveSequence {
-    /* 1. INITIAL DELAY: Cursor blinks patiently at the very beginning */
-    0%, 15% { left: 0%; }
+    /* 1. INITIAL DELAY: Cursor blinks in place before typing begins */
+    0%, 15% { left: 0ch; }
     
-    /* 2. INTENTIONAL TYPING: Cursor drifts steadily right along with the letters */
-    65% { left: 93%; }
+    /* 2. INTENTIONAL TYPING: Creeps steadily across the screen with the letters */
+    65% { left: 24ch; }
     
-    /* 3. THINKING PAUSE: Cursor stays flashing exactly at the period (.) */
-    75% { left: 93%; }
+    /* 3. THINKING PAUSE: Holds perfectly still at the end of the word "meant" */
+    75% { left: 24ch; }
     
-    /* 4. SPACING FORWARD: Cursor clicks forward into the empty air, mimicking thought */
-    85%, 100% { left: 100%; }
+    /* 4. SPACING FORWARD: Clicks forward 4 spaces into empty air while text stays hidden */
+    85% { left: 28ch; }
+    
+    /* 5. FINAL HOLD: Pauses at its final position before fading */
+    100% { left: 28ch; }
 }
 
-/* Smoothly dissolves the text and cursor entirely from the screen at the end */
+/* Smoothly dissolves the entire element completely off the screen at the end */
 @keyframes fadeOutSequence {
     0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
@@ -329,6 +344,6 @@ nav .links a:hover {
 
 /* Continuous clean cursor flashing */
 @keyframes blink {
-    from, to { border-color: transparent; }
-    50% { background-color: transparent; } /* Makes the floating line flash smoothly */
+    from, to { background-color: transparent; }
+    50% { background-color: #fff; }
 }
