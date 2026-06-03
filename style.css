@@ -223,6 +223,30 @@ footer.wrap {
   padding: 1.5rem;
 }
 
+/* Spotify Live "Now Playing" Pulsing Glow */
+#spotifyModal .now-playing {
+    color: #1DB954; /* Signature Spotify Green */
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    
+    /* Smooth, rhythmic breathing animation */
+    animation: livePulse 2s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 0.75;
+        text-shadow: 0 0 4px rgba(29, 185, 84, 0.2);
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(29, 185, 84, 0.7), 0 0 20px rgba(29, 185, 84, 0.4);
+    }
+}
+
 /* Calendar Modal specific sizing */
 #calendarModal .modal-content {
   width: min(1000px, 92vw);
