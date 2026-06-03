@@ -262,20 +262,35 @@ nav .links a:hover {
     white-space: nowrap;
     border-right: 2px solid #fff; /* The blinking cursor caret */
     width: 0; 
-    max-width: none !important; /* Fixes the cutoff by letting the text expand completely */
+    max-width: none !important;
 
     /* Chained animations: 
-       1. typing: bumped to 9.5s (slower, more poetic pace) and exactly 74 steps
-       2. blink: handles the flashing cursor caret
-       3. fadeOut: bumped delay to 13s so it stays readable for a few seconds before drifting away */
+       1. typing: 9.5s smooth ease-in-out human glide
+       2. blink: makes the cursor caret flash naturally
+       3. fadeOut: pauses for a few seconds, then takes 1.5s to completely vanish */
     animation: 
-        typing 9.5s steps(74, end) forwards,
+        typing 9.5s ease-in-out forwards,
         blink .75s step-end infinite,
-        fadeOut 1.5s ease-in-out 13s forwards;
+        fadeOut 1.5s ease-in-out 14s forwards;
 }
 
-/* Makes the text reveal itself character-by-character perfectly */
+/* Smoothly glides open past the text to create a "thinking" pause space */
 @keyframes typing {
     from { width: 0; }
-    to { width: 74ch; } /* 'ch' matches the exact width of your 74 characters */
+    to { width: calc(max-content + 6ch); } /* Glides the cursor exactly 6 character spaces past the period */
+}
+
+/* Makes the cursor flash */
+@keyframes blink {
+    from, to { border-color: transparent; }
+    50% { border-color: #fff; }
+}
+
+/* Makes the text elegantly drift up and vanish completely */
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-5px);
+        visibility: hidden; /* Hides it from the page layout entirely */
+    }
 }
