@@ -255,41 +255,64 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER & FADE EFFECT ===== */
+/* ===== TYPEWRITER MASTER TIMELINE ===== */
 .typewriter {
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid #fff; /* The blinking cursor caret */
-    width: 0; /* Starts completely closed so text is hidden during the initial flashes */
+    width: 0; /* Starts hidden */
 
-    /* Chained animations: 
-       1. typing: 9.5s smooth glide, but WAITS 2.25s first (gives the cursor 3 clean flashes to start)
-       2. blink: flashes continuously from the split second the page loads
-       3. fadeOut: waits 15s total, then takes 2s to cleanly melt away to black */
+    /* Chained actions:
+       1. typewriterSequence: Master timeline handling typing, pauses, and fading over 16s
+       2. blink: Left separate so the cursor flashes naturally and infinitely */
     animation: 
-        typing 9.5s ease-in-out 2.25s forwards,
-        blink .75s step-end infinite,
-        fadeOut 2s ease-in-out 15s forwards;
+        typewriterSequence 16s ease-in-out forwards,
+        blink .75s step-end infinite;
 }
 
-/* Smoothly expands the width to show the text + that organic thinking space */
-@keyframes typing {
-    from { width: 0; }
-    to { width: 60ch; } /* Tuned for Inter font to rest perfectly a few characters past the period */
+/* One seamless timeline to prevent browser glitches and simulate human thought */
+@keyframes typewriterSequence {
+    /* 1. INITIAL DELAY: Holds at 0 width for 3 clean cursor flashes */
+    0%, 14% { 
+        width: 0; 
+        opacity: 1; 
+    }
+    
+    /* 2. TYPING: Smoothly writes out the full 75-character sentence */
+    65% { 
+        width: 75ch; 
+        opacity: 1;
+    }
+    
+    /* 3. THINKING PAUSE 1: Blicks stationary right at the period (.) */
+    75% { 
+        width: 75ch; 
+        opacity: 1;
+    }
+    
+    /* 4. HESITATION/DRIFT: The cursor taps forward 4 more spaces as if thinking */
+    85% { 
+        width: 79ch; 
+        opacity: 1;
+    }
+    
+    /* 5. THINKING PAUSE 2: Holds position blinking out in space */
+    92% { 
+        width: 79ch; 
+        opacity: 1;
+    }
+    
+    /* 6. PURE FADE: Melts completely into the black background without moving */
+    100% { 
+        width: 79ch; 
+        opacity: 0; 
+        visibility: hidden;
+    }
 }
 
-/* Makes the cursor flash */
+/* Continuous cursor flashing */
 @keyframes blink {
     from, to { border-color: transparent; }
     50% { border-color: #fff; }
-}
-
-/* Smooth fade out with absolutely zero movement */
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to {
-        opacity: 0;
-        visibility: hidden; /* Fully hides it from the layout so it doesn't leave blank space */
-    }
 }
