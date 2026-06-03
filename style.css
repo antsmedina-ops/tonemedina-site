@@ -261,23 +261,22 @@ nav .links a:hover {
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid #fff; /* The blinking cursor caret */
-    width: calc(max-content + 6ch); /* Pre-calculates the exact width + thinking space */
-    max-width: 0; /* Keeps the text hidden while the cursor flashes at the start */
+    width: 0; /* Starts completely closed so text is hidden during the initial flashes */
 
     /* Chained animations: 
-       1. typing: 9.5s glide, but WAITS 2.25s first (giving the cursor 3 clean flashes to start)
-       2. blink: flashes continuously from the moment the page loads
-       3. fadeOut: bumped to 15s to account for the new delay, then takes 2s to melt away */
+       1. typing: 9.5s smooth glide, but WAITS 2.25s first (gives the cursor 3 clean flashes to start)
+       2. blink: flashes continuously from the split second the page loads
+       3. fadeOut: waits 15s total, then takes 2s to cleanly melt away to black */
     animation: 
         typing 9.5s ease-in-out 2.25s forwards,
         blink .75s step-end infinite,
         fadeOut 2s ease-in-out 15s forwards;
 }
 
-/* Smoothly expands the max-width constraint from 0% to 100% */
+/* Smoothly expands the width to show the text + that organic thinking space */
 @keyframes typing {
-    from { max-width: 0; }
-    to { max-width: 100%; } 
+    from { width: 0; }
+    to { width: 60ch; } /* Tuned for Inter font to rest perfectly a few characters past the period */
 }
 
 /* Makes the cursor flash */
@@ -291,6 +290,6 @@ nav .links a:hover {
     from { opacity: 1; }
     to {
         opacity: 0;
-        visibility: hidden; /* Fully hides it from the page layout after fading */
+        visibility: hidden; /* Fully hides it from the layout so it doesn't leave blank space */
     }
 }
