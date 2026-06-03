@@ -255,58 +255,58 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (PERFECT SYNC FIX) ===== */
+/* ===== TYPEWRITER EFFECT (THE FINAL BULLETPROOF FIX) ===== */
 .typewriter {
     display: block;
-    width: max-content; /* Locks the container perfectly to the exact pixel width of your text */
+    width: max-content; /* Locks the container perfectly to the text length */
     max-width: 100%;
-    margin: 0 auto; /* Keeps the block perfectly centered without wiggling or sliding */
-    text-align: left; /* Ensures text renders from left-to-right inside the centered block */
+    margin: 0 auto; /* Centers the text block on the page */
+    text-align: left;
     white-space: nowrap;
     position: relative;
-    padding-right: 4ch; /* Creates the precise empty space needed for the 4 "thinking" cursor taps */
+    padding-right: 4ch; /* The 4 extra "thinking" spaces at the end */
     
     /* Responsive font scaling */
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
-    /* Controls the total fade-out of the whole element at the very end */
+    /* Controls the total fade-out at the very end */
     animation: fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Mask: Anchored to the right edge, shrinking its width to reveal text from left to right */
+/* The Mask: Stays pinned to the right edge, while the LEFT edge slides across to reveal text */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
-    width: 100%; /* Starts fully covering the text and padding */
-    background: var(--bg, #0f1115); /* Dynamically matches your site's dark background */
-    border-left: 2px solid #fff; /* The blinking cursor caret is locked to the moving left edge */
+    left: 0;  /* Starts at the far left (fully covering the text) */
+    right: 0; /* Stays pinned to the far right */
+    background: var(--bg, #0f1115); 
+    border-left: 2px solid #fff; /* Cursor is attached to the moving left edge */
     
     animation: 
         maskSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* Percentage-based timeline guarantees every letter syncs up perfectly, regardless of font width */
+/* Moving 'left' from 0% to 100% guarantees left-to-right typing on every browser */
 @keyframes maskSequence {
-    /* 1. INITIAL DELAY: Holds completely covered for 3 clean cursor flashes */
-    0% { width: 100%; }
-    14% { width: 100%; animation-timing-function: steps(75, end); }
+    /* 1. INITIAL DELAY: Blink in place at the very beginning */
+    0% { left: 0%; }
+    14% { left: 0%; }
     
-    /* 2. TEXT COMPLETE: Mask shrinks to 5% width, perfectly revealing the 75 letters right at the period */
-    60% { width: 5%; animation-timing-function: ease-in-out; }
+    /* 2. TYPING: Left edge slides right, uncovering text left-to-right. Stops exactly at the period (95%) */
+    60% { left: 95%; }
     
     /* 3. THINKING PAUSE: Holds perfectly still at the period (.) while blinking */
-    75% { width: 5%; animation-timing-function: steps(4, end); }
+    75% { left: 95%; }
     
-    /* 4. HESITATION DRIFT: Shrinks the final 5% to let the cursor click into the empty padding */
-    85% { width: 0%; }
+    /* 4. HESITATION DRIFT: Slides the last 5% into the empty padding spaces */
+    85% { left: 100%; }
     
-    /* 5. FINAL PAUSE: Holds position out in the empty space before fading away */
-    100% { width: 0%; }
+    /* 5. FINAL PAUSE: Holds at the very end before fading away */
+    100% { left: 100%; }
 }
 
 /* Smoothly dissolves the entire element into the background at the end */
