@@ -255,68 +255,80 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (THE FINAL BULLETPROOF FIX) ===== */
+/* ===== TYPEWRITER EFFECT (REBUILT & FLOATING) ===== */
 .typewriter {
     display: block;
-    width: max-content; /* Locks the container perfectly to the text length */
+    width: max-content; /* Automatically locks onto the exact width of your text */
     max-width: 100%;
-    margin: 0 auto; /* Centers the text block on the page */
+    margin: 0 auto; /* Centers the floating text block on your page */
     text-align: left;
     white-space: nowrap;
     position: relative;
-    padding-right: 4ch; /* The 4 extra "thinking" spaces at the end */
+    padding-right: 4ch; /* The extra "thinking space" padding for the cursor at the end */
     
-    /* Responsive font scaling */
+    /* Responsive font sizing */
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
-    /* Controls the total fade-out at the very end */
-    animation: fadeOutSequence 16s ease-in-out forwards;
+    /* Handles the transparent text reveal and the final slow fade-out */
+    animation: 
+        revealSequence 16s ease-in-out forwards,
+        fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Mask: Stays pinned to the right edge, while the LEFT edge slides across to reveal text */
+/* The Cursor: A pure floating line with absolutely NO background box block */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;  /* Starts at the far left (fully covering the text) */
-    right: 0; /* Stays pinned to the far right */
-    background: var(--bg, #0f1115); 
-    border-left: 2px solid #fff; /* Cursor is attached to the moving left edge */
+    width: 2px;
+    background-color: #fff; /* White cursor lines up beautifully on your dark layout */
     
+    /* Slides the cursor across the screen and keeps it blinking */
     animation: 
-        maskSequence 16s ease-in-out forwards,
+        cursorMoveSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* Moving 'left' from 0% to 100% guarantees left-to-right typing on every browser */
-@keyframes maskSequence {
-    /* 1. INITIAL DELAY: Blink in place at the very beginning */
-    0% { left: 0%; }
-    14% { left: 0%; }
+/* Invisible Clip-Path Timeline: Perfectly reveals text left-to-right */
+@keyframes revealSequence {
+    /* 1. INITIAL DELAY: Text stays 100% hidden while cursor flashes at the start */
+    0%, 15% { clip-path: inset(0 100% 0 0); }
     
-    /* 2. TYPING: Left edge slides right, uncovering text left-to-right. Stops exactly at the period (95%) */
-    60% { left: 95%; }
+    /* 2. INTENTIONAL TYPING: Slowly unclips text up to the end of the words (93% width) */
+    65% { clip-path: inset(0 7% 0 0); }
     
-    /* 3. THINKING PAUSE: Holds perfectly still at the period (.) while blinking */
-    75% { left: 95%; }
+    /* 3. THINKING PAUSE: Holds perfectly still at the period */
+    75% { clip-path: inset(0 7% 0 0); }
     
-    /* 4. HESITATION DRIFT: Slides the last 5% into the empty padding spaces */
-    85% { left: 100%; }
-    
-    /* 5. FINAL PAUSE: Holds at the very end before fading away */
-    100% { left: 100%; }
+    /* 4. SPACING FORWARD: Unclips the remaining 7% of empty padding space */
+    85%, 100% { clip-path: inset(0 0% 0 0); }
 }
 
-/* Smoothly dissolves the entire element into the background at the end */
+/* Cursor Movement Timeline: Locked perfectly to the invisible clip-path above */
+@keyframes cursorMoveSequence {
+    /* 1. INITIAL DELAY: Cursor blinks patiently at the very beginning */
+    0%, 15% { left: 0%; }
+    
+    /* 2. INTENTIONAL TYPING: Cursor drifts steadily right along with the letters */
+    65% { left: 93%; }
+    
+    /* 3. THINKING PAUSE: Cursor stays flashing exactly at the period (.) */
+    75% { left: 93%; }
+    
+    /* 4. SPACING FORWARD: Cursor clicks forward into the empty air, mimicking thought */
+    85%, 100% { left: 100%; }
+}
+
+/* Smoothly dissolves the text and cursor entirely from the screen at the end */
 @keyframes fadeOutSequence {
-    0%, 91% { opacity: 1; visibility: visible; }
+    0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
 
-/* Continuous cursor flashing */
+/* Continuous clean cursor flashing */
 @keyframes blink {
     from, to { border-color: transparent; }
-    50% { border-color: #fff; }
+    50% { background-color: transparent; } /* Makes the floating line flash smoothly */
 }
