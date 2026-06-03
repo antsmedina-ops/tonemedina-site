@@ -261,35 +261,21 @@ nav .links a:hover {
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid #fff; /* The blinking cursor caret */
-    width: 0; /* Starts at 0 width and grows */
-    
+    width: 0; 
+    max-width: none !important; /* Fixes the cutoff by letting the text expand completely */
+
     /* Chained animations: 
-       1. typing: takes 6.5s (slower & more natural)
+       1. typing: bumped to 9.5s (slower, more poetic pace) and exactly 74 steps
        2. blink: handles the flashing cursor caret
-       3. fadeOut: waits 9s total, then takes 1.5s to completely vanish */
+       3. fadeOut: bumped delay to 13s so it stays readable for a few seconds before drifting away */
     animation: 
-        typing 6.5s steps(60, end) forwards,
+        typing 9.5s steps(74, end) forwards,
         blink .75s step-end infinite,
-        fadeOut 1.5s ease-in-out 9s forwards;
+        fadeOut 1.5s ease-in-out 13s forwards;
 }
 
-/* Makes the text reveal itself character by character */
+/* Makes the text reveal itself character-by-character perfectly */
 @keyframes typing {
     from { width: 0; }
-    to { width: 100%; }
-}
-
-/* Makes the cursor flash */
-@keyframes blink {
-    from, to { border-color: transparent; }
-    50% { border-color: #fff; }
-}
-
-/* Makes the text elegantly drift up and vanish */
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        transform: translateY(-5px);
-        visibility: hidden; /* Hides it completely so it doesn't leave blank empty space */
-    }
+    to { width: 74ch; } /* 'ch' matches the exact width of your 74 characters */
 }
