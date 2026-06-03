@@ -255,70 +255,61 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER MASTER TIMELINE ===== */
+/* ===== TYPEWRITER EFFECT (ANTI-SLIDE FIX) ===== */
 .typewriter {
-    display: inline-block;
-    overflow: hidden;
+    display: block;
+    width: 79ch; /* Fixed width (75 letters + 4 thinking spaces) prevents ANY left-to-right sliding */
+    margin: 0 auto; /* Keeps the entire block perfectly centered on your page */
+    text-align: left; /* Ensures text renders from left-to-right inside the centered block */
     white-space: nowrap;
-    border-right: 2px solid #fff; /* The blinking cursor caret */
-    width: 0; /* Starts hidden */
+    position: relative;
     
-    /* Crucial: Using a monospace font stack ensures 1ch = exactly 1 character. 
-       This prevents text cut-offs and keeps the cursor perfectly locked to the letters. */
+    /* Monospace forces every single character to be the exact same width */
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
+    /* Controls the total fade-out of the whole element at the very end */
+    animation: fadeOutSequence 16s ease-in-out forwards;
+}
+
+/* The Mask: Sits on top of the text to hide it, then slides right to reveal it */
+.typewriter::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: var(--bg, #0f1115); /* Dynamically matches your site's dark background */
+    border-left: 2px solid #fff; /* The blinking cursor caret is attached to the mask's left edge */
+    
     animation: 
-        typewriterSequence 16s ease-in-out forwards,
+        maskSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* Master timeline handling discrete typing steps, human hesitation, and the final fade */
-@keyframes typewriterSequence {
-    /* 1. INITIAL DELAY: Holds blank for 3 clean cursor flashes */
-    0% {
-        width: 0;
-        opacity: 1;
-    }
-    14% { 
-        width: 0; 
-        opacity: 1;
-        /* Switches to 75 rigid steps to type out the 75-character sentence letter-by-letter */
-        animation-timing-function: steps(75, end); 
-    }
+/* Master timeline moving the mask to reveal text and simulate human thought */
+@keyframes maskSequence {
+    /* 1. INITIAL DELAY: Mask stays at left: 0 for 3 clean cursor flashes */
+    0% { left: 0; }
+    14% { left: 0; animation-timing-function: steps(75, end); }
     
-    /* 2. TEXT COMPLETE: The full sentence finishes typing perfectly at the period */
-    60% { 
-        width: 75ch; 
-        opacity: 1;
-        animation-timing-function: ease-in-out; /* Holds completely still at the period */
-    }
+    /* 2. TEXT COMPLETE: Mask snaps open 1 character at a time, finishing right at the period */
+    60% { left: 75ch; animation-timing-function: linear; }
     
-    /* 3. THINKING HESITATION: Taps forward 4 empty spaces as if considering writing more */
-    75% { 
-        width: 75ch; 
-        opacity: 1;
-        /* Snaps forward 4 distinct spaces in a human-like typing cadence */
-        animation-timing-function: steps(4, end); 
-    }
+    /* 3. THINKING PAUSE 1: Holds completely still at the period (.) while blinking */
+    75% { left: 75ch; animation-timing-function: steps(4, end); }
     
-    /* 4. FINAL PAUSE: Blinks out in the empty space, reflecting on the sentence */
-    82% {
-        width: 79ch;
-        opacity: 1;
-        animation-timing-function: ease-in-out; 
-    }
-    92% { 
-        width: 79ch; 
-        opacity: 1;
-        animation-timing-function: ease-in-out; /* Prepares a perfectly still fade out */
-    }
+    /* 4. HESITATION/DRIFT: Cursor clicks forward 4 empty spaces as if pondering more text */
+    85% { left: 79ch; animation-timing-function: linear; }
     
-    /* 5. DISSOLVE: Melts directly into the background without moving an inch */
-    100% { 
-        width: 79ch; 
-        opacity: 0; 
-        visibility: hidden;
-    }
+    /* 5. FINAL PAUSE: Holds position out in the empty space before the finish */
+    100% { left: 79ch; }
+}
+
+/* Smoothly dissolves the entire element into the background at the end */
+@keyframes fadeOutSequence {
+    0%, 91% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
 }
 
 /* Continuous cursor flashing */
