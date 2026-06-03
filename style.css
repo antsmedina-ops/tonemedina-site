@@ -255,7 +255,7 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (THE COMPOSITOR-LOCKED FIX) ===== */
+/* ===== TYPEWRITER EFFECT (THE CLIP-PATH LOCK FIX) ===== */
 
 .typewriter {
     display: block;
@@ -271,24 +271,20 @@ nav .links a:hover {
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
     
-    /* Keeps your perfect typing rhythm and final fade out exactly as they were */
     animation: 
         textRevealSequence 16s ease-in-out forwards,
         fadeOutSequence 16s ease-in-out forwards;
 }
 
-/* The Cursor Overlay: Covers the exact dimensions of the text block.
-   The actual vertical cursor line is painted inside a gradient so it never drifts. */
+/* The Cursor Line */
 .typewriter::after {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
     bottom: 0;
-    pointer-events: none;
+    width: 2px;
+    background-color: #fff; 
     
-    /* Combines the layer-locked movement with a clean opacity flash */
     animation: 
         cursorMoveSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
@@ -296,58 +292,46 @@ nav .links a:hover {
 
 /* ===== ANIMATION TIMELINES (PERFECTLY SYNCHRONIZED) ===== */
 
-/* TEXT REVEAL: Untouched, exactly your preferred typing cadence */
+/* TEXT REVEAL: Uses clip-path to smoothly un-clip the text from left to right */
 @keyframes textRevealSequence {
     0%, 15% {
-        -webkit-mask-image: linear-gradient(to right, #000 0, transparent 0);
-        mask-image: linear-gradient(to right, #000 0, transparent 0);
+        clip-path: inset(0 100% 0 0); /* 100% hidden from the right edge */
     }
     65% {
-        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 4ch), transparent calc(100% - 4ch));
-        mask-image: linear-gradient(to right, #000 calc(100% - 4ch), transparent calc(100% - 4ch));
+        clip-path: inset(0 4ch 0 0);  /* Un-clips all the way up to the 4ch padding */
     }
-    75%, 100% {
-        -webkit-mask-image: linear-gradient(to right, #000 100%, transparent 100%);
-        mask-image: linear-gradient(to right, #000 100%, transparent 100%);
+    75% {
+        clip-path: inset(0 4ch 0 0);  /* Holds during the thinking pause */
+    }
+    85%, 100% {
+        clip-path: inset(0 0 0 0);    /* Completely revealed */
     }
 }
 
-/* CURSOR MOVEMENT: Mirrors the text mask math pixel-for-pixel on every single frame */
+/* CURSOR MOVEMENT: Tracks the exact same pixel coordinates as the clip-path edge */
 @keyframes cursorMoveSequence {
-    /* 1. INITIAL DELAY: Line sits completely flush at the start line */
-    0%, 15% { 
-        background: linear-gradient(to right, transparent 0, #fff 0, #fff 2px, transparent 2px) no-repeat;
+    0%, 15% {
+        left: 0;
     }
-    
-    /* 2. HAND-TYPED TRACKING: Glued flawlessly to the right shoulder of the text */
-    65% { 
-        background: linear-gradient(to right, transparent calc(100% - 4ch), #fff calc(100% - 4ch), #fff calc(100% - 4ch + 2px), transparent calc(100% - 4ch + 2px)) no-repeat;
+    65% {
+        left: calc(100% - 4ch); /* Glued perfectly to the end of the text sentence */
     }
-    
-    /* 3. THINKING PAUSE: Freezes precisely at the final character */
-    75% { 
-        background: linear-gradient(to right, transparent calc(100% - 4ch), #fff calc(100% - 4ch), #fff calc(100% - 4ch + 2px), transparent calc(100% - 4ch + 2px)) no-repeat;
+    75% {
+        left: calc(100% - 4ch); /* Holds position during the pause */
     }
-    
-    /* 4. SPACING FORWARD: Clicks forward over the empty 4ch padding */
-    85% { 
-        background: linear-gradient(to right, transparent 100%, #fff 100%, #fff calc(100% + 2px), transparent calc(100% + 2px)) no-repeat;
-    }
-    
-    /* 5. FINAL HOLD: Stays put at the destination before the fade takes over */
-    100% { 
-        background: linear-gradient(to right, transparent 100%, #fff 100%, #fff calc(100% + 2px), transparent calc(100% + 2px)) no-repeat;
+    85%, 100% {
+        left: calc(100% - 2px); /* Moves out cleanly into the empty air padding */
     }
 }
 
-/* Fades the entire element away cleanly at the end */
+/* Fades the entire element away smoothly at the very end */
 @keyframes fadeOutSequence {
     0%, 90% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
 
-/* Continuous clean cursor blinking via opacity (doesn't trigger layout shifts) */
+/* Clean cursor blinking rhythm */
 @keyframes blink {
-    from, to { opacity: 1; }
-    50% { opacity: 0; }
+    from, to { background-color: transparent; }
+    50% { background-color: #fff; }
 }
