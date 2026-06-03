@@ -254,3 +254,42 @@ nav .links a:hover {
     transform: scale(1.02); /* This creates the "expand" effect */
     transition: all 0.3s ease;
 }
+
+/* ===== TYPEWRITER & FADE EFFECT ===== */
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid #fff; /* The blinking cursor caret */
+    width: 0; /* Starts at 0 width and grows */
+    
+    /* Chained animations: 
+       1. typing: takes 6.5s (slower & more natural)
+       2. blink: handles the flashing cursor caret
+       3. fadeOut: waits 9s total, then takes 1.5s to completely vanish */
+    animation: 
+        typing 6.5s steps(60, end) forwards,
+        blink .75s step-end infinite,
+        fadeOut 1.5s ease-in-out 9s forwards;
+}
+
+/* Makes the text reveal itself character by character */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Makes the cursor flash */
+@keyframes blink {
+    from, to { border-color: transparent; }
+    50% { border-color: #fff; }
+}
+
+/* Makes the text elegantly drift up and vanish */
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-5px);
+        visibility: hidden; /* Hides it completely so it doesn't leave blank empty space */
+    }
+}
