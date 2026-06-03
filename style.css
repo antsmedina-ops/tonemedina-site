@@ -324,15 +324,15 @@ nav .links a:hover {
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
 
 /* Total phrase: "Sometimes the most beautiful things we encounter" (46 characters) */
+/* Total phrase: "Sometimes the most beautiful things we encounter..." (51 characters) */
 @keyframes typeLine1 {
     0% { width: 0; opacity: 1; }
-    22% { width: 14ch; opacity: 1; }  /* Fast burst: "Sometimes the " */
-    38% { width: 19ch; opacity: 1; }  /* Steady pacing: "most " */
-    65% { width: 31ch; opacity: 1; }  /* Deliberate flow: "beautiful t" */
-    78% { width: 34ch; opacity: 1; }  /* Micro-hesitation/stutter on "hings " */
-    100% { width: 46ch; opacity: 1; } /* Confident finish: "we encounter" */
+    22% { width: 14ch; opacity: 1; }  /* "Sometimes the " */
+    38% { width: 19ch; opacity: 1; }  /* "most " */
+    65% { width: 31ch; opacity: 1; }  /* "beautiful t" */
+    78% { width: 36ch; opacity: 1; }  /* "things " */
+    100% { width: 51ch; opacity: 1; } /* Expanded to 51ch to fit "encounter..." */
 }
-
 /* Total phrase: "are meant to be temporary." (26 characters) */
 @keyframes typeLine2 {
     0% { width: 0; opacity: 1; }
