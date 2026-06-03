@@ -255,7 +255,7 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== TYPEWRITER EFFECT (ANTI-SLIDE FIX) ===== */
+/* ===== TYPEWRITER EFFECT (ANTI-SLIDE & CUT-OFF FIX) ===== */
 .typewriter {
     display: block;
     width: 79ch; /* Fixed width (75 letters + 4 thinking spaces) prevents ANY left-to-right sliding */
@@ -263,6 +263,10 @@ nav .links a:hover {
     text-align: left; /* Ensures text renders from left-to-right inside the centered block */
     white-space: nowrap;
     position: relative;
+    
+    /* FIX: Calibrated font size ensures all 79 characters fit flawlessly 
+       inside your 980px layout container without running out of room */
+    font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     
     /* Monospace forces every single character to be the exact same width */
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
