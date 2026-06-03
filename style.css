@@ -215,6 +215,10 @@ body::before {
   padding: 1.25rem;
 }
 
+/* ===== GOOGLE CALENDAR DARK MODE ===== */
+iframe[src*="calendar.google.com"] {
+    filter: invert(0.9) hue-rotate(180deg);
+}
 #calendarModal iframe {
   height: 70vh;
   margin-top: 0;
