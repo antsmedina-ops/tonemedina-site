@@ -291,6 +291,8 @@ nav .links a:hover {
         blink .75s step-end infinite;
 }
 
+/* ===== TYPEWRITER EFFECT (CONSOLIDATED & FIXED) ===== */
+
 .typewriter {
     display: block;
     width: max-content;
@@ -300,7 +302,7 @@ nav .links a:hover {
     white-space: nowrap;
     position: relative;
     background: transparent;
-    padding-right: 4ch; /* <-- CRITICAL: This creates the empty air space for the cursor to jump into */
+    padding-right: 4ch; /* Creates the empty air space for the cursor to jump into */
     
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
@@ -308,4 +310,77 @@ nav .links a:hover {
     animation: 
         textRevealSequence 16s ease-in-out forwards,
         fadeOutSequence 16s ease-in-out forwards;
+}
+
+/* The Cursor: Fixed with left:0 and guided by transform to prevent dragging/drift */
+.typewriter::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0; /* Anchors the cursor perfectly at the starting line */
+    bottom: 0;
+    width: 2px;
+    background-color: #fff; 
+    
+    animation: 
+        cursorMoveSequence 16s ease-in-out forwards,
+        blink .75s step-end infinite;
+}
+
+/* ===== ANIMATION TIMELINES (UNTOUCHED TEXT, LOCKED CURSOR) ===== */
+
+/* TEXT REVEAL: Keeps your exact typing flow untouched */
+@keyframes textRevealSequence {
+    0%, 15% {
+        -webkit-mask-image: linear-gradient(to right, #000 0, transparent 0);
+        mask-image: linear-gradient(to right, #000 0, transparent 0);
+    }
+    65% {
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 4ch), transparent calc(100% - 4ch));
+        mask-image: linear-gradient(to right, #000 calc(100% - 4ch), transparent calc(100% - 4ch));
+    }
+    75%, 100% {
+        -webkit-mask-image: linear-gradient(to right, #000 100%, transparent 100%);
+        mask-image: linear-gradient(to right, #000 100%, transparent 100%);
+    }
+}
+
+/* CURSOR MOVEMENT: Digitally tracked to mirror the text layer pixel-for-pixel */
+@keyframes cursorMoveSequence {
+    /* 1. Flashes at the start while person hesitates */
+    0%, 15% { 
+        transform: translateX(0); 
+    }
+    
+    /* 2. Follows the hand-typed text flawlessly to the last letter */
+    65% { 
+        transform: translateX(calc(100% - 4ch)); 
+    }
+    
+    /* 3. Pauses at the end of the sentence (thinking) */
+    75% { 
+        transform: translateX(calc(100% - 4ch)); 
+    }
+    
+    /* 4. Spaces forward into thin air */
+    85% { 
+        transform: translateX(100%); 
+    }
+    
+    /* 5. Holds position before the final vanish */
+    100% { 
+        transform: translateX(100%); 
+    }
+}
+
+/* FADES EVERYTHING AWAY */
+@keyframes fadeOutSequence {
+    0%, 90% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* CURSOR BLINK */
+@keyframes blink {
+    from, to { background-color: transparent; }
+    50% { background-color: #fff; }
 }
