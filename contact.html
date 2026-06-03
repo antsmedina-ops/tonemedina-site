@@ -1,77 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tone Medina | Contact</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tone Medina | Contact & Links</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body id="top">
 
-  <nav>
-    <div class="wrap nav-inner">
-      <a href="index.html" class="nav-brand">Tone Medina</a>
-  <div class="links">
-        <a onclick="openSpotify()">Music</a>
-        <a href="works.html">Works</a>
-        <a href="news.html">News</a>
-        <a href="contact.html">Contact</a>
-        <a href="links.html">Links</a>
-        <a href="bio.html">Biography</a>
+<nav>
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-brand">Tone Medina</a>
+    <div class="links">
+      <a onclick="openSpotify()">Music</a>
+      <a href="works.html">Works</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+      <a href="links.html">Links</a>
+      <a href="bio.html">Biography</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section id="contact">
+    <div class="wrap contact-grid">
+      <div class="card contact-card" id="contactCard">
+        <h2>Contact</h2>
+        <p>Phone: 720.296.8296</p>
+        <p>Email: info@tonemedina.com</p>
+        <p>Instagram: @tonemedina</p>
+        <p>Bluesky: @tonemedina.com</p>
+      </div>
+
+      <div class="card" id="calendarCard">
+        <h2>Art Calendar / Events</h2>
+        <iframe
+          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
+          width="100%"
+          height="400"
+          style="border:0;">
+        </iframe>
       </div>
     </div>
-  </nav>
+  </section>
 
-  <main>
-    <section id="contact">
-      <div class="wrap contact-grid">
-        <div class="card contact-card" id="contactCard">
-          <h2>Contact</h2>
-          <p>Phone: 720.296.8296</p>
-          <p>Email: info@tonemedina.com</p>
-          <p>Instagram: @tonemedina</p>
-          <p>Bluesky: @tonemedina.com</p>
-        </div>
-        <div class="card" id="calendarCard">
-          <h2>Art Calendar / Events</h2>
-          <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=America%2FDenver&amp;showPrint=0&amp;mode=WEEK&amp;title=Art%20Calendar&amp;src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&amp;color=%23009688" width="100%" height="400" style="border: 0;"></iframe>
-        </div>
+  <section id="links">
+    <div class="wrap grid">
+      <div class="card">
+        <h3>Collaborators</h3>
+        <p style="margin-bottom: 1.5rem;">Friends & Collaborators. | Click each name to learn more.</p>
+
+        <p>
+          <a href="https://digilandgrab.com/">Corrina Espinosa</a><br>
+          A Denver based artist and curator.
+        </p>
+
+        <p>
+          <a href="https://www.instagram.com/redrum_ley/" target="_blank">Ian Rummley</a><br>
+          Denver based tattoo artist & educator. Owner of Singularity Tattoo Studio.
+        </p>
+
+        <p>
+          <a href="https://www.lenguajevulgar.com/" target="_blank">Javier Flores</a><br>
+          Socio driven Denver artist, educator & activist.
+        </p>
       </div>
-    </section>
-  </main>
 
-  <footer>
-    <div class="wrap">
-      <div>© 2026 Tone Medina</div>
-      <a href="https://github.com/antsmedina-ops" target="_blank" class="footer-admin">admin.login</a>
+      <div class="card">
+        <h3>Resources</h3>
+        <p style="margin-bottom: 1.5rem;">Festivals | Art Resources</p>
+
+         <p>
+          <a href="https://denverchalk.art/">The Denver Chalk Art Festival</a><br>
+          Voted Denvers "Best Festival" in the Westword Best of Denver readers choice.
+         </p>
+         
+         <p>
+          <a href="https://terryludwig.com/">Terry Ludwig Pastels</a><br>
+          Handmade Soft Pastels, handmade pastels since 2005.
+         </p>
+      </div>
     </div>
-  </footer>
+  </section>
+</main>
 
+<footer class="wrap">
+  <div>© 2026 Tone Medina</div>
+  <a href="https://github.com/antsmedina-ops" target="_blank" class="footer-admin">admin.login</a>
+</footer>
 
-<div class="modal" id="modal">
+<div class="modal" id="spotifyModal">
   <div class="modal-content">
-    <h3>Contact</h3>
-    <p style="margin-bottom: 1rem;">Click | Long Press</p>
-    <div class="selectable" onclick="copyText('info@tonemedina.com')">info@tonemedina.com</div>
-    <div class="selectable" onclick="copyText('7202968296')">720 296 8296</div>
-    <div class="close-btn" onclick="closeModal()">Close ✕</div>
+    <h3 class="now-playing-live" style="margin-bottom: 1rem;">Now Playing</h3>
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div class="close-btn" onclick="closeSpotify()">Close ✕</div>
   </div>
 </div>
 
-<div class="modal" id="calendarModal">
-  <div class="modal-content">
-    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
-    <p style="margin-bottom: 1rem;">see you soon.</p>
-    <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
-      width="100%"
-      style="border:0;">
-    </iframe>
-    <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
-  </div>
-</div>
-  
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
