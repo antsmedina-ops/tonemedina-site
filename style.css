@@ -255,18 +255,18 @@ nav .links a:hover {
     transition: all 0.3s ease;
 }
 
-/* ===== MULTI-LINE TYPEWRITER EFFECT ===== */
+/* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT ===== */
 
 .typewriter-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Keeps text left-aligned inside its block */
+    align-items: flex-start; 
     margin: 0 auto;
     width: max-content;
     max-width: 100%;
     
-    /* Fades the entire phrase away smoothly at the very end */
-    animation: fadeOutSequence 10s ease-in-out forwards;
+    /* Extended total window to 14 seconds to give people time to soak it in */
+    animation: fadeOutSequence 14s ease-in-out forwards;
 }
 
 .typewriter-container h3 {
@@ -280,33 +280,42 @@ nav .links a:hover {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
 }
 
-/* Line 1: Types out instantly, then turns off its cursor right as Line 2 starts */
+/* Line 1: Slower overall (4.5s). Types unevenly, clearing the way at exactly 5.0s */
 .line-1 {
     border-right: 2px solid #fff;
     animation: 
-        typeLine1 2.5s steps(46) 0.5s forwards,
-        killCursor 0s linear 3s forwards,
+        typeLine1 4.5s linear 0.5s forwards,
+        killCursor 0s linear 5.0s forwards,
         blink 0.75s step-end infinite;
 }
 
-/* Line 2: Waits exactly 3 seconds for Line 1 to finish, then starts typing */
+/* Line 2: Waits exactly 5.0s for Line 1 to complete its journey, types for 3.5s */
 .line-2 {
     border-right: 2px solid #fff;
     animation: 
-        typeLine2 1.8s steps(26) 3s forwards,
+        typeLine2 3.5s linear 5.0s forwards,
         blink 0.75s step-end infinite;
 }
 
-/* ===== ANIMATION TIMELINES (EXACT CHARACTER LOCKS) ===== */
+/* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
 
+/* Total phrase: "Sometimes the most beautiful things we encounter" (46 characters) */
 @keyframes typeLine1 {
-    from { width: 0; opacity: 1; }
-    to { width: 46ch; opacity: 1; } /* Character count length */
+    0% { width: 0; opacity: 1; }
+    22% { width: 14ch; opacity: 1; }  /* Fast burst: "Sometimes the " */
+    38% { width: 19ch; opacity: 1; }  /* Steady pacing: "most " */
+    65% { width: 31ch; opacity: 1; }  /* Deliberate flow: "beautiful t" */
+    78% { width: 34ch; opacity: 1; }  /* Micro-hesitation/stutter on "hings " */
+    100% { width: 46ch; opacity: 1; } /* Confident finish: "we encounter" */
 }
 
+/* Total phrase: "are meant to be temporary." (26 characters) */
 @keyframes typeLine2 {
-    from { width: 0; opacity: 1; }
-    to { width: 26ch; opacity: 1; } /* Character count length */
+    0% { width: 0; opacity: 1; }
+    15% { width: 4ch; opacity: 1; }   /* Quick start: "are " */
+    55% { width: 9ch; opacity: 1; }   /* THE SLOWDOWN: Takes 40% of the timeline just to type 5 letters for "meant" */
+    78% { width: 19ch; opacity: 1; }  /* Speeds back up smoothly: " to be tempor" */
+    100% { width: 26ch; opacity: 1; } /* Finishes out precisely on the period: "ary." */
 }
 
 /* Turns off the line 1 cursor right when line 2 begins */
@@ -316,7 +325,7 @@ nav .links a:hover {
 
 /* Holds the completed text on screen for reading, then fades out */
 @keyframes fadeOutSequence {
-    0%, 85% { opacity: 1; visibility: visible; }
+    0%, 88% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; }
 }
 
