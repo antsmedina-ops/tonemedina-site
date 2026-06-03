@@ -262,48 +262,58 @@ nav .links a:hover {
     white-space: nowrap;
     border-right: 2px solid #fff; /* The blinking cursor caret */
     width: 0; /* Starts hidden */
-
-    /* Chained actions:
-       1. typewriterSequence: Master timeline handling typing, pauses, and fading over 16s
-       2. blink: Left separate so the cursor flashes naturally and infinitely */
+    
+    /* Crucial: Using a monospace font stack ensures 1ch = exactly 1 character. 
+       This prevents text cut-offs and keeps the cursor perfectly locked to the letters. */
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
+    
     animation: 
         typewriterSequence 16s ease-in-out forwards,
         blink .75s step-end infinite;
 }
 
-/* One seamless timeline to prevent browser glitches and simulate human thought */
+/* Master timeline handling discrete typing steps, human hesitation, and the final fade */
 @keyframes typewriterSequence {
-    /* 1. INITIAL DELAY: Holds at 0 width for 3 clean cursor flashes */
-    0%, 14% { 
-        width: 0; 
-        opacity: 1; 
-    }
-    
-    /* 2. TYPING: Smoothly writes out the full 75-character sentence */
-    65% { 
-        width: 75ch; 
+    /* 1. INITIAL DELAY: Holds blank for 3 clean cursor flashes */
+    0% {
+        width: 0;
         opacity: 1;
     }
+    14% { 
+        width: 0; 
+        opacity: 1;
+        /* Switches to 75 rigid steps to type out the 75-character sentence letter-by-letter */
+        animation-timing-function: steps(75, end); 
+    }
     
-    /* 3. THINKING PAUSE 1: Blicks stationary right at the period (.) */
+    /* 2. TEXT COMPLETE: The full sentence finishes typing perfectly at the period */
+    60% { 
+        width: 75ch; 
+        opacity: 1;
+        animation-timing-function: ease-in-out; /* Holds completely still at the period */
+    }
+    
+    /* 3. THINKING HESITATION: Taps forward 4 empty spaces as if considering writing more */
     75% { 
         width: 75ch; 
         opacity: 1;
+        /* Snaps forward 4 distinct spaces in a human-like typing cadence */
+        animation-timing-function: steps(4, end); 
     }
     
-    /* 4. HESITATION/DRIFT: The cursor taps forward 4 more spaces as if thinking */
-    85% { 
-        width: 79ch; 
+    /* 4. FINAL PAUSE: Blinks out in the empty space, reflecting on the sentence */
+    82% {
+        width: 79ch;
         opacity: 1;
+        animation-timing-function: ease-in-out; 
     }
-    
-    /* 5. THINKING PAUSE 2: Holds position blinking out in space */
     92% { 
         width: 79ch; 
         opacity: 1;
+        animation-timing-function: ease-in-out; /* Prepares a perfectly still fade out */
     }
     
-    /* 6. PURE FADE: Melts completely into the black background without moving */
+    /* 5. DISSOLVE: Melts directly into the background without moving an inch */
     100% { 
         width: 79ch; 
         opacity: 0; 
