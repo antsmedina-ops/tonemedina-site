@@ -358,3 +358,19 @@ nav .links a:hover {
     from, to { border-color: transparent; }
     50% { border-color: #fff; }
 }
+
+
+/* Tightens the space between the H3 and the sub-header */
+.card h3 {
+  margin-bottom: 0.25rem; 
+}
+
+/* Controls the space between the sub-header and the first list item */
+.card h3 + p {
+  margin-bottom: 1.5rem;
+}
+
+/* Gives your link items consistent spacing */
+.link-item {
+  margin-bottom: 1.25rem;
+}
