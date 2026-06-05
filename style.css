@@ -362,15 +362,22 @@ nav .links a:hover {
 
 /* Tightens the space between the H3 and the sub-header */
 .card h3 {
-  margin-bottom: 0.25rem; 
+  margin-bottom: 0.15rem; 
 }
 
 /* Controls the space between the sub-header and the first list item */
 .card h3 + p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.4; 
 }
 
-/* Gives your link items consistent spacing */
+/* Gives your link items tighter, more natural spacing */
 .link-item {
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Removes the extra margin from the very last item in the card */
+.link-item:last-child {
+  margin-bottom: 0;
 }
