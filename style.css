@@ -44,9 +44,9 @@ main { flex: 1; }
 section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  display: block; /* Switches from rigid rows to fluid columns */
+  column-count: 2; /* Spreads cards across two clean vertical streams */
+  column-gap: 1rem;
 }
 
 .card {
@@ -57,8 +57,17 @@ section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
   transition: 0.25s;
   display: flex;
   flex-direction: column;
+  
+  margin-bottom: 1rem; /* Creates a clean gap between stacked cards */
+  break-inside: avoid; /* CRITICAL: Prevents a card from splitting in half across columns */
 }
 
+/* Keeps it a single, clean column on mobile phones */
+@media (max-width: 768px) {
+  .grid {
+    column-count: 1;
+  }
+}
 .card:hover {
   border-color: var(--accent);
   box-shadow: 0 0 25px rgba(90, 0, 0, 0.4);
@@ -441,4 +450,11 @@ nav .links a:hover {
 @media (max-width: 768px) {
   .nav-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
   .search-container { max-width: 100%; margin: 0.5rem 0; width: 100%; }
+}
+
+/* Keeps the masonry layout down to a single column on mobile screens */
+@media (max-width: 768px) {
+  .grid {
+    column-count: 1;
+  }
 }
