@@ -75,7 +75,11 @@ nav {
   border-bottom: 1px solid var(--line);
 }
 
-.nav-inner { display: flex; justify-content: space-between; padding: 0.95rem 0; }
+.nav-inner { 
+  display: flex; 
+  align-items: center; /* Keeps everything perfectly centered vertically */
+  padding: 0.95rem 0; 
+}
 
 .links a {
   color: var(--muted);
@@ -400,9 +404,9 @@ nav .links a:hover {
 
 /* ===== GLOBAL NAV SEARCH BAR ===== */
 .search-container {
-  flex: 1;
-  max-width: 300px;
-  margin: 0 1.5rem;
+  margin-left: auto; /* Shoves the search bar and menu items snugly to the right */
+  width: 240px;
+  margin-right: 2rem; /* Leaves a perfect gap before the "Music" link */
   display: flex;
   align-items: center;
 }
