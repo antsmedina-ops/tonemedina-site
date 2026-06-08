@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('global-search');
     if (!searchInput) return;
 
-    // Detect if the user is currently looking at the links page
-    const isLinksPage = window.location.pathname.includes('links.html');
+    // Fixed: Looks for just 'links' to support modern, clean URLs
+    const isLinksPage = window.location.pathname.includes('links');
 
     // 1. On-Load Check: Read URL parameters (e.g., ?q=chalk)
     const urlParams = new URLSearchParams(window.location.search);
@@ -160,8 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') {
             const value = searchInput.value.trim();
             if (!isLinksPage && value) {
-                // Redirect to links page with the query attached
-                window.location.href = `links.html?q=${encodeURIComponent(value)}`;
+                // Fixed: Redirects to 'links' instead of 'links.html'
+                window.location.href = `links?q=${encodeURIComponent(value)}`;
             }
         }
     });
@@ -172,23 +172,35 @@ function filterLinkCards(searchTerm) {
     const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
-        const items = card.querySelectorAll('.link-item');
+        // Looks for paragraphs, headers, and links inside the card
+        const items = card.querySelectorAll('.link-item, h3, p, a');
         let cardHasMatches = false;
 
+        // If the user cleared the search, show everything instantly
+        if (searchTerm === '') {
+            card.style.display = '';
+            items.forEach(item => item.style.display = '');
+            return;
+        }
+
         items.forEach(item => {
+            // Only filter actual individual links or list items, don't hide card headers
+            if (item.tagName === 'H2' || item.classList.contains('card-title')) return;
+
             const itemText = item.textContent.toLowerCase();
-            
-            // Check if the search term matches the artist name or description
             if (itemText.includes(searchTerm)) {
-                item.style.display = ''; // Shows matching item
+                item.style.display = ''; 
                 cardHasMatches = true;
             } else {
-                item.style.display = 'none'; // Hides non-matching item
+                // Only hide it if it's an actionable item or specific description
+                if (item.tagName === 'A' || item.parentElement.classList.contains('link-item') || item.tagName === 'P') {
+                    item.style.display = 'none';
+                }
             }
         });
 
-        // Clean UI management: Hide the entire card if nothing inside matches
-        if (cardHasMatches || searchTerm === '') {
+        // Hide the entire card panel if absolutely nothing matches inside it
+        if (cardHasMatches) {
             card.style.display = '';
         } else {
             card.style.display = 'none';
