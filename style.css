@@ -551,3 +551,25 @@ nav .links a:hover {
     gap: 1.5rem;
   }
 }
+
+/* 1. Ensure the layout container forces items to match heights */
+#contact .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch; /* Forces equal height for anything inside */
+  gap: 2rem;            /* Clean spacing between the cards */
+}
+
+/* 2. Force both cards to fully expand and behave uniformly */
+#contactCard, #calendarCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 3. Optional: Makes the calendar iframe fill its container perfectly */
+#calendarCard iframe {
+  flex-grow: 1;
+  min-height: 400px;    /* Keeps the calendar roomy */
+}
