@@ -126,3 +126,72 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(type, 500); // Waits half a second before starting to type
   });
 });
+
+
+// ==========================================================================
+// 6. GLOBAL SEARCH & LIVE FILTERING ENGINE
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('global-search');
+    if (!searchInput) return;
+
+    // Detect if the user is currently looking at the links page
+    const isLinksPage = window.location.pathname.includes('links.html');
+
+    // 1. On-Load Check: Read URL parameters (e.g., ?q=chalk)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlQuery = urlParams.get('q');
+
+    if (urlQuery && isLinksPage) {
+        searchInput.value = urlQuery;
+        filterLinkCards(urlQuery.toLowerCase());
+    }
+
+    // 2. Typing Event: Filter live if on links page
+    searchInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase().trim();
+        if (isLinksPage) {
+            filterLinkCards(value);
+        }
+    });
+
+    // 3. Enter Key Event: Redirect to links page if searching from elsewhere
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const value = searchInput.value.trim();
+            if (!isLinksPage && value) {
+                // Redirect to links page with the query attached
+                window.location.href = `links.html?q=${encodeURIComponent(value)}`;
+            }
+        }
+    });
+});
+
+// Filtering engine that handles individual link items and entire cards
+function filterLinkCards(searchTerm) {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const items = card.querySelectorAll('.link-item');
+        let cardHasMatches = false;
+
+        items.forEach(item => {
+            const itemText = item.textContent.toLowerCase();
+            
+            // Check if the search term matches the artist name or description
+            if (itemText.includes(searchTerm)) {
+                item.style.display = ''; // Shows matching item
+                cardHasMatches = true;
+            } else {
+                item.style.display = 'none'; // Hides non-matching item
+            }
+        });
+
+        // Clean UI management: Hide the entire card if nothing inside matches
+        if (cardHasMatches || searchTerm === '') {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
