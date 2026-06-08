@@ -108,6 +108,7 @@ nav {
 .links a:hover::after { width: 100%; }
 
 .nav-brand {
+  margin-right: auto;
   transition: 0.25s; cursor: pointer; color: var(--text); text-decoration: none;
 }
 
@@ -404,7 +405,6 @@ nav .links a:hover {
 
 /* ===== GLOBAL NAV SEARCH BAR ===== */
 .search-container {
-  margin-left: auto; /* Shoves the search bar and menu items snugly to the right */
   width: 240px;
   margin-right: 2rem; /* Leaves a perfect gap before the "Music" link */
   display: flex;
