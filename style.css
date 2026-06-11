@@ -604,3 +604,10 @@ nav .links a:hover {
 .selectable-link-item:hover {
     transform: scale(1.03);
 }
+
+/* Makes the title text glow red when the item is hovered */
+.selectable-link-item:hover .list-title {
+    color: #ff3333 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
