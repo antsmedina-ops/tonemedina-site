@@ -594,3 +594,13 @@ nav .links a:hover {
     line-height: 1.4;
 }
 
+.selectable-link-item {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.selectable-link-item:hover {
+    transform: scale(1.03);
+}
