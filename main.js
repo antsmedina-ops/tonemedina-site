@@ -207,3 +207,72 @@ function filterLinkCards(searchTerm) {
         }
     });
 }
+
+// ==========================================================================
+// 7. ANALOG STATIC HOVER AUDIO ENGINE (WEB AUDIO API)
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const soundCards = document.querySelectorAll(".hover-sound");
+  let audioCtx = null;
+  let noiseSource = null;
+  let filterNode = null;
+  let gainNode = null;
+
+  // Synthesizes a raw analog static texture purely via code
+  function initStaticNoise() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Generate 2 seconds of unique random static data
+    const bufferSize = audioCtx.sampleRate * 2;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    noiseSource = audioCtx.createBufferSource();
+    noiseSource.buffer = buffer;
+    noiseSource.loop = true;
+
+    // Analog Filter: Cuts high frequencies so it sounds like an old tube TV, not harsh computer noise
+    filterNode = audioCtx.createBiquadFilter();
+    filterNode.type = "lowpass";
+    filterNode.frequency.value = 650; // Gritty, muffled frequency floor
+
+    // Volume Master: Kept subtle and atmospheric so it doesn't jar the user
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0; // Starts silent
+
+    // Route the audio matrix: Source -> Filter -> Volume -> Speakers
+    noiseSource.connect(filterNode);
+    filterNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    noiseSource.start();
+  }
+
+  soundCards.forEach(card => {
+    card.addEventListener("mouseenter", () => {
+      try {
+        if (!audioCtx) {
+          initStaticNoise();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        // Smoothly fade the volume in over 0.05 seconds to prevent ugly popping sounds
+        gainNode.gain.linearRampToValueAtTime(0.018, audioCtx.currentTime + 0.05);
+      } catch (error) {
+        // Safe fail if the browser blocks audio before the user's first click
+        console.log("Audio waiting for initial user interaction gesture.");
+      }
+    });
+
+    card.addEventListener("mouseleave", () => {
+      if (gainNode && audioCtx) {
+        // Smoothly fade the volume back down to absolute zero
+        gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+      }
+    });
+  });
+});
