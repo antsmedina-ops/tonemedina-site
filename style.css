@@ -350,23 +350,21 @@ nav .links a:hover {
 
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
 
-/* Total phrase: "Sometimes the most beautiful things we encounter" (46 characters) */
-/* Total phrase: "Sometimes the most beautiful things we encounter..." (51 characters) */
 @keyframes typeLine1 {
     0% { width: 0; opacity: 1; }
-    22% { width: 14ch; opacity: 1; }  /* "Sometimes the " */
-    38% { width: 19ch; opacity: 1; }  /* "most " */
-    65% { width: 31ch; opacity: 1; }  /* "beautiful t" */
-    78% { width: 36ch; opacity: 1; }  /* "things " */
-    100% { width: 51ch; opacity: 1; } /* Expanded to 51ch to fit "encounter..." */
+    22% { width: 14ch; opacity: 1; }  
+    38% { width: 19ch; opacity: 1; }  
+    65% { width: 31ch; opacity: 1; }  
+    78% { width: 36ch; opacity: 1; }  
+    100% { width: 51ch; opacity: 1; } 
 }
-/* Total phrase: "are meant to be temporary." (26 characters) */
+
 @keyframes typeLine2 {
     0% { width: 0; opacity: 1; }
-    15% { width: 4ch; opacity: 1; }   /* Quick start: "are " */
-    55% { width: 9ch; opacity: 1; }   /* THE SLOWDOWN: Takes 40% of the timeline just to type 5 letters for "meant" */
-    78% { width: 19ch; opacity: 1; }  /* Speeds back up smoothly: " to be tempor" */
-    100% { width: 26ch; opacity: 1; } /* Finishes out precisely on the period: "ary." */
+    15% { width: 4ch; opacity: 1; }   
+    55% { width: 9ch; opacity: 1; }   
+    78% { width: 19ch; opacity: 1; }  
+    100% { width: 26ch; opacity: 1; } 
 }
 
 /* Turns off the line 1 cursor right when line 2 begins */
