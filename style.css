@@ -573,3 +573,24 @@ nav .links a:hover {
   flex-grow: 1;
   min-height: 400px;    /* Keeps the calendar roomy */
 }
+
+/* Universal List Typography */
+.list-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #ffffff; 
+    margin-bottom: 0.2rem;
+    display: block;
+}
+
+.list-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65); /* Softly muted for dark backgrounds */
+    margin-bottom: 1.5rem; /* Space before the next person */
+    display: block;
+    line-height: 1.4;
+}
+
