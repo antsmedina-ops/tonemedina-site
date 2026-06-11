@@ -560,7 +560,15 @@ nav .links a:hover {
     gap: 1.5rem;
   }
 }
-
+/* ==========================================================================
+   7. NEWS & PRESS PAGE LAYOUT
+   ========================================================================== */
+.news-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Clean 50/50 desktop split */
+  gap: 2rem;
+  width: 100%;
+}
 /* 1. Ensure the layout container forces items to match heights */
 #contact .grid {
   display: grid;
