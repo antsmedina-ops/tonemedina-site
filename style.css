@@ -683,7 +683,7 @@ nav .links a:hover {
 }
 
 /* ==========================================================================
-   OVERRIDE: ARTICLE CARD RED NEON GLOW
+   ARTICLE CARD RED NEON GLOW (OVERRIDE)
    ========================================================================== */
 .article-card:hover {
   border-color: #ff3333 !important;
