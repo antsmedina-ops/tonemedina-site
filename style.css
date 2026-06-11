@@ -182,7 +182,7 @@ body::before {
 @keyframes neonDying {
     /* "ON" State: Full bright red glow and white-hot glass core */
     0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        -webkit-text-stroke: 3px #ffffff;
+        -webkit-text-stroke: 3px #ff3333;
         text-shadow: 
             0 0 5px rgba(255, 0, 0, 0.8),
             0 0 15px rgba(255, 0, 0, 0.8),
