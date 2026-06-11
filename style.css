@@ -643,3 +643,40 @@ nav .links a:hover {
     filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
 }
 
+/* ==========================================================================
+   VIDEO ROLLOVER PREVIEW ENGINE
+   ========================================================================== */
+.video-card {
+    position: relative;
+    background: #161a22; 
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    transform: scale(0.96); 
+    opacity: 0.6; 
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                border-color 0.4s ease, 
+                box-shadow 0.4s ease, 
+                opacity 0.4s ease;
+}
+
+.video-card iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    border: none;
+    display: block;
+    filter: grayscale(40%) brightness(75%); 
+    transition: filter 0.4s ease;
+}
+
+.video-card:hover {
+    opacity: 1;
+    transform: scale(1.02); 
+    border-color: #ff3333 !important;   
+    box-shadow: 0 0 25px rgba(255, 51, 51, 0.4);
+    z-index: 5; 
+}
+
+.video-card:hover iframe {
+    filter: grayscale(0%) brightness(100%);
+}
