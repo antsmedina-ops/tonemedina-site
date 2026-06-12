@@ -172,8 +172,8 @@ function filterLinkCards(searchTerm) {
     const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
-        // Looks for paragraphs, headers, and links inside the card
-        const items = card.querySelectorAll('.link-item, h3, p, a');
+        // FIXED: Now looks for list items (li) and styled text (em, strong, span)
+        const items = card.querySelectorAll('.link-item, h3, p, a, li, em, strong, span');
         let cardHasMatches = false;
 
         // If the user cleared the search, show everything instantly
@@ -192,8 +192,8 @@ function filterLinkCards(searchTerm) {
                 item.style.display = ''; 
                 cardHasMatches = true;
             } else {
-                // Only hide it if it's an actionable item or specific description
-                if (item.tagName === 'A' || item.parentElement.classList.contains('link-item') || item.tagName === 'P') {
+                // FIXED: Added LI and SPAN to the list of items that should hide if they don't match
+                if (item.tagName === 'A' || item.parentElement.classList.contains('link-item') || item.tagName === 'P' || item.tagName === 'LI' || item.tagName === 'SPAN') {
                     item.style.display = 'none';
                 }
             }
