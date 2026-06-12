@@ -235,12 +235,10 @@ body::before {
     color: #40000a;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   }
-}
-  }
-  20%, 24%, 55% {
-    /* Sign briefly shorts out to a dark, unlit translucent glass tube */
-    color: #40000a;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+20%, 24%, 55% {
+    /* Sign briefly shorts out to a dark, unlit translucent glass tube */ 
+    color: #40000a; 
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); 
   }
 }
 
@@ -248,11 +246,13 @@ body::before {
    5. UTILS, MODALS & MEDIA QUERIES
    ========================================================================== */
 /* Add your modal/footer/footer-admin/media-query styles here */
+
 footer .wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 0;
+  width: 100%; /* Force it to take up the full horizontal space */
 }
 /* ===== ENHANCED MODAL ===== */
 .modal {
