@@ -142,10 +142,12 @@ nav {
 }
 
 .ig-track {
-  display: flex; 
-  gap: 1.5rem; 
-  width: max-content;
-  align-items: stretch; /* Forces all elements to maintain an aligned horizontal baseline */
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;            /* Forces container to match card width */
+  overflow: hidden;       /* Removes the scrollbar */
+  justify-content: center; /* Centers the track content */
+  align-items: stretch;
   animation: rollingGallery 35s linear infinite;
 }
 
