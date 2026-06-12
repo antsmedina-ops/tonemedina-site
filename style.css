@@ -251,8 +251,9 @@ footer .wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 0;
-  width: 100%; /* Force it to take up the full horizontal space */
+  padding: 1.5rem 2rem; /* Added 2rem to the sides so text doesn't hug the screen edges */
+  width: 100%;
+  max-width: 100%;       /* Overrides any global container constraints */
 }
 /* ===== ENHANCED MODAL ===== */
 .modal {
