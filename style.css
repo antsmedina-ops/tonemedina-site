@@ -144,15 +144,11 @@ nav {
 .ig-track {
   display: flex;
   gap: 1.5rem;
-  width: 100%;            /* Forces container to match card width */
-  overflow: hidden;       /* Removes the scrollbar */
-  justify-content: center; /* Centers the track content */
+  width: 100%;             /* Locks width to the card */
+  overflow: hidden;        /* Clips everything inside, hides scrollbar */
+  justify-content: center; /* Keeps the track centered */
   align-items: stretch;
-  animation: rollingGallery 35s linear infinite;
-}
-
-.ig-track:hover { 
-  animation-play-state: paused; 
+  animation: none;         /* REMOVE the animation to stop the drift */
 }
 
 @keyframes rollingGallery {
@@ -162,7 +158,7 @@ nav {
 
 .ig-card {
   width: 326px; 
-  height: 460px; /* Strict boundary container to hide uneven caption spaces */
+  height: auto; /* Strict boundary container to hide uneven caption spaces */
   overflow: hidden; 
   background: var(--panel); 
   border: 1px solid var(--line);
