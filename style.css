@@ -57,9 +57,12 @@ section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
   transition: 0.25s;
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
+  break-inside: avoid;
   
-  margin-bottom: 1rem; /* Creates a clean gap between stacked cards */
-  break-inside: avoid; /* CRITICAL: Prevents a card from splitting in half across columns */
+  /* Add these two lines here */
+  overflow: hidden;
+  position: relative;
 }
 
 /* Keeps it a single, clean column on mobile phones */
