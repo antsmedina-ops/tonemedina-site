@@ -247,13 +247,13 @@ body::before {
    ========================================================================== */
 /* Add your modal/footer/footer-admin/media-query styles here */
 
-footer .wrap {
+ffooter.wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem; /* Added 2rem to the sides so text doesn't hug the screen edges */
+  padding: 1.5rem 2rem; 
   width: 100%;
-  max-width: 100%;       /* Overrides any global container constraints */
+  max-width: 100%;       
 }
 /* ===== ENHANCED MODAL ===== */
 .modal {
