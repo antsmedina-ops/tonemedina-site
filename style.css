@@ -144,11 +144,13 @@ nav {
 .ig-track {
   display: flex;
   gap: 1.5rem;
-  width: 100%;             /* Locks width to the card */
-  overflow: hidden;        /* Clips everything inside, hides scrollbar */
-  justify-content: center; /* Keeps the track centered */
+  width: 100%;             
+  overflow-x: auto;        /* Allows scrolling to see the other images */
+  overflow-y: hidden;      /* Keeps the scrollbar clean */
+  justify-content: flex-start; /* Aligns them to the left so they don't drift */
   align-items: stretch;
-  animation: none;         /* REMOVE the animation to stop the drift */
+  animation: none;         /* Stays stationary */
+  padding-bottom: 20px;    /* Gives the scrollbar room to breathe */
 }
 
 @keyframes rollingGallery {
