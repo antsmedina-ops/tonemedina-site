@@ -248,11 +248,11 @@ body::before {
    5. UTILS, MODALS & MEDIA QUERIES
    ========================================================================== */
 /* Add your modal/footer/footer-admin/media-query styles here */
-footer.wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 0;
+footer .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
 }
 /* ===== ENHANCED MODAL ===== */
 .modal {
