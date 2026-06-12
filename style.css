@@ -680,4 +680,50 @@ nav .links a:hover {
     filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
 }
 
+/* ==========================================================================
+   BEHANCE FLAT PREVIEW SHOWCASE
+   ========================================================================== */
+.portfolio-card {
+  position: relative;
+  text-decoration: none;
+}
 
+/* Forces your uploaded project cover to fill the 326x460 card perfectly without stretching */
+.portfolio-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* A dark gradient overlay that holds the project title and description */
+.portfolio-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 17, 21, 0.95) 0%, rgba(15, 17, 21, 0.3) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.3s ease;
+}
+
+/* Fades the title text in smoothly when hovered */
+.portfolio-card:hover .portfolio-overlay {
+  opacity: 1;
+}
+
+.portfolio-overlay h4 {
+  margin: 0 0 0.25rem 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.portfolio-overlay p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
