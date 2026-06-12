@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. ROOT & CORE
+   1. ROOT VARIABLES & RESET
    ========================================================================== */
 :root {
   --bg: #0f1115;
@@ -11,22 +11,471 @@
   --max: 980px;
 }
 
-/* (Include your existing Reset, Body, Nav, Typewriter, and Modal code here...) */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, rgba(27, 32, 48, 0.4) 0%, rgba(15, 17, 21, 0.85) 52%), 
+              url('aztec background sans text.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+main { flex: 1; }
 
 /* ==========================================================================
-   7. NEWS & PRESS PAGE LAYOUT (The Single Source of Truth)
+   2. UI COMPONENTS & LAYOUT
+   ========================================================================== */
+.wrap {
+  width: min(var(--max), calc(100% - 2rem));
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+
+.grid {
+  display: block; /* Switches from rigid rows to fluid columns */
+  column-count: 2; /* Spreads cards across two clean vertical streams */
+  column-gap: 1rem;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: 0.25s;
+  display: flex;
+  flex-direction: column;
+  
+  margin-bottom: 1rem; /* Creates a clean gap between stacked cards */
+  break-inside: avoid; /* CRITICAL: Prevents a card from splitting in half across columns */
+}
+
+/* Keeps it a single, clean column on mobile phones */
+@media (max-width: 768px) {
+  .grid {
+    column-count: 1;
+  }
+}
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 25px rgba(90, 0, 0, 0.4);
+  transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   3. NAVIGATION
+   ========================================================================== */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(15, 17, 21, 0.85);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-inner { 
+  display: flex; 
+  align-items: center; 
+  padding: 0.95rem 0;
+  width: min(var(--max), calc(100% - 2rem)); /* Centers it to match your cards */
+  margin: 0 auto; /* Keeps it perfectly locked in the middle of the screen */
+}
+
+.links a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1rem;
+  font-size: 0.8rem;
+  transition: 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.links a:hover {
+  color: var(--accent);
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(90, 0, 0, 0.5);
+}
+
+.links a::after {
+  content: "";
+  position: absolute; left: 0; bottom: -4px; width: 0%; height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(90, 0, 0, 0.6);
+  transition: 0.25s ease;
+}
+
+.links a:hover::after { width: 100%; }
+
+.nav-brand {
+  margin-right: auto;
+  transition: 0.25s; cursor: pointer; color: var(--text); text-decoration: none;
+}
+
+.nav-brand:hover {
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(90, 0, 0, 0.6);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   4. GALLERIES & ANIMATIONS
+   ========================================================================== */
+/* IG/Video Rows */
+.ig-row, .video-row { overflow: hidden; padding-bottom: 1rem; }
+
+.ig-track {
+  display: flex; gap: 1rem; width: max-content;
+  animation: rollingGallery 30s linear infinite;
+}
+
+.ig-track:hover { animation-play-state: paused; }
+
+@keyframes rollingGallery {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 0.5rem)); }
+}
+
+.ig-card {
+  min-width: 300px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: 1rem; flex: 0 0 auto;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: brightness(0.8) grayscale(0.2);
+}
+
+.ig-card:hover {
+  transform: scale(1.25);
+  filter: brightness(1.1) grayscale(0);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  border-color: rgba(90, 0, 0, 0.8);
+}
+
+/* Dying Neon Background */
+body::before {
+  content: "tone";
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 21vw;
+  line-height: 0.8;
+  color: rgba(120, 0, 0, 0.18);
+  pointer-events: none; z-index: 0;
+  animation: neonDying 8s infinite;
+}
+
+@keyframes neonDying {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        color: rgba(120, 0, 0, 0.18);
+        text-shadow: 0 0 20px rgba(120, 0, 0, 0.2);
+    }
+    20%, 24%, 55%, 56% {
+        color: rgba(120, 0, 0, 0.02);
+        text-shadow: none;
+    }
+}
+
+/* ==========================================================================
+   5. UTILS, MODALS & MEDIA QUERIES
+   ========================================================================== */
+/* Add your modal/footer/footer-admin/media-query styles here */
+footer.wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+}
+/* ===== ENHANCED MODAL ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* This is what hides it! */
+  pointer-events: none; /* This stops you from clicking it when hidden */
+  transition: opacity 0.4s ease;
+  z-index: 999;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 380px;
+  background: rgba(22, 26, 34, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(90, 0, 0, 0.3);
+  transform: scale(0.8) translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal.active .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+/* Spotify Modal specific sizing */
+#spotifyModal .modal-content {
+  width: 450px;
+  padding: 1.5rem;
+}
+
+/* Spotify Live "Now Playing" Pulsing Glow */
+#spotifyModal .now-playing {
+    color: #1DB954; /* Signature Spotify Green */
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    
+    /* Smooth, rhythmic breathing animation */
+    animation: livePulse 2s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 0.75;
+        text-shadow: 0 0 4px rgba(29, 185, 84, 0.2);
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(29, 185, 84, 0.7), 0 0 20px rgba(29, 185, 84, 0.4);
+    }
+}
+
+/* Calendar Modal specific sizing */
+#calendarModal .modal-content {
+  width: min(1000px, 92vw);
+  padding: 1.25rem;
+}
+
+/* ===== GOOGLE CALENDAR DARK MODE ===== */
+iframe[src*="calendar.google.com"] {
+    filter: invert(0.9) hue-rotate(180deg);
+}
+#calendarModal iframe {
+  height: 70vh;
+  margin-top: 0;
+}
+
+/*/* ===== RED GLOW & EXPAND HOVER EFFECTS ===== */
+
+/* Navigation links: Red neon glow */
+nav .links a:hover {
+    color: #ff3333 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Artist/Name cards: Glow, Border, and slight Expansion */
+.card:hover, .selectable:hover {
+    border-color: #ff3333 !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.2);
+    transform: scale(1.02); /* This creates the "expand" effect */
+    transition: all 0.3s ease;
+}
+
+/* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT ===== */
+
+.typewriter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    margin: 0 auto;
+    width: max-content;
+    max-width: 100%;
+    
+    /* Extended total window to 14 seconds to give people time to soak it in */
+    animation: fadeOutSequence 14s ease-in-out forwards;
+}
+
+.typewriter-container h3 {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    width: 0;
+    line-height: 1.6;
+    font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
+}
+
+/* Line 1: Slower overall (4.5s). Types unevenly, clearing the way at exactly 5.0s */
+.line-1 {
+    border-right: 2px solid #fff;
+    animation: 
+        typeLine1 4.5s linear 0.5s forwards,
+        killCursor 0s linear 5.0s forwards,
+        blink 0.75s step-end infinite;
+}
+
+/* Line 2: Waits exactly 5.0s for Line 1 to complete its journey, types for 3.5s */
+.line-2 {
+    border-right: 2px solid #fff;
+    animation: 
+        typeLine2 3.5s linear 5.0s forwards,
+        blink 0.75s step-end infinite;
+}
+
+/* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
+
+/* Total phrase: "Sometimes the most beautiful things we encounter" (46 characters) */
+/* Total phrase: "Sometimes the most beautiful things we encounter..." (51 characters) */
+@keyframes typeLine1 {
+    0% { width: 0; opacity: 1; }
+    22% { width: 14ch; opacity: 1; }  /* "Sometimes the " */
+    38% { width: 19ch; opacity: 1; }  /* "most " */
+    65% { width: 31ch; opacity: 1; }  /* "beautiful t" */
+    78% { width: 36ch; opacity: 1; }  /* "things " */
+    100% { width: 51ch; opacity: 1; } /* Expanded to 51ch to fit "encounter..." */
+}
+/* Total phrase: "are meant to be temporary." (26 characters) */
+@keyframes typeLine2 {
+    0% { width: 0; opacity: 1; }
+    15% { width: 4ch; opacity: 1; }   /* Quick start: "are " */
+    55% { width: 9ch; opacity: 1; }   /* THE SLOWDOWN: Takes 40% of the timeline just to type 5 letters for "meant" */
+    78% { width: 19ch; opacity: 1; }  /* Speeds back up smoothly: " to be tempor" */
+    100% { width: 26ch; opacity: 1; } /* Finishes out precisely on the period: "ary." */
+}
+
+/* Turns off the line 1 cursor right when line 2 begins */
+@keyframes killCursor {
+    to { border-right-color: transparent; }
+}
+
+/* Holds the completed text on screen for reading, then fades out */
+@keyframes fadeOutSequence {
+    0%, 88% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* Classic rhythmic cursor blink */
+@keyframes blink {
+    from, to { border-color: transparent; }
+    50% { border-color: #fff; }
+}
+
+
+/* Tightens the space between the H3 and the sub-header */
+.card h3 {
+  margin-bottom: 0; 
+}
+
+/* Controls the space between the sub-header and the first list item */
+.card h3 + p {
+  margin-top: 0.15rem; /* This overrides the sneaky default browser space! */
+  margin-bottom: 0.8rem;
+  line-height: 1.4; 
+}
+
+/* Gives your link items tighter, more natural spacing */
+.link-item {
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Removes the extra margin from the very last item in the card */
+.link-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== CARD LINK HOVER EFFECTS ===== */
+/* Styles the names/links inside the link cards */
+.link-item a {
+  color: var(--text);
+  text-decoration: none; /* Removes the default underline */
+  font-weight: 600; /* Makes the names pop a bit more */
+  transition: all 0.3s ease;
+}
+
+/* Adds the matching red neon glow when hovered */
+.link-item a:hover {
+  color: #ff3333;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+}
+
+/* ===== GLOBAL NAV SEARCH BAR ===== */
+.search-container {
+  width: 240px;
+  margin-right: 2rem; /* Leaves a perfect gap before the "Music" link */
+  display: flex;
+  align-items: center;
+}
+
+#global-search {
+  width: 100%;
+  background: rgba(22, 26, 34, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0.45rem 1rem;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#global-search::placeholder {
+  color: #555c66;
+}
+
+/* Red Neon Glow on Focus */
+#global-search:focus {
+  border-color: #ff3333;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+  background: rgba(22, 26, 34, 0.9);
+}
+
+/* Responsive tweak for smaller screens */
+@media (max-width: 768px) {
+  .nav-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+  .search-container { max-width: 100%; margin: 0.5rem 0; width: 100%; }
+}
+
+/* Keeps the masonry layout down to a single column on mobile screens */
+@media (max-width: 768px) {
+  .grid {
+    column-count: 1;
+  }
+}
+
+/* ==========================================================================
+   7. NEWS & PRESS PAGE LAYOUT
    ========================================================================== */
 .news-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Clean 50/50 desktop split */
   gap: 2rem;
   width: 100%;
 }
 
-@media (max-width: 900px) {
-  .news-layout { grid-template-columns: 1fr; }
+.media-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
+/* Premium Typography-Focused Article Card */
 .article-card {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -37,39 +486,142 @@
   transition: 0.25s ease;
 }
 
-/* Red Neon Hover Engine */
-.article-card:hover, .video-card:hover {
-  border-color: #ff3333 !important;
-  box-shadow: 0 0 20px rgba(255, 51, 51, 0.3), inset 0 0 10px rgba(255, 51, 51, 0.1) !important;
+.article-card:hover {
+  border-color: var(--text);
 }
 
-/* ==========================================================================
-   VIDEO ROLLOVER PREVIEW ENGINE
-   ========================================================================== */
-.video-card {
-    position: relative;
-    background: #161a22; 
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    overflow: hidden;
-    transform: scale(0.96); 
-    opacity: 0.6; 
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
-                border-color 0.4s ease, 
-                box-shadow 0.4s ease, 
-                opacity 0.4s ease;
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 1rem;
 }
 
-.video-card iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9; 
-    border: none;
+.pub-name {
+  color: #ff3333; /* Highlights the publisher name with your brand accent color */
+  font-weight: bold;
+}
+
+.article-title {
+  font-size: 1.75rem;
+  line-height: 1.3;
+  margin-bottom: 1.2rem;
+  color: var(--text);
+}
+
+.article-excerpt {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #ccc; /* Slightly softer white for comfortable reading */
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.article-link {
+  align-self: flex-start;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: bold;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 4px;
+  transition: 0.25s;
+}
+
+.article-link:hover {
+  border-color: #ff3333;
+  color: #ff3333;
+}
+
+.article-link .arrow {
+  display: inline-block;
+  transition: transform 0.25s;
+}
+
+.article-link:hover .arrow {
+  transform: translateX(5px); /* Smooth micro-interaction on hover */
+}
+
+/* Responsive collapse for tablets and mobile screens */
+@media (max-width: 900px) {
+  .news-layout {
+    grid-template-columns: 1fr; /* Stacks videos on top, articles on bottom */
+    gap: 1.5rem;
+  }
+}
+
+/* 1. Ensure the layout container forces items to match heights */
+#contact .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch; /* Forces equal height for anything inside */
+  gap: 2rem;            /* Clean spacing between the cards */
+}
+
+/* 2. Force both cards to fully expand and behave uniformly */
+#contactCard, #calendarCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 3. Optional: Makes the calendar iframe fill its container perfectly */
+#calendarCard iframe {
+  flex-grow: 1;
+  min-height: 400px;    /* Keeps the calendar roomy */
+}
+
+/* Universal List Typography */
+.list-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #ffffff; 
+    margin-bottom: 0.2rem;
     display: block;
-    filter: grayscale(40%) brightness(75%); 
-    transition: filter 0.4s ease;
 }
 
-.video-card:hover iframe {
-    filter: grayscale(0%) brightness(100%);
-    opacity: 1;
+.list-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65); /* Softly muted for dark backgrounds */
+    margin-bottom: 1.5rem; /* Space before the next person */
+    display: block;
+    line-height: 1.4;
+}
+
+.selectable-link-item {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.selectable-link-item:hover {
+    transform: scale(1.03);
+}
+
+/* Makes the title text glow red when the item is hovered */
+.selectable-link-item:hover .list-title {
+    color: #ff3333 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* ===== SOCIAL LOGO BASE & HOVER ANIMATION ===== */
+.social-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor; /* Matches text color dynamically (White -> Red) */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+}
+
+/* When you hover over a social item, pop and rotate the logo slightly */
+.selectable-link-item:hover .social-icon {
+    transform: scale(1.25) rotate(12deg);
+    filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
 }
