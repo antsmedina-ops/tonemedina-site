@@ -133,32 +133,59 @@ nav {
    4. GALLERIES & ANIMATIONS
    ========================================================================== */
 /* IG/Video Rows */
-.ig-row, .video-row { overflow: hidden; padding-bottom: 1rem; }
-
-.ig-track {
-  display: flex; gap: 1rem; width: max-content;
-  animation: rollingGallery 30s linear infinite;
+.ig-row, .video-row { 
+  overflow: hidden; 
+  padding: 1.5rem 0; 
 }
 
-.ig-track:hover { animation-play-state: paused; }
+.ig-track {
+  display: flex; 
+  gap: 1.5rem; 
+  width: max-content;
+  align-items: stretch; /* Forces all elements to maintain an aligned horizontal baseline */
+  animation: rollingGallery 35s linear infinite;
+}
+
+.ig-track:hover { 
+  animation-play-state: paused; 
+}
 
 @keyframes rollingGallery {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 0.5rem)); }
+  100% { transform: translateX(calc(-50% - 0.75rem)); }
 }
 
 .ig-card {
-  min-width: 300px; background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem; flex: 0 0 auto;
+  width: 326px; 
+  height: 460px; /* Strict boundary container to hide uneven caption spaces */
+  overflow: hidden; 
+  background: var(--panel); 
+  border: 1px solid var(--line);
+  border-radius: 12px; 
+  padding: 0; /* Reset internal padding so iframe embeds sit completely flush */
+  flex: 0 0 auto;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   filter: brightness(0.8) grayscale(0.2);
 }
 
 .ig-card:hover {
-  transform: scale(1.25);
+  transform: scale(1.06); /* Scaled down slightly from 1.25 so scrolling items don't overlap the navigation bar */
   filter: brightness(1.1) grayscale(0);
   box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-  border-color: rgba(90, 0, 0, 0.8);
+  border-color: #ff3333 !important;
+}
+
+/* Absolute size override targeting Instagram's dynamically generated tracking scripts */
+.ig-card iframe {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Realistic Red Neon Background */
@@ -199,6 +226,13 @@ body::before {
       0 0 35px #ff0033,
       0 0 70px #ff0033,
       0 0 100px #ff0033;
+  }
+  20%, 24%, 55% {
+    /* Sign briefly shorts out to a dark, unlit translucent glass tube */
+    color: #40000a;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  }
+}
   }
   20%, 24%, 55% {
     /* Sign briefly shorts out to a dark, unlit translucent glass tube */
