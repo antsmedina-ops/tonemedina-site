@@ -161,30 +161,50 @@ nav {
   border-color: rgba(90, 0, 0, 0.8);
 }
 
-/* Dying Neon Background */
+/* Realistic Red Neon Background */
 body::before {
   content: "tone";
-  position: fixed; top: 50%; left: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 21vw;
   line-height: 0.8;
-  color: rgba(120, 0, 0, 0.18);
-  pointer-events: none; z-index: 0;
-  animation: neonDying 8s infinite;
+  pointer-events: none;
+  z-index: 0;
+  color: #fff; /* White-hot inner gas core */
+  
+  /* Layered realistic red neon glow */
+  text-shadow: 
+    0 0 4px #fff,
+    0 0 10px #fff,
+    0 0 18px #ff0033,
+    0 0 35px #ff0033,
+    0 0 70px #ff0033,
+    0 0 100px #ff0033;
+  animation: realistic-flicker 3s infinite alternate;
 }
 
-@keyframes neonDying {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        color: rgba(120, 0, 0, 0.18);
-        text-shadow: 0 0 20px rgba(120, 0, 0, 0.2);
-    }
-    20%, 24%, 55%, 56% {
-        color: rgba(120, 0, 0, 0.02);
-        text-shadow: none;
-    }
+@keyframes realistic-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    /* Sign is fully ON */
+    color: #fff;
+    text-shadow: 
+      0 0 4px #fff,
+      0 0 10px #fff,
+      0 0 18px #ff0033,
+      0 0 35px #ff0033,
+      0 0 70px #ff0033,
+      0 0 100px #ff0033;
+  }
+  20%, 24%, 55% {
+    /* Sign briefly shorts out to a dark, unlit translucent glass tube */
+    color: #40000a;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  }
 }
 
 /* ==========================================================================
@@ -625,3 +645,5 @@ nav .links a:hover {
     transform: scale(1.25) rotate(12deg);
     filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
 }
+
+
