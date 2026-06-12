@@ -247,7 +247,7 @@ body::before {
    ========================================================================== */
 /* Add your modal/footer/footer-admin/media-query styles here */
 
-ffooter.wrap {
+footer.wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
