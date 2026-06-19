@@ -167,24 +167,43 @@ nav {
   100% { transform: translateX(calc(-50% - 0.75rem)); }
 }
 
+/* Force every single card to be the exact same dimensions */
 .ig-card {
-  width: 326px; 
-  height: auto; /* Strict boundary container to hide uneven caption spaces */
-  overflow: hidden; 
+  min-width: 300px;
+  max-width: 300px;
+  height: 400px; /* Forces uniform height alignment */
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
   background: var(--panel); 
   border: 1px solid var(--line);
-  border-radius: 12px; 
-  padding: 0; /* Reset internal padding so iframe embeds sit completely flush */
   flex: 0 0 auto;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   filter: brightness(0.8) grayscale(0.2);
 }
 
 .ig-card:hover {
-  transform: scale(1.06); /* Scaled down slightly from 1.25 so scrolling items don't overlap the navigation bar */
+  transform: scale(1.04); 
   filter: brightness(1.1) grayscale(0);
   box-shadow: 0 20px 40px rgba(0,0,0,0.6);
   border-color: #ff3333 !important;
+}
+
+/* Ensure images perfectly fill the card boundaries without warping */
+.ig-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+/* Smooth Infinite Scroll Animation */
+@keyframes gentle-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Absolute size override targeting Instagram's dynamically generated tracking scripts */
