@@ -141,16 +141,25 @@ nav {
   padding: 1.5rem 0; 
 }
 
+/* Container holding the track to clip the edges perfectly */
+.ig-track-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* The actual scrolling row */
 .ig-track {
   display: flex;
-  gap: 1.5rem;
-  width: 100%;             
-  overflow-x: auto;        /* Allows scrolling to see the other images */
-  overflow-y: hidden;      /* Keeps the scrollbar clean */
-  justify-content: flex-start; /* Aligns them to the left so they don't drift */
-  align-items: stretch;
-  animation: none;         /* Stays stationary */
-  padding-bottom: 20px;    /* Gives the scrollbar room to breathe */
+  gap: 20px;
+  width: max-content;
+  align-items: flex-start;
+  animation: gentle-scroll 25s linear infinite;
+}
+
+/* Pause the scrolling smoothly when a user hovers over an image */
+.ig-track:hover {
+  animation-play-state: paused;
 }
 
 @keyframes rollingGallery {
