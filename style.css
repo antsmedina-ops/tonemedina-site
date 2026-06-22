@@ -759,3 +759,51 @@ nav .links a:hover {
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+/* Container holding the track */
+.ig-track-wrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+/* The actual scrolling row */
+.ig-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: gentle-scroll 25s linear infinite;
+}
+
+/* Pause the scrolling when a user hovers over an image */
+.ig-track:hover {
+    animation-play-state: paused;
+}
+
+/* Force every single card to be the exact same dimensions */
+.ig-card {
+    min-width: 300px;
+    max-width: 300px;
+    height: 400px; /* Forces uniform height */
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Ensure images perfectly fill the card boundaries without warping or cutting off details */
+.ig-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    border-radius: 8px;
+}
+
+/* Smooth Infinite Scroll Animation */
+@keyframes gentle-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Adjust based on duplication */
+    }
+}
