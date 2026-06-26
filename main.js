@@ -105,7 +105,7 @@ function copyText(text) {
 }
 
 // ===== HAND-TYPED ANIMATION OBSERVER =====
-(function() {
+window.addEventListener("load", () => {
     const typewriter = document.querySelector('.typewriter-container');
     if (typewriter) {
         const observer = new IntersectionObserver((entries) => {
@@ -115,10 +115,10 @@ function copyText(text) {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0 }); 
+        }, { threshold: 0 });
         observer.observe(typewriter);
     }
-})();
+});
 
 // ===== GLOBAL SEARCH & LIVE FILTERING ENGINE =====
 document.addEventListener('DOMContentLoaded', () => {
