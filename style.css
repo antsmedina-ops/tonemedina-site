@@ -390,8 +390,12 @@ nav .links a:hover {
     margin: 0 auto;
     width: max-content;
     max-width: 100%;
-    
-    /* Extended total window to 14 seconds to give people time to soak it in */
+    opacity: 0; /* Starts hidden */
+}
+
+/* This class is added by main.js only when the element is visible */
+.typewriter-container.start-typing {
+    opacity: 1;
     animation: fadeOutSequence 14s ease-in-out forwards;
 }
 
@@ -802,4 +806,10 @@ nav .links a:hover {
     100% {
         transform: translateX(-50%); /* Adjust based on duplication */
     }
+}
+
+/* Fades the typewriter out after it completes its cycle */
+@keyframes fadeOutSequence {
+    0%, 88% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
 }
