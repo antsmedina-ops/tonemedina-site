@@ -105,22 +105,22 @@ function copyText(text) {
 }
 
 // ===== HAND-TYPED ANIMATION OBSERVER =====
-document.addEventListener("DOMContentLoaded", () => {
-    const typewriter = document.querySelector('.typewriter-container');
-    
-    if (typewriter) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('start-typing');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 }); // Changed to 0.1 to be more responsive
+const typewriter = document.querySelector('.typewriter-container');
+if (typewriter) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('start-typing');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 }); 
+    observer.observe(typewriter);
+}
 
-        observer.observe(typewriter);
-    }
-});
+// ===== GLOBAL SEARCH & LIVE FILTERING ENGINE =====
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('global-search');
 
 // ==========================================================================
 // 6. GLOBAL SEARCH & LIVE FILTERING ENGINE
