@@ -104,30 +104,23 @@ function copyText(text) {
   }, 1200);
 }
 
-// ===== HAND-TYPED ANIMATION =====
-108    document.addEventListener("DOMContentLoaded", () => {
-109        // --- PASTE NEW TYPEWRITER CODE HERE ---
-110        const typewriter = document.querySelector('.typewriter-container');
-111        if (typewriter) {
-112            const observer = new IntersectionObserver((entries) => {
-113                entries.forEach(entry => {
-114                    if (entry.isIntersecting) {
-115                        entry.target.classList.add('start-typing');
-116                        observer.unobserve(entry.target); 
-117                    }
-118                });
-119            }, { threshold: 0.5 });
-120            observer.observe(typewriter);
-121        }
-122
-123        // --- YOUR EXISTING CODE STARTS HERE ---
-124        const typeElements = document.querySelectorAll(".typewriter");
-...
+// ===== HAND-TYPED ANIMATION OBSERVER =====
+document.addEventListener("DOMContentLoaded", () => {
+    const typewriter = document.querySelector('.typewriter-container');
     
-    setTimeout(type, 500); // Waits half a second before starting to type
-  });
-});
+    if (typewriter) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('start-typing');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 }); // Changed to 0.1 to be more responsive
 
+        observer.observe(typewriter);
+    }
+});
 
 // ==========================================================================
 // 6. GLOBAL SEARCH & LIVE FILTERING ENGINE
