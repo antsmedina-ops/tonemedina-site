@@ -406,21 +406,18 @@ nav .links a:hover {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
 }
 
-/* Line 1: Slower overall (4.5s). Types unevenly, clearing the way at exactly 5.0s */
 .line-1 {
-    border-right: 2px solid #fff;
+    border-right: 2px solid transparent;
     animation: 
         typeLine1 4.5s linear 0.5s forwards,
-        killCursor 0s linear 5.0s forwards,
-        blink 0.75s step-end infinite;
+        blink 0.75s step-end 6 0.5s forwards;
 }
 
-/* Line 2: Waits exactly 5.0s for Line 1 to complete its journey, types for 3.5s */
 .line-2 {
-    border-right: 2px solid #fff;
+    border-right: 2px solid transparent;
     animation: 
         typeLine2 3.5s linear 5.0s forwards,
-        blink 0.75s step-end infinite;
+        blink 0.75s step-end infinite 5.0s;
 }
 
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
