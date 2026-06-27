@@ -414,25 +414,33 @@ nav .links a:hover {
 
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
 
-/* Total phrase: "Sometimes the most beautiful things we encounter..." (51 characters) */
+/* Line 1: "Sometimes..." (Exactly 12 characters) */
 @keyframes typeLine1 {
-    0% { width: 0; opacity: 1; animation-timing-function: steps(14, end); }
-    22% { width: 14ch; opacity: 1; animation-timing-function: steps(5, end); }  /* "Sometimes the " */
-    38% { width: 19ch; opacity: 1; animation-timing-function: steps(12, end); } /* "most " */
-    65% { width: 31ch; opacity: 1; animation-timing-function: steps(5, end); }  /* "beautiful t" */
-    78% { width: 36ch; opacity: 1; animation-timing-function: steps(15, end); } /* "things " */
-    100% { width: 51ch; opacity: 1; } /* Expanded to 51ch to fit "encounter..." */
+    0% { width: 0; animation-timing-function: steps(4, end); }
+    30% { width: 4ch; animation-timing-function: steps(5, end); }   /* "Some" */
+    65% { width: 9ch; animation-timing-function: steps(3, end); }   /* Quick burst "times" */
+    100% { width: 12ch; }                                           /* Finishes exactly on the periods */
 }
 
-/* Total phrase: "are meant to be temporary." (26 characters) */
+/* Line 2: "the most beautiful things in life," (Exactly 33 characters) */
 @keyframes typeLine2 {
-    0% { width: 0; opacity: 1; animation-timing-function: steps(4, end); }
-    15% { width: 4ch; opacity: 1; animation-timing-function: steps(5, end); }   /* Quick start: "are " */
-    55% { width: 9ch; opacity: 1; animation-timing-function: steps(10, end); }  /* THE SLOWDOWN */
-    78% { width: 19ch; opacity: 1; animation-timing-function: steps(7, end); }  /* Speeds back up smoothly */
-    100% { width: 26ch; opacity: 1; } /* Finishes out precisely on the period */
+    0% { width: 0; animation-timing-function: steps(4, end); }
+    15% { width: 4ch; animation-timing-function: steps(10, end); }  /* Fast "the " */
+    55% { width: 14ch; animation-timing-function: steps(9, end); }  /* Big slowdown on "beautiful" */
+    80% { width: 23ch; animation-timing-function: steps(10, end); } /* "things in " */
+    100% { width: 33ch; }                                           /* Holds steadily on the comma */
 }
-/* Turns off the line 1 cursor right when line 2 begins */
+
+/* Line 3: "are meant to be temporary" (Exactly 25 characters) */
+@keyframes typeLine3 {
+    0% { width: 0; animation-timing-function: steps(3, end); }
+    25% { width: 3ch; animation-timing-function: steps(9, end); }   /* "are" */
+    60% { width: 12ch; animation-timing-function: steps(3, end); }  /* " meant to be " */
+    80% { width: 15ch; animation-timing-function: steps(10, end); } /* Long "thoughtful hesitation" before the final word */
+    100% { width: 25ch; }                                           /* Finishes typing layout */
+}
+
+/* Turns off a line cursor right when the next line begins */
 @keyframes killCursor {
     to { border-right-color: transparent; }
 }
@@ -448,31 +456,6 @@ nav .links a:hover {
     from, to { border-color: transparent; }
     50% { border-color: #fff; }
 }
-
-
-/* Tightens the space between the H3 and the sub-header */
-.card h3 {
-  margin-bottom: 0; 
-}
-
-/* Controls the space between the sub-header and the first list item */
-.card h3 + p {
-  margin-top: 0.15rem; /* This overrides the sneaky default browser space! */
-  margin-bottom: 0.8rem;
-  line-height: 1.4; 
-}
-
-/* Gives your link items tighter, more natural spacing */
-.link-item {
-  margin-bottom: 0.75rem;
-  line-height: 1.4;
-}
-
-/* Removes the extra margin from the very last item in the card */
-.link-item:last-child {
-  margin-bottom: 0;
-}
-
 /* ===== CARD LINK HOVER EFFECTS ===== */
 /* Styles the names/links inside the link cards */
 .link-item a {
