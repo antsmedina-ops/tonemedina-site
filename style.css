@@ -383,45 +383,27 @@ nav .links a:hover {
 
 /* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT ===== */
 
-.typewriter-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; 
-    margin: 0 auto;
-    width: max-content;
-    max-width: 100%;
-    opacity: 0; /* Starts hidden */
-}
-
-/* This class is added by main.js only when the element is visible */
-.typewriter-container.start-typing {
-    opacity: 1;
-    animation: fadeOutSequence 14s ease-in-out forwards;
-}
-
 .typewriter-container h3 {
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
-    opacity: 0;
     width: 0;
     line-height: 1.6;
     font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
+    border-right: 2px solid transparent; /* Hide cursor globally by default */
 }
 
 .line-1 {
-    border-right: 2px solid transparent;
     animation: 
-        typeLine1 4.5s linear 0.5s forwards,
-        blink 0.75s step-end 6 0.5s forwards;
+        typeLine1 1.5s steps(12, end) 0.5s forwards,
+        blink 0.75s step-end 3 0.5s forwards; /* Blinks 3 times while typing "Sometimes..." then shuts off */
 }
 
 .line-2 {
-    border-right: 2px solid transparent;
     animation: 
-        typeLine2 3.5s linear 5.0s forwards,
-        blink 0.75s step-end infinite 5.0s;
+        typeLine2 2.5s steps(33, end) 2.2s forwards,
+        blink 0.75s step-end infinite 2.2s; /* Starts blinking only when line 2 takes over */
 }
 
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
