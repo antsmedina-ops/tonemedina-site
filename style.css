@@ -403,7 +403,13 @@ nav .links a:hover {
 .line-2 {
     animation: 
         typeLine2 2.5s steps(33, end) 2.2s forwards,
-        blink 0.75s step-end infinite 2.2s; /* Starts blinking only when line 2 takes over */
+        blink 0.75s step-end 3 2.2s forwards; /* Blinks while typing line 2, then shuts off */
+}
+
+.line-3 {
+    animation: 
+        typeLine3 3.5s steps(25, end) 5.0s forwards,
+        blink 0.75s step-end infinite 5.0s; /* Waits for the pause, types slowly, then blinks indefinitely */
 }
 
 /* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
