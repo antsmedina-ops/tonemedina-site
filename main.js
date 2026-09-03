@@ -107,3 +107,20 @@ document.addEventListener("DOMContentLoaded", () => {
         card.addEventListener("mouseleave", () => { if (gainNode && audioCtx) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05); });
     });
 });
+
+function copyText(text, element) {
+  navigator.clipboard.writeText(text).then(() => {
+    if (element) {
+      element.classList.add('copied');
+      const originalText = element.innerText;
+      element.innerText = 'Copied!';
+      
+      setTimeout(() => {
+        element.classList.remove('copied');
+        element.innerText = originalText;
+      }, 1500);
+    }
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+  });
+}
