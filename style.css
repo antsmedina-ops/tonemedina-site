@@ -59,8 +59,6 @@ section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
   flex-direction: column;
   margin-bottom: 1rem;
   break-inside: avoid;
-  
-  /* Add these two lines here */
   overflow: hidden;
   position: relative;
 }
@@ -71,6 +69,7 @@ section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
     column-count: 1;
   }
 }
+
 .card:hover {
   border-color: var(--accent);
   box-shadow: 0 0 25px rgba(90, 0, 0, 0.4);
@@ -162,11 +161,6 @@ nav {
   animation-play-state: paused;
 }
 
-@keyframes rollingGallery {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 0.75rem)); }
-}
-
 /* Force every single card to be the exact same dimensions */
 .ig-card {
   min-width: 300px;
@@ -234,8 +228,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
   color: #fff; /* White-hot inner gas core */
-  
-  /* Layered realistic red neon glow */
   text-shadow: 
     0 0 4px #fff,
     0 0 10px #fff,
@@ -248,7 +240,6 @@ body::before {
 
 @keyframes realistic-flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    /* Sign is fully ON */
     color: #fff;
     text-shadow: 
       0 0 4px #fff,
@@ -259,22 +250,14 @@ body::before {
       0 0 100px #ff0033;
   }
   20%, 24%, 55% {
-    /* Sign briefly shorts out to a dark, unlit translucent glass tube */
     color: #40000a;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  }
-20%, 24%, 55% {
-    /* Sign briefly shorts out to a dark, unlit translucent glass tube */ 
-    color: #40000a; 
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); 
   }
 }
 
 /* ==========================================================================
    5. UTILS, MODALS & MEDIA QUERIES
    ========================================================================== */
-/* Add your modal/footer/footer-admin/media-query styles here */
-
 footer.wrap {
   display: flex;
   justify-content: space-between;
@@ -283,6 +266,7 @@ footer.wrap {
   width: 100%;
   max-width: 100%;       
 }
+
 /* ===== ENHANCED MODAL ===== */
 .modal {
   position: fixed;
@@ -290,8 +274,8 @@ footer.wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0; /* This is what hides it! */
-  pointer-events: none; /* This stops you from clicking it when hidden */
+  opacity: 0;
+  pointer-events: none;
   transition: opacity 0.4s ease;
   z-index: 999;
 }
@@ -327,26 +311,24 @@ footer.wrap {
 
 /* Spotify Live "Now Playing" Pulsing Glow */
 #spotifyModal .now-playing {
-    color: #1DB954; /* Signature Spotify Green */
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    
-    /* Smooth, rhythmic breathing animation */
-    animation: livePulse 2s infinite ease-in-out;
+  color: #1DB954;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: livePulse 2s infinite ease-in-out;
 }
 
 @keyframes livePulse {
-    0%, 100% {
-        opacity: 0.75;
-        text-shadow: 0 0 4px rgba(29, 185, 84, 0.2);
-    }
-    50% {
-        opacity: 1;
-        text-shadow: 0 0 12px rgba(29, 185, 84, 0.7), 0 0 20px rgba(29, 185, 84, 0.4);
-    }
+  0%, 100% {
+    opacity: 0.75;
+    text-shadow: 0 0 4px rgba(29, 185, 84, 0.2);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(29, 185, 84, 0.7), 0 0 20px rgba(29, 185, 84, 0.4);
+  }
 }
 
 /* Calendar Modal specific sizing */
@@ -357,115 +339,103 @@ footer.wrap {
 
 /* ===== GOOGLE CALENDAR DARK MODE ===== */
 iframe[src*="calendar.google.com"] {
-    filter: invert(0.9) hue-rotate(180deg);
+  filter: invert(0.9) hue-rotate(180deg);
 }
+
 #calendarModal iframe {
   height: 70vh;
   margin-top: 0;
 }
 
-/*/* ===== RED GLOW & EXPAND HOVER EFFECTS ===== */
-
-/* Navigation links: Red neon glow */
+/* ===== RED GLOW & EXPAND HOVER EFFECTS ===== */
 nav .links a:hover {
-    color: #ff3333 !important;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
-    transition: all 0.3s ease;
-}
-
-/* Artist/Name cards: Glow, Border, and slight Expansion */
-.card:hover, .selectable:hover {
-    border-color: #ff3333 !important;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.2);
-    transform: scale(1.02); /* This creates the "expand" effect */
-    transition: all 0.3s ease;
-}
-
-/* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT ===== */
-
-.typewriter-container h3 {
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    line-height: 1.6;
-    font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
-    border-right: 2px solid transparent; /* Hide cursor globally by default */
-}
-
-.line-1 {
-    animation: 
-        typeLine1 1.5s steps(12, end) 0.5s forwards,
-        blink 0.75s step-end 3 0.5s forwards; /* Blinks 3 times while typing "Sometimes..." then shuts off */
-}
-
-.line-2 {
-    animation: 
-        typeLine2 2.5s steps(33, end) 2.2s forwards,
-        blink 0.75s step-end 3 2.2s forwards; /* Blinks while typing line 2, then shuts off */
-}
-
-.line-3 {
-    animation: 
-        typeLine3 3.5s steps(25, end) 5.0s forwards,
-        blink 0.75s step-end infinite 5.0s; /* Waits for the pause, types slowly, then blinks indefinitely */
-}
-
-/* ===== HUMAN TIMING BREAKDOWNS (UNEVEN SPEEDS) ===== */
-
-/* Line 1: "Sometimes..." (Exactly 12 characters) */
-@keyframes typeLine1 {
-    0% { width: 0; animation-timing-function: steps(4, end); }
-    30% { width: 4ch; animation-timing-function: steps(5, end); }   /* "Some" */
-    65% { width: 9ch; animation-timing-function: steps(3, end); }   /* Quick burst "times" */
-    100% { width: 12ch; }                                           /* Finishes exactly on the periods */
-}
-
-/* Line 2: "the most beautiful things in life," (Exactly 33 characters) */
-@keyframes typeLine2 {
-    0% { width: 0; animation-timing-function: steps(4, end); }
-    15% { width: 4ch; animation-timing-function: steps(10, end); }  /* Fast "the " */
-    55% { width: 14ch; animation-timing-function: steps(9, end); }  /* Big slowdown on "beautiful" */
-    80% { width: 23ch; animation-timing-function: steps(10, end); } /* "things in " */
-    100% { width: 33ch; }                                           /* Holds steadily on the comma */
-}
-
-/* Line 3: "are meant to be temporary" (Exactly 25 characters) */
-@keyframes typeLine3 {
-    0% { width: 0; animation-timing-function: steps(3, end); }
-    25% { width: 3ch; animation-timing-function: steps(9, end); }   /* "are" */
-    60% { width: 12ch; animation-timing-function: steps(3, end); }  /* " meant to be " */
-    80% { width: 15ch; animation-timing-function: steps(10, end); } /* Long "thoughtful hesitation" before the final word */
-    100% { width: 25ch; }                                           /* Finishes typing layout */
-}
-
-/* Turns off a line cursor right when the next line begins */
-@keyframes killCursor {
-    to { border-right-color: transparent; }
-}
-
-/* Holds the completed text on screen for reading, then fades out */
-@keyframes fadeOutSequence {
-    0%, 88% { opacity: 1; visibility: visible; }
-    100% { opacity: 0; visibility: hidden; }
-}
-
-/* Classic rhythmic cursor blink */
-@keyframes blink {
-    from, to { border-color: transparent; }
-    50% { border-color: #fff; }
-}
-/* ===== CARD LINK HOVER EFFECTS ===== */
-/* Styles the names/links inside the link cards */
-.link-item a {
-  color: var(--text);
-  text-decoration: none; /* Removes the default underline */
-  font-weight: 600; /* Makes the names pop a bit more */
+  color: #ff3333 !important;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
   transition: all 0.3s ease;
 }
 
-/* Adds the matching red neon glow when hovered */
+.card:hover, .selectable:hover {
+  border-color: #ff3333 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.2);
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
+
+/* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT ===== */
+.typewriter-container h3 {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
+  border-right: 2px solid transparent;
+}
+
+.line-1 {
+  animation: 
+    typeLine1 1.5s steps(12, end) 0.5s forwards,
+    blink 0.75s step-end 3 0.5s forwards;
+}
+
+.line-2 {
+  animation: 
+    typeLine2 2.5s steps(33, end) 2.2s forwards,
+    blink 0.75s step-end 3 2.2s forwards;
+}
+
+.line-3 {
+  animation: 
+    typeLine3 3.5s steps(25, end) 5.0s forwards,
+    blink 0.75s step-end infinite 5.0s;
+}
+
+@keyframes typeLine1 {
+  0% { width: 0; animation-timing-function: steps(4, end); }
+  30% { width: 4ch; animation-timing-function: steps(5, end); }
+  65% { width: 9ch; animation-timing-function: steps(3, end); }
+  100% { width: 12ch; }
+}
+
+@keyframes typeLine2 {
+  0% { width: 0; animation-timing-function: steps(4, end); }
+  15% { width: 4ch; animation-timing-function: steps(10, end); }
+  55% { width: 14ch; animation-timing-function: steps(9, end); }
+  80% { width: 23ch; animation-timing-function: steps(10, end); }
+  100% { width: 33ch; }
+}
+
+@keyframes typeLine3 {
+  0% { width: 0; animation-timing-function: steps(3, end); }
+  25% { width: 3ch; animation-timing-function: steps(9, end); }
+  60% { width: 12ch; animation-timing-function: steps(3, end); }
+  80% { width: 15ch; animation-timing-function: steps(10, end); }
+  100% { width: 25ch; }
+}
+
+@keyframes killCursor {
+  to { border-right-color: transparent; }
+}
+
+@keyframes fadeOutSequence {
+  0%, 88% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: #fff; }
+}
+
+/* ===== CARD LINK HOVER EFFECTS ===== */
+.link-item a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
 .link-item a:hover {
   color: #ff3333;
   text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
@@ -474,7 +444,7 @@ nav .links a:hover {
 /* ===== GLOBAL NAV SEARCH BAR ===== */
 .search-container {
   width: 240px;
-  margin-right: 2rem; /* Leaves a perfect gap before the "Music" link */
+  margin-right: 2rem;
   display: flex;
   align-items: center;
 }
@@ -496,24 +466,15 @@ nav .links a:hover {
   color: #555c66;
 }
 
-/* Red Neon Glow on Focus */
 #global-search:focus {
   border-color: #ff3333;
   box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
   background: rgba(22, 26, 34, 0.9);
 }
 
-/* Responsive tweak for smaller screens */
 @media (max-width: 768px) {
   .nav-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
   .search-container { max-width: 100%; margin: 0.5rem 0; width: 100%; }
-}
-
-/* Keeps the masonry layout down to a single column on mobile screens */
-@media (max-width: 768px) {
-  .grid {
-    column-count: 1;
-  }
 }
 
 /* ==========================================================================
@@ -521,7 +482,7 @@ nav .links a:hover {
    ========================================================================== */
 .news-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Clean 50/50 desktop split */
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   width: 100%;
 }
@@ -532,7 +493,6 @@ nav .links a:hover {
   gap: 1.5rem;
 }
 
-/* Premium Typography-Focused Article Card */
 .article-card {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -558,7 +518,7 @@ nav .links a:hover {
 }
 
 .pub-name {
-  color: #ff3333; /* Highlights the publisher name with your brand accent color */
+  color: #ff3333;
   font-weight: bold;
 }
 
@@ -572,7 +532,7 @@ nav .links a:hover {
 .article-excerpt {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #ccc; /* Slightly softer white for comfortable reading */
+  color: #ccc;
   margin-bottom: 2rem;
   font-style: italic;
 }
@@ -598,26 +558,23 @@ nav .links a:hover {
 }
 
 .article-link:hover .arrow {
-  transform: translateX(5px); /* Smooth micro-interaction on hover */
+  transform: translateX(5px);
 }
 
-/* Responsive collapse for tablets and mobile screens */
 @media (max-width: 900px) {
   .news-layout {
-    grid-template-columns: 1fr; /* Stacks videos on top, articles on bottom */
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 }
 
-/* 1. Ensure the layout container forces items to match heights */
 #contact .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  align-items: stretch; /* Forces equal height for anything inside */
-  gap: 2rem;            /* Clean spacing between the cards */
+  align-items: stretch;
+  gap: 2rem;
 }
 
-/* 2. Force both cards to fully expand and behave uniformly */
 #contactCard, #calendarCard {
   height: 100%;
   display: flex;
@@ -625,62 +582,59 @@ nav .links a:hover {
   box-sizing: border-box;
 }
 
-/* 3. Optional: Makes the calendar iframe fill its container perfectly */
 #calendarCard iframe {
   flex-grow: 1;
-  min-height: 400px;    /* Keeps the calendar roomy */
+  min-height: 400px;
 }
 
-/* Universal List Typography */
 .list-title {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: #ffffff; 
-    margin-bottom: 0.2rem;
-    display: block;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #ffffff; 
+  margin-bottom: 0.2rem;
+  display: block;
 }
 
 .list-desc {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.65); /* Softly muted for dark backgrounds */
-    margin-bottom: 1.5rem; /* Space before the next person */
-    display: block;
-    line-height: 1.4;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 1.5rem;
+  display: block;
+  line-height: 1.4;
 }
 
 .selectable-link-item {
-    display: block;
-    padding: 0.5rem;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-.selectable-link-item:hover {
-    transform: scale(1.03);
+  display: block;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-/* Makes the title text glow red when the item is hovered */
+.selectable-link-item:hover {
+  transform: scale(1.03);
+}
+
 .selectable-link-item:hover .list-title {
-    color: #ff3333 !important;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
-    transition: all 0.3s ease;
+  color: #ff3333 !important;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+  transition: all 0.3s ease;
 }
 
 /* ===== SOCIAL LOGO BASE & HOVER ANIMATION ===== */
 .social-icon {
-    width: 20px;
-    height: 20px;
-    fill: currentColor; /* Matches text color dynamically (White -> Red) */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
 }
 
-/* When you hover over a social item, pop and rotate the logo slightly */
 .selectable-link-item:hover .social-icon {
-    transform: scale(1.25) rotate(12deg);
-    filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
+  transform: scale(1.25) rotate(12deg);
+  filter: drop-shadow(0 0 6px rgba(255, 51, 51, 0.8));
 }
 
 /* ==========================================================================
@@ -691,7 +645,6 @@ nav .links a:hover {
   text-decoration: none;
 }
 
-/* Forces your uploaded project cover to fill the 326x460 card perfectly without stretching */
 .portfolio-card img {
   width: 100%;
   height: 100%;
@@ -699,7 +652,6 @@ nav .links a:hover {
   display: block;
 }
 
-/* A dark gradient overlay that holds the project title and description */
 .portfolio-overlay {
   position: absolute;
   inset: 0;
@@ -708,11 +660,10 @@ nav .links a:hover {
   flex-direction: column;
   justify-content: flex-end;
   padding: 1.5rem;
-  opacity: 0; /* Hidden by default */
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-/* Fades the title text in smoothly when hovered */
 .portfolio-card:hover .portfolio-overlay {
   opacity: 1;
 }
@@ -729,58 +680,4 @@ nav .links a:hover {
   margin: 0;
   font-size: 0.85rem;
   color: var(--muted);
-}
-
-/* Container holding the track */
-.ig-track-wrapper {
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-}
-
-/* The actual scrolling row */
-.ig-track {
-    display: flex;
-    gap: 20px;
-    width: max-content;
-    animation: gentle-scroll 25s linear infinite;
-}
-
-/* Pause the scrolling when a user hovers over an image */
-.ig-track:hover {
-    animation-play-state: paused;
-}
-
-/* Force every single card to be the exact same dimensions */
-.ig-card {
-    min-width: 300px;
-    max-width: 300px;
-    height: 400px; /* Forces uniform height */
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* Ensure images perfectly fill the card boundaries without warping or cutting off details */
-.ig-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    border-radius: 8px;
-}
-
-/* Smooth Infinite Scroll Animation */
-@keyframes gentle-scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%); /* Adjust based on duplication */
-    }
-}
-
-/* Fades the typewriter out after it completes its cycle */
-@keyframes fadeOutSequence {
-    0%, 88% { opacity: 1; visibility: visible; }
-    100% { opacity: 0; visibility: hidden; }
 }
