@@ -681,3 +681,31 @@ nav .links a:hover {
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+/* Archives Accordion Styling */
+.archive-card {
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+.archive-summary {
+  list-style: none;
+  outline: none;
+}
+
+.archive-summary::-webkit-details-marker {
+  display: none;
+}
+
+.archive-summary h3 {
+  margin: 0;
+}
+
+.archive-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
