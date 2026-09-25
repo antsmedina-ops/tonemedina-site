@@ -30,16 +30,22 @@
       
       <div class="card" id="contactCard">
         <h3>Contact</h3>
-        <p style="margin-bottom: 1.5rem;">Click to copy or longpress.</p>
-        
-        <div class="selectable" onclick="copyText('7202968296')">
-          Phone: 720.296.8296
+       <div class="card" id="contactCard" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 2rem;">
+          <h3 style="font-size: 1.8rem; letter-spacing: 0.05em; margin-bottom: 0.3rem;">Contact</h3>
+          <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.6; margin-bottom: 2rem;">Click to copy or longpress</p>
+          
+          <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="selectable" onclick="copyText('7202968296')" style="padding: 1rem 1.25rem; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; background: rgba(255, 255, 255, 0.03); cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;">
+              <span style="display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5; margin-bottom: 0.3rem;">Phone</span>
+              <span style="display: block; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.05em;">720.296.8296</span>
+            </div>
+
+            <div class="selectable" onclick="copyText('info@tonemedina.com')" style="padding: 1rem 1.25rem; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; background: rgba(255, 255, 255, 0.03); cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;">
+              <span style="display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5; margin-bottom: 0.3rem;">Email</span>
+              <span style="display: block; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.03em;">info@tonemedina.com</span>
+            </div>
+          </div>
         </div>
-        
-        <div class="selectable" onclick="copyText('info@tonemedina.com')">
-          Email: info@tonemedina.com
-        </div>
-      </div> <div class="card" id="calendarCard">
         <h3>Art Calendar / Events</h3>
         <p style="margin-bottom: 1.5rem;">Who I'm with & where I'll be.</p>
         <iframe
