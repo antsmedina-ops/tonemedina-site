@@ -1,4 +1,4 @@
-/* ===== TONE MEDINA'S REDEYE AI COMPANION ===== */
+/* ===== TONE MEDINA'S REDEYE / ¡OJO! AI COMPANION ===== */
 (function() {
   const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
 
@@ -42,7 +42,7 @@
       will-change: transform;
     `;
     
-    botDiv.title = 'Redeye';
+    botDiv.title = '¡Ojo!';
 
     // Chat Window Container
     chatWindowDiv.id = 'redeye-chat-window';
@@ -133,7 +133,7 @@
     requestAnimationFrame(animateLoop);
   }
 
- // ===== 3. CHAT INTERACTION LOGIC =====
+  // ===== 3. CHAT INTERACTION LOGIC =====
   let leaveTimer = null;
 
   function addRedeyeListeners(historyArea, inputArea) {
@@ -163,7 +163,7 @@
       leaveTimer = setTimeout(() => {
         chatWindowDiv.style.display = 'none';
         isBotMuted = false;
-      }, 4000); // 4 seconds delay
+      }, 4000);
     });
 
     // Mouse re-enters the chat window -> Cancel the closing timer
@@ -183,30 +183,22 @@
     inputArea.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (leaveTimer) clearTimeout(leaveTimer); // Stay open while sending
+        if (leaveTimer) clearTimeout(leaveTimer);
         sendInputToWorker(inputArea, historyArea);
       }
     });
   }
-    });
 
-    inputArea.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendInputToWorker(inputArea, historyArea);
-      }
-    });
+  function appendMessageToHistory(sender, text, historyArea) {
+    const msgDiv = document.createElement('div');
+    const isUser = sender === 'user';
+    const displayName = isUser ? 'You' : '¡Ojo!';
+    
+    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? '#eee' : '#A00'};`;
+    msgDiv.innerHTML = `<strong>${displayName}:</strong> ${text}`;
+    historyArea.appendChild(msgDiv);
+    historyArea.scrollTop = historyArea.scrollHeight;
   }
- function appendMessageToHistory(sender, text, historyArea) {
-  const msgDiv = document.createElement('div');
-  const isUser = sender === 'user';
-  const displayName = isUser ? 'You' : '¡Ojo!';
-  
-  msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? '#eee' : '#A00'};`;
-  msgDiv.innerHTML = `<strong>${displayName}:</strong> ${text}`;
-  historyArea.appendChild(msgDiv);
-  historyArea.scrollTop = historyArea.scrollHeight;
-}
 
   async function sendInputToWorker(inputArea, historyArea) {
     const userInput = inputArea.value.trim();
