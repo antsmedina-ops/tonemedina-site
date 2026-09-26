@@ -125,84 +125,130 @@ function copyText(text, element) {
   });
 }
 
-/* main.js - Update with these functions */
+/* --- Floating AI Companion & Concept Generator --- */
+
+let companionBubble = null;
+let mouseX = 0;
+let mouseY = 0;
+let bubbleX = window.innerWidth - 90;
+let bubbleY = window.innerHeight - 90;
+
+document.addEventListener("DOMContentLoaded", () => {
+    companionBubble = document.getElementById("companion-bubble");
+    if (companionBubble) {
+        companionBubble.style.left = bubbleX + "px";
+        companionBubble.style.top = bubbleY + "px";
+    }
+
+    // Track cursor for floating follow effect
+    document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    animate();
+
+    const userInput = document.getElementById("user-input");
+    if (userInput) {
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendInput();
+            }
+        });
+    }
+});
+
+function animate() {
+    if (!companionBubble) return;
+
+    let dx = mouseX - bubbleX;
+    let dy = mouseY - bubbleY;
+
+    // Smooth floating delay
+    bubbleX += dx * 0.05;
+    bubbleY += dy * 0.05;
+
+    const bubbleSize = companionBubble.offsetWidth || 60;
+    if (bubbleX < 0) bubbleX = 0;
+    if (bubbleY < 0) bubbleY = 0;
+    if (bubbleX > window.innerWidth - bubbleSize) bubbleX = window.innerWidth - bubbleSize;
+    if (bubbleY > window.innerHeight - bubbleSize) bubbleY = window.innerHeight - bubbleSize;
+
+    companionBubble.style.left = bubbleX + "px";
+    companionBubble.style.top = bubbleY + "px";
+
+    requestAnimationFrame(animate);
+}
 
 function toggleChat() {
-    const chatContainer = document.getElementById('companion-container');
-    const chatBubble = document.getElementById('companion-bubble');
+    const chatContainer = document.getElementById("companion-container");
+    const chatBubble = document.getElementById("companion-bubble");
 
-    if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
-        chatContainer.style.display = 'flex';
-        chatBubble.style.display = 'none';
+    if (!chatContainer || !chatBubble) return;
+
+    if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+        chatContainer.style.display = "flex";
+        chatBubble.style.display = "none";
     } else {
-        chatContainer.style.display = 'none';
-        chatBubble.style.display = 'flex';
+        chatContainer.style.display = "none";
+        chatBubble.style.display = "flex";
     }
 }
 
-// Ensure the companion is hidden initially if set in CSS
-document.addEventListener("DOMContentLoaded", () => {
-    // Other initialization code if exists...
-    
-    // Allow 'Enter' key to send message
-    const userInput = document.getElementById("user-input");
-    userInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-            sendInput();
-        }
-    });
-});
-
-function addMessage(text, sender) {
+function addMessage(text, sender, id = null) {
     const chatMessages = document.getElementById("chat-messages");
+    if (!chatMessages) return;
+
     const messageDiv = document.createElement("div");
     messageDiv.className = sender + "-message";
+    if (id) messageDiv.id = id;
     messageDiv.textContent = text;
     chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeLoadingMessage(id) {
+    const loadingEl = document.getElementById(id);
+    if (loadingEl) {
+        loadingEl.remove();
+    }
 }
 
 async function sendInput() {
     const userInputField = document.getElementById("user-input");
+    if (!userInputField) return;
+
     const userInput = userInputField.value;
     if (userInput.trim() === "") return;
 
-    // Display user's message
     addMessage(userInput, "user");
-    userInputField.value = ""; // Clear input
+    userInputField.value = "";
 
-    // Placeholder message while waiting
     const loadingMessageId = "loading-" + Date.now();
     addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
 
     try {
-        // --- THIS PART CALLS THE AI ---
-        // REPLACE THIS URL WITH YOUR CLOUDFLARE WORKER / VERCEL FUNCTION URL
-        const backendURL = "https://your-serverless-function-url.workers.dev/api/concept";
+        const backendURL = "https://redeye.antsmedina.workers.dev";
 
         const response = await fetch(backendURL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                prompt: userInput // The visitor's input (themes/materials)
-            })
+            body: JSON.stringify({ prompt: userInput })
         });
 
         const data = await response.json();
-        
-        // Remove 'loading' placeholder and add final response
         removeLoadingMessage(loadingMessageId);
-        addMessage(data.conceptDescription, "bot");
 
+        if (data.conceptDescription) {
+            addMessage(data.conceptDescription, "bot");
+        } else if (data.error) {
+            addMessage("Error: " + data.error, "bot");
+        } else {
+            addMessage("Received an unexpected response. Please try again.", "bot");
+        }
     } catch (error) {
         console.error("Error calling AI API:", error);
         removeLoadingMessage(loadingMessageId);
         addMessage("Apologies, my creative energy is momentarily blocked. Try again in a bit?", "bot");
     }
-}
-
-function removeLoadingMessage(id) {
-    // Logic to replace the placeholder message if desired, 
-    // or simply add another message. Simplest for now is just 
-    // adding the new message.
 }
