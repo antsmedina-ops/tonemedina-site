@@ -909,3 +909,34 @@ nav .links a:hover {
     transition: opacity 2s ease-out; /* 2-second gentle fade */
     pointer-events: none;
 }
+
+/* ===== MOBILE TYPEWRITER FIX ===== */
+@media (max-width: 768px) {
+  .typewriter-container h3 {
+    font-size: clamp(0.75rem, 3.8vw, 0.95rem) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+
+  .line-1 {
+    animation: 
+      typeLine1 1.5s steps(12, end) 0.5s forwards,
+      blink 0.75s step-end 6 0.5s,
+      untypeLine1 1.5s steps(12, end) 9.0s forwards,
+      killCursor 0s 9.0s forwards !important;
+  }
+
+  .line-2 {
+    animation: 
+      typeLine2 2.5s steps(33, end) 2.2s forwards,
+      blink 0.75s step-end 3 2.2s,
+      untypeLine2 2.0s steps(33, end) 10.8s forwards !important;
+  }
+
+  .line-3 {
+    animation: 
+      typeLine3 3.5s steps(25, end) 5.0s forwards,
+      blink 0.75s step-end 5 5.0s,
+      untypeLine3 2.0s steps(25, end) 13.0s forwards !important;
+  }
+}
