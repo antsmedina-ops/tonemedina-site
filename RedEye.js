@@ -79,14 +79,15 @@
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
-    // Dynamic organic placeholder sequence
-    inputArea.placeholder = "I see you";
+   // Dynamic organic placeholder sequence
+    inputArea.placeholder = "I see you...";
+
     setTimeout(() => {
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
         inputArea.placeholder = "tell me...";
-      }, 500);
-    }, 7500);
+      }, 500); // 0.5s pause before second prompt
+    }, 7500); // Waits 7.5 seconds so "I see you..." is visible
 
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
