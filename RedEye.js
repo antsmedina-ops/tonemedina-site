@@ -80,14 +80,13 @@
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
   // Dynamic organic placeholder sequence
-    inputArea.placeholder = "I'm watching you...";
-
-    setTimeout(() => {
-      inputArea.placeholder = ""; // Clear pause
-      setTimeout(() => {
-        inputArea.placeholder = "talk to me";
-      }, 400); // 0.4s pause
-    }, 4500); // Holds "I'm watching you..." for 4.5s
+inputArea.placeholder = "I'm watching you...";
+setTimeout(() => {
+  inputArea.placeholder = ""; // Clear pause
+  setTimeout(() => {
+    inputArea.placeholder = "talk to me";
+  }, 400); // 0.4s pause
+}, 4500); // Holds "I'm watching you..." for 4.5s
 
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
