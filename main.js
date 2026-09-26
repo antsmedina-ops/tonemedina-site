@@ -205,6 +205,16 @@ function toggleChat() {
     }
 }
 
+// Hook up the click event to your bubble so it opens the chat
+document.addEventListener("DOMContentLoaded", () => {
+    const companionBubbleEl = document.getElementById("companion-bubble");
+    if (companionBubbleEl) {
+        companionBubbleEl.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleChat();
+        });
+    }
+});
 function addMessage(text, sender, id = null) {
     const chatMessages = document.getElementById("chat-messages");
     if (!chatMessages) return;
