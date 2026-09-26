@@ -1,17 +1,22 @@
 // ===== CORE MODAL AND UTILITY LOGIC =====
 document.addEventListener("DOMContentLoaded", () => {
+    // Contact Card Trigger Setup (Supports both hover and click fallback)
     const contactTrigger = document.getElementById("contactCard");
     const modal = document.getElementById("modal");
-    const spotifyModal = document.getElementById("spotifyModal");
-    const calendarCard = document.getElementById("calendarCard");
-    const calendarModal = document.getElementById("calendarModal");
-
+    
     if (contactTrigger && modal) {
-        const contactModalContent = modal.querySelector(".modal-content");
         contactTrigger.addEventListener("mouseenter", () => {
             modal.classList.add("active");
             document.body.classList.add("modal-open");
         });
+        
+        contactTrigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            modal.classList.toggle("active");
+            document.body.classList.toggle("modal-open");
+        });
+
+        const contactModalContent = modal.querySelector(".modal-content");
         if (contactModalContent) {
             contactModalContent.addEventListener("mouseleave", () => {
                 closeModal();
@@ -19,17 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Calendar Card Modal Setup
+    const calendarCard = document.getElementById("calendarCard");
+    const calendarModal = document.getElementById("calendarModal");
+    
     if (calendarCard && calendarModal) {
-        const calendarModalContent = calendarModal.querySelector(".modal-content");
         calendarCard.addEventListener("mouseenter", () => {
             calendarModal.classList.add("active");
             document.body.classList.add("modal-open");
         });
-        if (calendarModalContent) {
-            calendarModalContent.addEventListener("mouseleave", () => {
-                closeCalendar();
-            });
-        }
+        
+        calendarCard.addEventListener("click", (e) => {
+            e.preventDefault();
+            calendarModal.classList.toggle("active");
+            document.body.classList.toggle("modal-open");
+        });
     }
 });
 
@@ -218,8 +227,8 @@ function copyText(text, element) {
 }
 
 // ===== FLOATING AI COMPANION & CHAT ENGINE =====
-let mouseX = 0;
-let mouseY = 0;
+let mouseX = window.innerWidth - 90;
+let mouseY = window.innerHeight - 90;
 let bubbleX = window.innerWidth - 90;
 let bubbleY = window.innerHeight - 90;
 
