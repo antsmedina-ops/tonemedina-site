@@ -234,7 +234,7 @@
     });
 
     const data = await response.json();
-    const botResponse = data.conceptDescription || 'I am processing that...';
+    const botResponse = data.conceptDescripconst botResponse = data.conceptDescription || data.response || data.text || (typeof data === 'string' ? data : 'I am watching, tell me more.');tion || 'I am processing that...';
 
     appendMessageToHistory('redeye', botResponse, historyArea);
     chatMessages.push({ role: 'assistant', content: botResponse });
