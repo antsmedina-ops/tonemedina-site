@@ -79,15 +79,15 @@
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
-   // Dynamic organic placeholder sequence
+  // Dynamic organic placeholder sequence
     inputArea.placeholder = "I'm watching you...";
 
     setTimeout(() => {
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
         inputArea.placeholder = "talk to me";
-      }, 500); // 1.5s pause before second prompt
-    }, 7500); // Waits 8.5 seconds so "I'm watching you..." is visible
+      }, 500); // 0.5s pause before second prompt
+    }, 4000); // 4s wait so "I'm watching you..." is clearly seen first
 
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
