@@ -23,7 +23,7 @@
   let effectiveOffset = BASE_OFFSET;
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
- function createBotUi() {
+  function createBotUi() {
     botDiv.id = 'redeye-bot';
     
     // Check if device is mobile width
@@ -31,102 +31,106 @@
 
     botDiv.style.cssText = `
       position: fixed;
-      ${isMobile ? 'bottom: 20px; right: 20px;' : 'top: 0; left: 0;'}
-      width: 40px;
-      height: 40px;
+      ${isMobile ? 'bottom: 25px; right: 25px;' : 'top: 0; left: 0;'}
+      width: 44px;
+      height: 44px;
       background: rgba(0, 0, 0, 0.95);
       border: 3px solid #8B0000;
       border-radius: 50%;
       cursor: pointer;
       z-index: 999999;
       pointer-events: auto;
-      box-shadow: 0 0 25px 12px rgba(139, 0, 0, 0.75);
+      box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
       transition: box-shadow 0.3s ease, transform 0.05s linear;
       will-change: transform;
     `;
     
     botDiv.title = '¡Ojo!';
 
-    // Chat Window Container
+    // Responsive Chat Window Container
     chatWindowDiv.id = 'redeye-chat-window';
     chatWindowDiv.style.cssText = `
       position: fixed;
-      bottom: 75px;
-      right: 15px;
-      width: calc(100vw - 30px);
+      bottom: 80px;
+      right: 20px;
+      width: calc(100vw - 40px);
       max-width: 340px;
       height: 380px;
-      max-height: 70vh;
+      max-height: 65vh;
       background: rgba(10, 10, 10, 0.95);
       color: #fff;
       border: 1px solid rgba(139, 0, 0, 0.5);
-      border-radius: 8px;
+      border-radius: 12px;
       display: none;
       z-index: 1000000;
-      box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+      box-shadow: 0 5px 30px rgba(0,0,0,0.85);
       padding: 1rem;
       flex-direction: column;
       font-family: 'SFMono-Regular', Consolas, monospace;
       box-sizing: border-box;
     `;
+    
+    closeChatBtn.innerHTML = '✕';
+    closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa; font-size: 16px; padding: 5px;';
+    chatWindowDiv.appendChild(closeChatBtn);
+
+    // Chat History Area
+    const chatHistoryDiv = document.createElement('div');
+    chatHistoryDiv.id = 'redeye-history';
+    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
+    chatWindowDiv.appendChild(chatHistoryDiv);
 
     // Input Area
     botInputDiv.id = 'redeye-input';
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
-// Dynamic organic placeholder sequence
-inputArea.placeholder = "I'm watching you...";
-setTimeout(() => {
-  inputArea.placeholder = ""; // Clear pause
-  setTimeout(() => {
-    inputArea.placeholder = "it's ok, talk to me";
-  }, 1200); // 1.2s human breath pause
-}, 5000); // Holds "I'm watching you..." for 5.0s
-
-   // Chat History Area
-    const chatHistoryDiv = document.createElement('div');
-    chatHistoryDiv.id = 'redeye-history';
-    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
-    chatWindowDiv.appendChild(chatHistoryDiv);
+    // Dynamic organic placeholder sequence
+    inputArea.placeholder = "I'm watching you...";
+    setTimeout(() => {
+      inputArea.placeholder = ""; // Clear pause
+      setTimeout(() => {
+        inputArea.placeholder = "it's ok, talk to me";
+      }, 1200); // 1.2s human breath pause
+    }, 5000); // Holds "I'm watching you..." for 5.0s
 
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
 
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
-
+    
     addRedeyeListeners(chatHistoryDiv, inputArea);
   }
 
   // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
-function trackMouse(e) {
-  if (isBotMuted || window.innerWidth <= 768) return; // Skip mouse tracking on mobile
+  function trackMouse(e) {
+    if (isBotMuted || window.innerWidth <= 768) return; // Skip tracking on mobile
 
-  const dx = e.clientX - currentX;
-  const dy = e.clientY - currentY;
-  const distanceToCursor = Math.hypot(dx, dy);
-  const angle = Math.atan2(dy, dx);
+    const dx = e.clientX - currentX;
+    const dy = e.clientY - currentY;
+    const distanceToCursor = Math.hypot(dx, dy);
+    const angle = Math.atan2(dy, dx);
 
-  const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
+    const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
 
-  // Curiosity detection: collapse offset toward 30px when cursor approaches
-  if (distanceToCursor < 450) {
-    effectiveOffset += (30 - effectiveOffset) * 0.08;
-  } else {
-    effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
+    // Curiosity detection: collapse offset toward 30px when cursor approaches
+    if (distanceToCursor < 450) {
+      effectiveOffset += (30 - effectiveOffset) * 0.08;
+    } else {
+      effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
+    }
+
+    const wanderX = Math.cos(time * 0.015) * 15;
+    const wanderY = Math.sin(time * 0.025) * 15;
+
+    targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
+    targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
   }
-
-  const wanderX = Math.cos(time * 0.015) * 15;
-  const wanderY = Math.sin(time * 0.025) * 15;
-
-  targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
-  targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
-}
 
   function animateLoop() {
     time++;
-    if (!isBotMuted && botDiv) {
+    if (!isBotMuted && botDiv && window.innerWidth > 768) {
       const currentLerp = effectiveOffset < 100 ? 0.008 : LERP_SPEED;
       currentX += (targetX - currentX) * currentLerp;
       currentY += (targetY - currentY) * currentLerp;
@@ -139,13 +143,17 @@ function trackMouse(e) {
   let leaveTimer = null;
 
   function addRedeyeListeners(historyArea, inputArea) {
-    // Open chat when clicking the bot icon
-    botDiv.addEventListener('click', (e) => {
+    // Open/toggle chat when clicking or tapping the bot icon
+    const toggleChat = (e) => {
       e.stopPropagation();
       if (leaveTimer) clearTimeout(leaveTimer);
-      chatWindowDiv.style.display = 'flex';
-      isBotMuted = true;
-    });
+      const isOpening = chatWindowDiv.style.display !== 'flex';
+      chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
+      isBotMuted = isOpening;
+    };
+
+    botDiv.addEventListener('click', toggleChat);
+    botDiv.addEventListener('touchstart', toggleChat, { passive: true });
 
     // Close button
     closeChatBtn.addEventListener('click', (e) => {
