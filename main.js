@@ -1,7 +1,17 @@
 // ===== CORE MODAL AND UTILITY LOGIC =====
 document.addEventListener("DOMContentLoaded", () => {
-    // Contact Card Trigger Setup (Supports both hover and click fallback)
-    const contactTrigger = document.getElementById("contactCard");
+    // Find the Contact navigation item dynamically by text content if ID isn't present
+    const navLinks = document.querySelectorAll("nav a, header a, .nav-links a");
+    let contactTrigger = document.getElementById("contactCard");
+    
+    if (!contactTrigger) {
+        navLinks.forEach(link => {
+            if (link.textContent.trim().toLowerCase() === "contact") {
+                contactTrigger = link;
+            }
+        });
+    }
+
     const modal = document.getElementById("modal");
     
     if (contactTrigger && modal) {
