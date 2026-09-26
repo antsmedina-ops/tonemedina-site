@@ -36,14 +36,24 @@ window.addEventListener("load", () => {
     if (window.instgrm) { window.instgrm.Embeds.process(); }
     
     // Typewriter Observer (Triggered on Load)
-    const typewriter = document.querySelector('.typewriter-container');
-    if (typewriter) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('start-typing');
-                    observer.unobserve(entry.target);
-                }
+   const typewriter = document.querySelector('.typewriter-container');
+if (typewriter) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('start-typing');
+                
+                // Once the typing finishes (e.g., after 4 seconds), add the fade-out class
+                setTimeout(() => {
+                    entry.target.classList.add('fade-out');
+                }, 4000); 
+
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0 });
+    observer.observe(typewriter);
+}
             });
         }, { threshold: 0 });
         observer.observe(typewriter);
