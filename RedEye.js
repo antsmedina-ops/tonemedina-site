@@ -85,8 +85,8 @@
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
         inputArea.placeholder = "have a question? ask me...";
-      }, 500); // 0.5s pause before second prompt
-    }, 7500); // 7.5s wait so it doesn't feel rushed
+      }, 500); // 1.5s pause before second prompt
+    }, 7500); // 9.5s wait so it doesn't feel rushed
     
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
