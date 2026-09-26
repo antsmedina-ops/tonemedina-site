@@ -71,7 +71,7 @@ window.addEventListener("load", () => {
         window.instgrm.Embeds.process();
     }
     
-   // Typewriter Observer (Triggered on Load)
+  // Typewriter Observer (Triggered on Load)
     const typewriter = document.querySelector('.typewriter-container');
     if (typewriter) {
         const observer = new IntersectionObserver((entries) => {
@@ -79,10 +79,10 @@ window.addEventListener("load", () => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('start-typing');
                     
-                    // Wait 8.5 seconds so all three lines finish typing before fading out
+                    // Wait 9.5 seconds so all lines finish typing before fading out
                     setTimeout(() => {
                         entry.target.classList.add('fade-out');
-                    }, 8500); 
+                    }, 9500); 
 
                     observer.unobserve(entry.target);
                 }
