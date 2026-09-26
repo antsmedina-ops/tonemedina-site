@@ -78,12 +78,16 @@
     botInputDiv.id = 'redeye-input';
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
-   // Dynamic rotating placeholder sequence
-      inputArea.placeholder = "I've been watching you...";
+   // Dynamic organic placeholder sequence
+    inputArea.placeholder = "I've been watching you";
 
     setTimeout(() => {
-    inputArea.placeholder = "have a ? bout tone or his art.";
-}, 4000); // Switches to the second statement after 4 seconds
+      inputArea.placeholder = ""; // Brief clear pause
+      setTimeout(() => {
+        inputArea.placeholder = "have a question? ask me...";
+      }, 500); // 0.5s pause before second prompt
+    }, 7500); // 7.5s wait so it doesn't feel rushed
+    
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
 
