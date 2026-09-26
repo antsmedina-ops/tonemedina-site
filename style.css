@@ -743,12 +743,11 @@ nav .links a:hover {
 #glow-orb {
     width: 24px;
     height: 24px;
-    background-color: #ff3333; /* A base vibrant red */
+    border: 3px solid #ff3333; /* Hollow ring border */
     border-radius: 50%;
     margin-right: 12px;
-    /* Create the amorphous glowing effect: */
-    box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 30px #ff0000;
-    /* Basic animation to make it 'breathe' */
+    background: transparent; /* Makes the center hollow */
+    box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, inset 0 0 8px #ff3333;
     animation: glowPulse 3s infinite ease-in-out;
 }
 
