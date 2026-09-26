@@ -709,3 +709,155 @@ nav .links a:hover {
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* style.css */
+
+/* --- The Main Chat Container (Hidden by Default) --- */
+#companion-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background-color: #111; /* Or match your background color */
+    border: 1px solid #333; /* Dark subtle border */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    z-index: 1000;
+    font-family: 'Courier New', Courier, monospace; /* Example 'chalk' vibe */
+}
+
+/* --- Header & The Custom Glowing Red Orb --- */
+#companion-header {
+    background-color: #222;
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+/* THE CUSTOM RED GLOW 'IMAGE' */
+#glow-orb {
+    width: 24px;
+    height: 24px;
+    background-color: #ff3333; /* A base vibrant red */
+    border-radius: 50%;
+    margin-right: 12px;
+    /* Create the amorphous glowing effect: */
+    box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 30px #ff0000;
+    /* Basic animation to make it 'breathe' */
+    animation: glowPulse 3s infinite ease-in-out;
+}
+
+/* Pulse animation for the glow */
+@keyframes glowPulse {
+    0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px #ff3333; }
+    50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 15px #ff3333, 0 0 30px #ff0000; }
+    100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px #ff3333; }
+}
+
+#companion-title {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+#close-chat {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* --- Messages Area --- */
+#chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    color: #eee;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.bot-message, .user-message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 80%;
+}
+
+.bot-message {
+    background-color: #2a2a2a;
+    align-self: flex-start;
+}
+
+.user-message {
+    background-color: #444;
+    align-self: flex-end;
+    color: #fff;
+    text-align: right;
+}
+
+/* --- Input Area --- */
+#chat-input-area {
+    padding: 10px;
+    background-color: #222;
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 8px;
+    border-radius: 0 0 12px 12px;
+}
+
+#user-input {
+    flex-grow: 1;
+    background-color: #111;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+#send-btn {
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* --- The Collapsed Floating Bubble --- */
+#companion-bubble {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(30,30,30,0.8);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+#companion-bubble:hover {
+    transform: scale(1.1);
+}
+
+#glow-orb-small {
+    width: 30px;
+    height: 30px;
+    background-color: #ff3333;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333;
+    animation: glowPulse 3s infinite ease-in-out;
+}
