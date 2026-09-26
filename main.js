@@ -49,16 +49,7 @@ if (typewriter) {
                 }, 4000); 
 
                 observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0 });
-    observer.observe(typewriter);
-}
-            });
-        }, { threshold: 0 });
-        observer.observe(typewriter);
-    }
-});
+           
 
 // ===== GLOBAL SEARCH & LIVE FILTERING ENGINE =====
 document.addEventListener('DOMContentLoaded', () => {
