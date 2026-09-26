@@ -134,24 +134,39 @@
   }
 
  // ===== 3. CHAT INTERACTION LOGIC =====
-function addRedeyeListeners(historyArea, inputArea) {
-  botDiv.addEventListener('click', () => {
-    chatWindowDiv.style.display = 'flex';
-    isBotMuted = true;
-  });
+  function addRedeyeListeners(historyArea, inputArea) {
+    botDiv.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stops click from bubbling up to document
+      chatWindowDiv.style.display = 'flex';
+      isBotMuted = true;
+    });
 
-  closeChatBtn.addEventListener('click', () => {
-    chatWindowDiv.style.display = 'none';
-    isBotMuted = false;
-  });
+    closeChatBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      chatWindowDiv.style.display = 'none';
+      isBotMuted = false;
+    });
 
-  inputArea.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendInputToWorker(inputArea, historyArea);
-    }
-  });
-}
+    // Prevent clicks inside the chat window from closing it
+    chatWindowDiv.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Clicks anywhere else on the document will close the window
+    document.addEventListener('click', () => {
+      if (chatWindowDiv.style.display === 'flex') {
+        chatWindowDiv.style.display = 'none';
+        isBotMuted = false;
+      }
+    });
+
+    inputArea.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendInputToWorker(inputArea, historyArea);
+      }
+    });
+  }
  function appendMessageToHistory(sender, text, historyArea) {
   const msgDiv = document.createElement('div');
   const isUser = sender === 'user';
