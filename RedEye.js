@@ -234,7 +234,18 @@
     });
 
     const data = await response.json();
-    const botResponse = data.conceptDescription || data.response || data.text || (typeof data === 'string' ? data : 'I am watching, tell me more.');
+let botResponse = '';
+if (data.conceptDescription) {
+    botResponse = data.conceptDescription;
+} else if (data.response) {
+    botResponse = typeof data.response === 'string' ? data.response : data.response.response;
+} else if (data.text) {
+    botResponse = data.text;
+} else if (data.error) {
+    botResponse = `Error: ${data.error}`;
+} else {
+    botResponse = JSON.stringify(data);
+}
 
     appendMessageToHistory('redeye', botResponse, historyArea);
     chatMessages.push({ role: 'assistant', content: botResponse });
