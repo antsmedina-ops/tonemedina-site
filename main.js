@@ -265,14 +265,16 @@ function toggleChat() {
     const chatContainer = document.getElementById("companion-container");
     const chatBubble = document.getElementById("companion-bubble");
     
-    if (!chatContainer || !chatBubble) return;
+    if (!chatContainer) return;
     
-    if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+    const currentDisplay = window.getComputedStyle(chatContainer).display;
+    
+    if (currentDisplay === "none" || currentDisplay === "") {
         chatContainer.style.display = "flex";
-        chatBubble.style.display = "none";
+        if (chatBubble) chatBubble.style.display = "none";
     } else {
         chatContainer.style.display = "none";
-        chatBubble.style.display = "flex";
+        if (chatBubble) chatBubble.style.display = "flex";
     }
 }
 function addMessage(text, sender, id = null) {
