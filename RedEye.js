@@ -134,30 +134,60 @@
   }
 
  // ===== 3. CHAT INTERACTION LOGIC =====
+  let leaveTimer = null;
+
   function addRedeyeListeners(historyArea, inputArea) {
+    // Open chat when clicking the bot icon
     botDiv.addEventListener('click', (e) => {
-      e.stopPropagation(); // Stops click from bubbling up to document
+      e.stopPropagation();
+      if (leaveTimer) clearTimeout(leaveTimer);
       chatWindowDiv.style.display = 'flex';
       isBotMuted = true;
     });
 
+    // Close button
     closeChatBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (leaveTimer) clearTimeout(leaveTimer);
       chatWindowDiv.style.display = 'none';
       isBotMuted = false;
     });
 
-    // Prevent clicks inside the chat window from closing it
+    // Prevent clicks inside chat window from bubbling up
     chatWindowDiv.addEventListener('click', (e) => {
       e.stopPropagation();
     });
 
-    // Clicks anywhere else on the document will close the window
+    // Mouse leaves the chat window -> Start 4-second delay before closing
+    chatWindowDiv.addEventListener('mouseleave', () => {
+      leaveTimer = setTimeout(() => {
+        chatWindowDiv.style.display = 'none';
+        isBotMuted = false;
+      }, 4000); // 4 seconds delay
+    });
+
+    // Mouse re-enters the chat window -> Cancel the closing timer
+    chatWindowDiv.addEventListener('mouseenter', () => {
+      if (leaveTimer) clearTimeout(leaveTimer);
+    });
+
+    // Click anywhere outside on document to close immediately
     document.addEventListener('click', () => {
       if (chatWindowDiv.style.display === 'flex') {
+        if (leaveTimer) clearTimeout(leaveTimer);
         chatWindowDiv.style.display = 'none';
         isBotMuted = false;
       }
+    });
+
+    inputArea.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (leaveTimer) clearTimeout(leaveTimer); // Stay open while sending
+        sendInputToWorker(inputArea, historyArea);
+      }
+    });
+  }
     });
 
     inputArea.addEventListener('keypress', (e) => {
