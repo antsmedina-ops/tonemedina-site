@@ -23,12 +23,15 @@
   let effectiveOffset = BASE_OFFSET;
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
-  function createBotUi() {
+ function createBotUi() {
     botDiv.id = 'redeye-bot';
+    
+    // Check if device is mobile width
+    const isMobile = window.innerWidth <= 768;
+
     botDiv.style.cssText = `
       position: fixed;
-      top: 0;
-      left: 0;
+      ${isMobile ? 'bottom: 20px; right: 20px;' : 'top: 0; left: 0;'}
       width: 40px;
       height: 40px;
       background: rgba(0, 0, 0, 0.95);
@@ -48,10 +51,12 @@
     chatWindowDiv.id = 'redeye-chat-window';
     chatWindowDiv.style.cssText = `
       position: fixed;
-      bottom: 80px;
-      right: 30px;
-      width: 320px;
-      height: 400px;
+      bottom: 75px;
+      right: 15px;
+      width: calc(100vw - 30px);
+      max-width: 340px;
+      height: 380px;
+      max-height: 70vh;
       background: rgba(10, 10, 10, 0.95);
       color: #fff;
       border: 1px solid rgba(139, 0, 0, 0.5);
@@ -62,17 +67,8 @@
       padding: 1rem;
       flex-direction: column;
       font-family: 'SFMono-Regular', Consolas, monospace;
+      box-sizing: border-box;
     `;
-    
-    closeChatBtn.innerHTML = '✕';
-    closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa;';
-    chatWindowDiv.appendChild(closeChatBtn);
-
-    // Chat History Area
-    const chatHistoryDiv = document.createElement('div');
-    chatHistoryDiv.id = 'redeye-history';
-    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
-    chatWindowDiv.appendChild(chatHistoryDiv);
 
     // Input Area
     botInputDiv.id = 'redeye-input';
@@ -98,29 +94,29 @@ setTimeout(() => {
   }
 
   // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
-  function trackMouse(e) {
-    if (isBotMuted) return;
+function trackMouse(e) {
+  if (isBotMuted || window.innerWidth <= 768) return; // Skip mouse tracking on mobile
 
-    const dx = e.clientX - currentX;
-    const dy = e.clientY - currentY;
-    const distanceToCursor = Math.hypot(dx, dy);
-    const angle = Math.atan2(dy, dx);
+  const dx = e.clientX - currentX;
+  const dy = e.clientY - currentY;
+  const distanceToCursor = Math.hypot(dx, dy);
+  const angle = Math.atan2(dy, dx);
 
-    const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
+  const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
 
-    // Curiosity detection: collapse offset toward 30px when cursor approaches
-    if (distanceToCursor < 450) {
-      effectiveOffset += (30 - effectiveOffset) * 0.08;
-    } else {
-      effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
-    }
-
-    const wanderX = Math.cos(time * 0.015) * 15;
-    const wanderY = Math.sin(time * 0.025) * 15;
-
-    targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
-    targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
+  // Curiosity detection: collapse offset toward 30px when cursor approaches
+  if (distanceToCursor < 450) {
+    effectiveOffset += (30 - effectiveOffset) * 0.08;
+  } else {
+    effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
   }
+
+  const wanderX = Math.cos(time * 0.015) * 15;
+  const wanderY = Math.sin(time * 0.025) * 15;
+
+  targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
+  targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
+}
 
   function animateLoop() {
     time++;
