@@ -80,7 +80,7 @@ inputArea.placeholder = "I'm watching you...";
 setTimeout(() => {
   inputArea.placeholder = ""; // Clear pause
   setTimeout(() => {
-    inputArea.placeholder = "talk to me";
+    inputArea.placeholder = "it's ok, talk to me";
   }, 400); // 0.4s pause
 }, 4500); // Holds "I'm watching you..." for 4.5s
 
