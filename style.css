@@ -883,19 +883,19 @@ nav .links a:hover {
 
 @media (max-width: 768px) {
   #companion-container {
-    bottom: 70px !important; /* Lifts it safely above the mobile footer */
-    right: 15px !important;
-  }
-  
-  #companion-bubble {
-    position: fixed !important; /* Locks it securely to the screen on mobile */
+    position: fixed !important;
     bottom: 20px !important;
     right: 20px !important;
-    background-color: rgba(17, 17, 17, 0.9) !important; /* Solid background so it's clearly visible */
-    border: 2px solid #ff3333 !important;
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.6) !important;
-    width: 50px !important;
-    height: 50px !important;
+    left: auto !important;
+    width: calc(100vw - 40px) !important;
+    max-width: 380px !important;
+    height: 55vh !important;
+  }
+
+  #companion-bubble {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    left: auto !important;
   }
 }
-
