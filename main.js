@@ -275,7 +275,6 @@ function toggleChat() {
         chatBubble.style.display = "flex";
     }
 }
-
 function addMessage(text, sender, id = null) {
     const chatMessages = document.getElementById("chat-messages");
     if (!chatMessages) return;
