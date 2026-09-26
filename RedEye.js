@@ -17,7 +17,7 @@
 
   // Movement Config
   const LERP_SPEED = 0.015; // Much slower & smoother (was 0.035)
-  const BASE_OFFSET = 200;  // 200px distance from cursor
+  const BASE_OFFSET = 400;  // 400px distance from cursor
   
   // Dynamic AI organic drift variables
   let time = 0;
