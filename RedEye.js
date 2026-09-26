@@ -133,26 +133,25 @@
     requestAnimationFrame(animateLoop);
   }
 
-  // ===== 3. CHAT INTERACTION LOGIC =====
-  function addRedeyeListeners(historyArea, inputArea) {
-    botDiv.addEventListener('click', () => {
-      chatWindowDiv.style.display = 'flex';
-      isBotMuted = true;
-    });
+ // ===== 3. CHAT INTERACTION LOGIC =====
+function addRedeyeListeners(historyArea, inputArea) {
+  botDiv.addEventListener('click', () => {
+    chatWindowDiv.style.display = 'flex';
+    isBotMuted = true;
+  });
 
-    closeChatBtn.addEventListener('click', () => {
-      chatWindowDiv.style.display = 'none';
-      isBotMuted = false;
-    });
+  closeChatBtn.addEventListener('click', () => {
+    chatWindowDiv.style.display = 'none';
+    isBotMuted = false;
+  });
 
-    inputArea.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendInputToWorker(inputArea, historyArea);
-      }
-    });
-  }
-
+  inputArea.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendInputToWorker(inputArea, historyArea);
+    }
+  });
+}
  function appendMessageToHistory(sender, text, historyArea) {
   const msgDiv = document.createElement('div');
   const isUser = sender === 'user';
