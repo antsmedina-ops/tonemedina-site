@@ -209,59 +209,7 @@ let mouseY = 0;
 let bubbleX = window.innerWidth - 90;
 let bubbleY = window.innerHeight - 90;
 
-document.addEventListener("DOMContentLoaded", () => {
-    companionBubble = document.getElementById("companion-bubble");
-    if (companionBubble) {
-        companionBubble.style.left = bubbleX + "px";
-        companionBubble.style.top = bubbleY + "px";
-        
-        companionBubble.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleChat();
-        });
-    }
 
-    document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    animate();
-
-    const userInput = document.getElementById("user-input");
-    if (userInput) {
-        userInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                sendInput();
-            }
-        });
-    }
-});
-        userInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                sendInput();
-            }
-        });
-    }
-
-   document.addEventListener("DOMContentLoaded", () => {
-    companionBubble = document.getElementById("companion-bubble");
-    if (companionBubble) {
-        companionBubble.style.left = bubbleX + "px";
-        companionBubble.style.top = bubbleY + "px";
-        
-        companionBubble.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleChat();
-        });
-    }
-
-    document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    animate();
 
     const userInput = document.getElementById("user-input");
     if (userInput) {
