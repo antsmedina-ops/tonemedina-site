@@ -1,4 +1,4 @@
-/* ===== TONE MEDINA'S REDEYE AI COMPANION (NATURAL AI DRIFT) ===== */
+/* ===== TONE MEDINA'S REDEYE AI COMPANION ===== */
 (function() {
   const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
 
@@ -16,11 +16,11 @@
   let currentY = targetY;
 
   // Movement Config
-  const LERP_SPEED = 0.015; // Much slower & smoother (was 0.035)
-  const BASE_OFFSET = 400;  // 400px distance from cursor
-  
-  // Dynamic AI organic drift variables
+  const LERP_SPEED = 0.015;
+  const BASE_OFFSET = 400; // Hovering distance
+
   let time = 0;
+  let effectiveOffset = BASE_OFFSET;
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
   function createBotUi() {
@@ -78,16 +78,16 @@
     botInputDiv.id = 'redeye-input';
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
-   // Dynamic organic placeholder sequence
+    
+    // Dynamic organic placeholder sequence
     inputArea.placeholder = "I've been watching you";
-
     setTimeout(() => {
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
         inputArea.placeholder = "have a question? ask me...";
-      }, 500); // 1.5s pause before second prompt
-    }, 7500); // 9.5s wait so it doesn't feel rushed
-    
+      }, 500);
+    }, 7500);
+
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
 
@@ -98,30 +98,23 @@
   }
 
   // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
-  let effectiveOffset = BASE_OFFSET;
-
   function trackMouse(e) {
     if (isBotMuted) return;
 
-    // Distance vector between current bot position and cursor
     const dx = e.clientX - currentX;
     const dy = e.clientY - currentY;
     const distanceToCursor = Math.hypot(dx, dy);
     const angle = Math.atan2(dy, dx);
 
-    // Dynamic AI breathing offset
     const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
 
-    // Detect if cursor is near/approaching Redeye (Curiosity threshold: within 450px)
+    // Curiosity detection: collapse offset toward 30px when cursor approaches
     if (distanceToCursor < 450) {
-      // Smoothly collapse offset toward 30px so user can easily click
       effectiveOffset += (30 - effectiveOffset) * 0.08;
     } else {
-      // Drift back out to full hovering distance
       effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
     }
 
-    // Organic wandering noise
     const wanderX = Math.cos(time * 0.015) * 15;
     const wanderY = Math.sin(time * 0.025) * 15;
 
@@ -132,16 +125,12 @@
   function animateLoop() {
     time++;
     if (!isBotMuted && botDiv) {
-      // Slow down lerp speed when close for easy clicking
       const currentLerp = effectiveOffset < 100 ? 0.008 : LERP_SPEED;
-      
       currentX += (targetX - currentX) * currentLerp;
       currentY += (targetY - currentY) * currentLerp;
-
       botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
     }
     requestAnimationFrame(animateLoop);
-  }
   }
 
   // ===== 3. CHAT INTERACTION LOGIC =====
