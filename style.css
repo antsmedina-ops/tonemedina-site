@@ -374,19 +374,19 @@ nav .links a:hover {
 }
 
 .line-1 {
-  animation: 
+  animation:
     typeLine1 1.5s steps(12, end) 0.5s forwards,
     blink 0.75s step-end 3 0.5s forwards;
 }
 
 .line-2 {
-  animation: 
+  animation:
     typeLine2 2.5s steps(33, end) 2.2s forwards,
     blink 0.75s step-end 3 2.2s forwards;
 }
 
 .line-3 {
-  animation: 
+  animation:
     typeLine3 3.5s steps(25, end) 5.0s forwards,
     blink 0.75s step-end infinite 5.0s;
 }
