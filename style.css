@@ -373,59 +373,63 @@ nav .links a:hover {
   border-right: 2px solid transparent;
 }
 
+/* ===== MULTI-LINE HUMANIZED TYPEWRITER EFFECT WITH UNTYPING ===== */
 .line-1 {
-  animation:
+  animation: 
     typeLine1 1.5s steps(12, end) 0.5s forwards,
-    blink 0.75s step-end 3 0.5s forwards;
+    blink 0.75s step-end 6 0.5s,
+    untypeLine1 1.5s steps(12, end) 9.0s forwards,
+    killCursor 0s 9.0s forwards;
 }
 
 .line-2 {
-  animation:
+  animation: 
     typeLine2 2.5s steps(33, end) 2.2s forwards,
-    blink 0.75s step-end 3 2.2s forwards;
+    blink 0.75s step-end 3 2.2s,
+    untypeLine2 2.0s steps(33, end) 10.8s forwards;
 }
 
 .line-3 {
-  animation:
+  animation: 
     typeLine3 3.5s steps(25, end) 5.0s forwards,
-    blink 0.75s step-end infinite 5.0s;
+    blink 0.75s step-end 5 5.0s,
+    untypeLine3 2.0s steps(25, end) 13.0s forwards;
 }
 
+/* Typing Keyframes */
 @keyframes typeLine1 {
-  0% { width: 0; animation-timing-function: steps(4, end); }
-  30% { width: 4ch; animation-timing-function: steps(5, end); }
-  65% { width: 9ch; animation-timing-function: steps(3, end); }
+  0% { width: 0; }
   100% { width: 12ch; }
 }
 
 @keyframes typeLine2 {
-  0% { width: 0; animation-timing-function: steps(4, end); }
-  15% { width: 4ch; animation-timing-function: steps(10, end); }
-  55% { width: 14ch; animation-timing-function: steps(9, end); }
-  80% { width: 23ch; animation-timing-function: steps(10, end); }
+  0% { width: 0; }
   100% { width: 33ch; }
 }
 
 @keyframes typeLine3 {
-  0% { width: 0; animation-timing-function: steps(3, end); }
-  25% { width: 3ch; animation-timing-function: steps(9, end); }
-  60% { width: 12ch; animation-timing-function: steps(3, end); }
-  80% { width: 15ch; animation-timing-function: steps(10, end); }
+  0% { width: 0; }
   100% { width: 25ch; }
+}
+
+/* Untyping Keyframes */
+@keyframes untypeLine1 {
+  0% { width: 12ch; }
+  100% { width: 0; }
+}
+
+@keyframes untypeLine2 {
+  0% { width: 33ch; }
+  100% { width: 0; }
+}
+
+@keyframes untypeLine3 {
+  0% { width: 25ch; }
+  100% { width: 0; }
 }
 
 @keyframes killCursor {
   to { border-right-color: transparent; }
-}
-
-@keyframes fadeOutSequence {
-  0%, 88% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
-}
-
-@keyframes blink {
-  from, to { border-color: transparent; }
-  50% { border-color: #fff; }
 }
 
 /* ===== CARD LINK HOVER EFFECTS ===== */
