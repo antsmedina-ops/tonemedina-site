@@ -97,36 +97,51 @@
     addRedeyeListeners(chatHistoryDiv, inputArea);
   }
 
-  // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE =====
+  // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
+  let effectiveOffset = BASE_OFFSET;
+
   function trackMouse(e) {
     if (isBotMuted) return;
 
-    // Angle to mouse pointer
+    // Distance vector between current bot position and cursor
     const dx = e.clientX - currentX;
     const dy = e.clientY - currentY;
+    const distanceToCursor = Math.hypot(dx, dy);
     const angle = Math.atan2(dy, dx);
 
-    // Dynamic distance oscillating smoothly between 80px and 125px
-    const dynamicOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
-    
-    // Organic floating wander noise
-    const wanderX = Math.cos(time * 0.015) * 20;
-    const wanderY = Math.sin(time * 0.025) * 20;
+    // Dynamic AI breathing offset
+    const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
 
-    targetX = e.clientX - Math.cos(angle) * dynamicOffset + wanderX - 20;
-    targetY = e.clientY - Math.sin(angle) * dynamicOffset + wanderY - 20;
+    // Detect if cursor is near/approaching Redeye (Curiosity threshold: within 450px)
+    if (distanceToCursor < 450) {
+      // Smoothly collapse offset toward 30px so user can easily click
+      effectiveOffset += (30 - effectiveOffset) * 0.08;
+    } else {
+      // Drift back out to full hovering distance
+      effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
+    }
+
+    // Organic wandering noise
+    const wanderX = Math.cos(time * 0.015) * 15;
+    const wanderY = Math.sin(time * 0.025) * 15;
+
+    targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
+    targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
   }
 
   function animateLoop() {
     time++;
     if (!isBotMuted && botDiv) {
-      // Lazy linear interpolation towards target
-      currentX += (targetX - currentX) * LERP_SPEED;
-      currentY += (targetY - currentY) * LERP_SPEED;
+      // Slow down lerp speed when close for easy clicking
+      const currentLerp = effectiveOffset < 100 ? 0.008 : LERP_SPEED;
+      
+      currentX += (targetX - currentX) * currentLerp;
+      currentY += (targetY - currentY) * currentLerp;
 
       botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
     }
     requestAnimationFrame(animateLoop);
+  }
   }
 
   // ===== 3. CHAT INTERACTION LOGIC =====
