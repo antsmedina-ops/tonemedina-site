@@ -1,44 +1,48 @@
 // ===== CORE MODAL AND UTILITY LOGIC =====
-const contactTrigger = document.getElementById("contactCard");
-const modal = document.getElementById("modal");
-const spotifyModal = document.getElementById("spotifyModal");
-const calendarCard = document.getElementById("calendarCard");
-const calendarModal = document.getElementById("calendarModal");
+document.addEventListener("DOMContentLoaded", () => {
+    const contactTrigger = document.getElementById("contactCard");
+    const modal = document.getElementById("modal");
+    const spotifyModal = document.getElementById("spotifyModal");
+    const calendarCard = document.getElementById("calendarCard");
+    const calendarModal = document.getElementById("calendarModal");
 
-if (contactTrigger && modal) {
-    const contactModalContent = modal.querySelector(".modal-content");
-    contactTrigger.addEventListener("mouseenter", () => {
-        modal.classList.add("active");
-        document.body.classList.add("modal-open");
-    });
-    if (contactModalContent) {
-        contactModalContent.addEventListener("mouseleave", () => {
-            closeModal();
+    if (contactTrigger && modal) {
+        const contactModalContent = modal.querySelector(".modal-content");
+        contactTrigger.addEventListener("mouseenter", () => {
+            modal.classList.add("active");
+            document.body.classList.add("modal-open");
         });
+        if (contactModalContent) {
+            contactModalContent.addEventListener("mouseleave", () => {
+                closeModal();
+            });
+        }
     }
-}
+
+    if (calendarCard && calendarModal) {
+        const calendarModalContent = calendarModal.querySelector(".modal-content");
+        calendarCard.addEventListener("mouseenter", () => {
+            calendarModal.classList.add("active");
+            document.body.classList.add("modal-open");
+        });
+        if (calendarModalContent) {
+            calendarModalContent.addEventListener("mouseleave", () => {
+                closeCalendar();
+            });
+        }
+    }
+});
 
 function closeModal() {
+    const modal = document.getElementById("modal");
     if (modal) {
         modal.classList.remove("active");
         document.body.classList.remove("modal-open");
     }
 }
 
-if (calendarCard && calendarModal) {
-    const calendarModalContent = calendarModal.querySelector(".modal-content");
-    calendarCard.addEventListener("mouseenter", () => {
-        calendarModal.classList.add("active");
-        document.body.classList.add("modal-open");
-    });
-    if (calendarModalContent) {
-        calendarModalContent.addEventListener("mouseleave", () => {
-            closeCalendar();
-        });
-    }
-}
-
 function closeCalendar() {
+    const calendarModal = document.getElementById("calendarModal");
     if (calendarModal) {
         calendarModal.classList.remove("active");
         document.body.classList.remove("modal-open");
@@ -46,6 +50,7 @@ function closeCalendar() {
 }
 
 function openSpotify() {
+    const spotifyModal = document.getElementById("spotifyModal");
     if (spotifyModal) {
         spotifyModal.classList.add("active");
         document.body.classList.add("modal-open");
@@ -53,6 +58,7 @@ function openSpotify() {
 }
 
 function closeSpotify() {
+    const spotifyModal = document.getElementById("spotifyModal");
     if (spotifyModal) {
         spotifyModal.classList.remove("active");
         document.body.classList.remove("modal-open");
@@ -60,6 +66,9 @@ function closeSpotify() {
 }
 
 window.addEventListener("click", (e) => {
+    const modal = document.getElementById("modal");
+    const spotifyModal = document.getElementById("spotifyModal");
+    const calendarModal = document.getElementById("calendarModal");
     if (modal && e.target === modal) closeModal();
     if (spotifyModal && e.target === spotifyModal) closeSpotify();
     if (calendarModal && e.target === calendarModal) closeCalendar();
@@ -71,7 +80,6 @@ window.addEventListener("load", () => {
         window.instgrm.Embeds.process();
     }
 
-    // Typewriter Observer & Fade-Out
     const typewriter = document.querySelector('.typewriter-container');
     if (typewriter) {
         const observer = new IntersectionObserver((entries) => {
