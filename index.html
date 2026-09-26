@@ -1,110 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tone Medina | Artist</title>
+// ===== CORE MODAL AND UTILITY LOGIC =====
+const contactTrigger = document.getElementById("contactCard");
+const modal = document.getElementById("modal");
+const spotifyModal = document.getElementById("spotifyModal");
+const calendarCard = document.getElementById("calendarCard");
+const calendarModal = document.getElementById("calendarModal");
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+if (contactTrigger && modal) {
+    const contactModalContent = modal.querySelector(".modal-content");
+    contactTrigger.addEventListener("mouseenter", () => { modal.classList.add("active"); document.body.classList.add("modal-open"); });
+    if (contactModalContent) { contactModalContent.addEventListener("mouseleave", () => { closeModal(); }); }
+}
 
-<link rel="stylesheet" href="style.css" />
-</head>
+function closeModal() { if (modal) { modal.classList.remove("active"); document.body.classList.remove("modal-open"); } }
 
-<body id="top" class="home-page">
+if (calendarCard && calendarModal) {
+    const calendarModalContent = calendarModal.querySelector(".modal-content");
+    calendarCard.addEventListener("mouseenter", () => { calendarModal.classList.add("active"); document.body.classList.add("modal-open"); });
+    if (calendarModalContent) { calendarModalContent.addEventListener("mouseleave", () => { closeCalendar(); }); }
+}
 
-<nav>
-  <div class="wrap nav-inner">
-    <a href="index.html" class="nav-brand">Tone Medina</a>
+function closeCalendar() { if (calendarModal) { calendarModal.classList.remove("active"); document.body.classList.remove("modal-open"); } }
 
-   <div class="links">
-        <a onclick="openSpotify()">Music</a>
-        <a href="works.html">Art Work</a>
-        <a href="news.html">News</a>
-        <a href="contact.html">Contact</a>
-        <a href="links.html">Links</a>
-        <a href="bio.html">Biography</a>
-      </div>
-  </div>
-</nav>
+function openSpotify() { if (spotifyModal) { spotifyModal.classList.add("active"); document.body.classList.add("modal-open"); } }
 
-<header class="wrap" style="padding: 2.5rem 0 1.5rem;">
-    <div class="typewriter-container">
-  <h3 class="line-1">Sometimes...</h3>
-  <h3 class="line-2">the most beautiful things in life,</h3>
-  <h3 class="line-3">are meant to be temporary</h3>
-    </div>
-  </header>
+function closeSpotify() { if (spotifyModal) { spotifyModal.classList.remove("active"); document.body.classList.remove("modal-open"); } }
 
-  <main>
-    </main>
+window.addEventListener("click", (e) => {
+    if (modal && e.target === modal) closeModal();
+    if (spotifyModal && e.target === spotifyModal) closeSpotify();
+    if (calendarModal && e.target === calendarModal) closeCalendar();
+});
 
- <footer class="wrap" style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
-    <div>© 2026 Tone Medina</div>
-    <a href="https://github.com/login" target="_blank" class="footer-admin" style="margin-left: auto;">Login</a>
-  </footer>
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>Contact</h3>
-    <p style="margin-bottom: 1rem;">Click | Long Press </p>
-    <div class="selectable" onclick="copyText('info@tonemedina.com'  )">
-      info@tonemedina.com
-    </div>
-    <div class="selectable" onclick="copyText('7202968296')">
-      720 296 8296
-    </div>
-    <div class="close-btn" onclick="closeModal()">Close ✕</div>
-  </div>
-</div>
-
-<div class="modal" id="calendarModal">
-  <div class="modal-content">
-    <h3 style="margin-bottom: 0.5rem;">Art Calendar / Events</h3>
-    <p style="margin-bottom: 1rem;">see you soon.</p>
-    <iframe
-      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&mode=WEEK&title=Art%20Calendar&src=d3d457006b423af8462d7da968e81d3895e1a024c27a77f389e690bfc0046b46%40group.calendar.google.com&color=%23009688"
-      width="100%"
-      style="border:0;">
-    </iframe>
-    <div class="close-btn" onclick="closeCalendar()">Close ✕</div>
-  </div>
-</div>
-
-<div class="modal" id="spotifyModal">
-  <div class="modal-content">
-    <h3 class="now-playing" style="margin-bottom: 1rem;">Now Playing</h3>
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5M4GjeLsxGsK7SPtnBasBr?utm_source=generator&amp;theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    <div class="close-btn" onclick="closeSpotify( )">Close ✕</div>
-  </div>
-</div>
-
-<script async src="//www.instagram.com/embed.js"></script>
-<script src="main.js"></script>
-</body>
-</html>
-
-<!-- index.html (Before </body>) -->
-
-<div id="companion-container">
-    <div id="companion-header">
-        <!-- THE RED GLOW ELEMENT (Your 'Custom Image') -->
-        <div id="glow-orb"></div>
-        <span id="companion-title">Chalk & Canvas Concept Generator</span>
-        <button id="close-chat" onclick="toggleChat()">×</button>
-    </div>
+// ===== PAGE LOAD UTILITIES =====
+window.addEventListener("load", () => {
+    if (window.instgrm) { window.instgrm.Embeds.process(); }
     
-    <div id="chat-messages">
-        <!-- Messages will populate here asynchronously -->
-        <div class="bot-message">Hello! Type two themes or materials and I'll describe a concept for you.</div>
-    </div>
-    
-    <div id="chat-input-area">
-        <input type="text" id="user-input" placeholder="e.g., 'Mountain sunrise + Geometry'">
-        <button id="send-btn" onclick="sendInput()">Send</button>
-    </div>
-</div>
+    // Typewriter Observer (Triggered on Load)
+    const typewriter = document.querySelector('.typewriter-container');
+    if (typewriter) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('start-typing');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0 });
+        observer.observe(typewriter);
+    }
+});
 
-<!-- FLOATING COMPANION BUBBLE (Alternative view when collapsed) -->
-<div id="companion-bubble" onclick="toggleChat()">
-    <div id="glow-orb-small"></div>
-</div>
+// ===== GLOBAL SEARCH & LIVE FILTERING ENGINE =====
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('global-search');
+    if (!searchInput) return;
+
+    const isLinksPage = window.location.pathname.includes('links');
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlQuery = urlParams.get('q');
+    if (urlQuery && isLinksPage) { searchInput.value = urlQuery; filterLinkCards(urlQuery.toLowerCase()); }
+
+    searchInput.addEventListener('input', (e) => { const value = e.target.value.toLowerCase().trim(); if (isLinksPage) filterLinkCards(value); });
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const value = searchInput.value.trim();
+            if (!isLinksPage && value) window.location.href = `links?q=${encodeURIComponent(value)}`;
+        }
+    });
+});
+
+function filterLinkCards(searchTerm) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const items = card.querySelectorAll('.link-item, h3, p, a, li, em, strong, span');
+        let cardHasMatches = false;
+        if (searchTerm === '') { card.style.display = ''; items.forEach(item => item.style.display = ''); return; }
+        items.forEach(item => {
+            if (item.tagName === 'H2' || item.classList.contains('card-title')) return;
+            const itemText = item.textContent.toLowerCase();
+            if (itemText.includes(searchTerm)) { item.style.display = ''; cardHasMatches = true; }
+            else if (item.tagName === 'A' || item.parentElement.classList.contains('link-item') || item.tagName === 'P' || item.tagName === 'LI' || item.tagName === 'SPAN') { item.style.display = 'none'; }
+        });
+        card.style.display = cardHasMatches ? '' : 'none';
+    });
+}
+
+// ===== ANALOG STATIC HOVER AUDIO ENGINE =====
+document.addEventListener("DOMContentLoaded", () => {
+    const soundCards = document.querySelectorAll(".hover-sound");
+    let audioCtx = null, noiseSource = null, filterNode = null, gainNode = null;
+    function initStaticNoise() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const bufferSize = audioCtx.sampleRate * 2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+        noiseSource = audioCtx.createBufferSource(); noiseSource.buffer = buffer; noiseSource.loop = true;
+        filterNode = audioCtx.createBiquadFilter(); filterNode.type = "lowpass"; filterNode.frequency.value = 650;
+        gainNode = audioCtx.createGain(); gainNode.gain.value = 0;
+        noiseSource.connect(filterNode); filterNode.connect(gainNode); gainNode.connect(audioCtx.destination); noiseSource.start();
+    }
+    soundCards.forEach(card => {
+        card.addEventListener("mouseenter", () => {
+            try { if (!audioCtx) initStaticNoise(); if (audioCtx.state === "suspended") audioCtx.resume(); gainNode.gain.linearRampToValueAtTime(0.018, audioCtx.currentTime + 0.05); } catch (e) {}
+        });
+        card.addEventListener("mouseleave", () => { if (gainNode && audioCtx) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05); });
+    });
+});
+
+function copyText(text, element) {
+  navigator.clipboard.writeText(text).then(() => {
+    if (element) {
+      element.classList.add('copied');
+      const originalText = element.innerText;
+      element.innerText = 'Copied!';
+      
+      setTimeout(() => {
+        element.classList.remove('copied');
+        element.innerText = originalText;
+      }, 1500);
+    }
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+  });
+}
