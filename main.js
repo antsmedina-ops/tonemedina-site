@@ -1,31 +1,4 @@
 // ===== CORE MODAL AND UTILITY LOGIC =====
-document.addEventListener("DOMContentLoaded", () => {
-    // Find the Contact navigation item dynamically by text content if ID isn't present
-    const navLinks = document.querySelectorAll("nav a, header a, .nav-links a");
-    let contactTrigger = document.getElementById("contactCard");
-    
-    if (!contactTrigger) {
-        navLinks.forEach(link => {
-            if (link.textContent.trim().toLowerCase() === "contact") {
-                contactTrigger = link;
-            }
-        });
-    }
-
-    const modal = document.getElementById("modal");
-    
-    if (contactTrigger && modal) {
-        contactTrigger.addEventListener("mouseenter", () => {
-            modal.classList.add("active");
-            document.body.classList.add("modal-open");
-        });
-        
-        contactTrigger.addEventListener("click", (e) => {
-            e.preventDefault();
-            modal.classList.toggle("active");
-            document.body.classList.toggle("modal-open");
-        });
-// ===== CORE MODAL AND UTILITY LOGIC =====
 const contactTrigger = document.getElementById("contactCard");
 const modal = document.getElementById("modal");
 const spotifyModal = document.getElementById("spotifyModal");
