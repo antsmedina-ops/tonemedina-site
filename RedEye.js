@@ -78,7 +78,7 @@
     botInputDiv.id = 'redeye-input';
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
-    inputArea.placeholder = 'How can I help you today?';
+    inputArea.placeholder = 'I've been watching you?';
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
 
