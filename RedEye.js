@@ -84,7 +84,7 @@
     setTimeout(() => {
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
-        inputArea.placeholder = "have a question? ask me...";
+        inputArea.placeholder = "have a question?";
       }, 500);
     }, 7500);
 
@@ -153,13 +153,16 @@
     });
   }
 
-  function appendMessageToHistory(sender, text, historyArea) {
-    const msgDiv = document.createElement('div');
-    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${sender === 'user' ? '#eee' : '#A00'};`;
-    msgDiv.innerHTML = `<strong style="text-transform: capitalize;">${sender}:</strong> ${text}`;
-    historyArea.appendChild(msgDiv);
-    historyArea.scrollTop = historyArea.scrollHeight;
-  }
+ function appendMessageToHistory(sender, text, historyArea) {
+  const msgDiv = document.createElement('div');
+  const isUser = sender === 'user';
+  const displayName = isUser ? 'You' : '¡Ojo!';
+  
+  msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? '#eee' : '#A00'};`;
+  msgDiv.innerHTML = `<strong>${displayName}:</strong> ${text}`;
+  historyArea.appendChild(msgDiv);
+  historyArea.scrollTop = historyArea.scrollHeight;
+}
 
   async function sendInputToWorker(inputArea, historyArea) {
     const userInput = inputArea.value.trim();
