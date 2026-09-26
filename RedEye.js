@@ -210,35 +210,41 @@
     historyArea.scrollTop = historyArea.scrollHeight;
   }
 
-  async function sendInputToWorker(inputArea, historyArea) {
-    const userInput = inputArea.value.trim();
-    if (!userInput) return;
+ async function sendInputToWorker(inputArea, historyArea) {
+  const userInput = inputArea.value.trim();
+  if (!userInput) return;
 
-    inputArea.value = '';
-    inputArea.disabled = true;
-    
-    appendMessageToHistory('user', userInput, historyArea);
-    chatMessages.push({ role: 'user', content: userInput });
+  inputArea.value = '';
+  inputArea.disabled = true;
 
-    try {
-      const response = await fetch(BOT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: chatMessages })
-      });
+  appendMessageToHistory('user', userInput, historyArea);
+  chatMessages.push({ role: 'user', content: userInput });
 
-      const data = await response.json();
-      const botResponse = data.conceptDescription || 'I am processing that...';
+  // Scrape visible page text so ¡Ojo! knows what the user is looking at
+  const pageContext = document.body.innerText.substring(0, 3000);
 
-      appendMessageToHistory('redeye', botResponse, historyArea);
-      chatMessages.push({ role: 'assistant', content: botResponse });
-    } catch (err) {
-      appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
-    } finally {
-      inputArea.disabled = false;
-      inputArea.focus();
-    }
+  try {
+    const response = await fetch(BOT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        messages: chatMessages,
+        pageContext: pageContext 
+      })
+    });
+
+    const data = await response.json();
+    const botResponse = data.conceptDescription || 'I am processing that...';
+
+    appendMessageToHistory('redeye', botResponse, historyArea);
+    chatMessages.push({ role: 'assistant', content: botResponse });
+  } catch (err) {
+    appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
+  } finally {
+    inputArea.disabled = false;
+    inputArea.focus();
   }
+}
 
   // Initialize once DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
