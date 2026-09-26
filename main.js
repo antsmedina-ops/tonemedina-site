@@ -232,35 +232,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const companionBubbleEl = document.getElementById("companion-bubble");
-    if (companionBubbleEl) {
-        companionBubbleEl.addEventListener("click", (e) => {
+   document.addEventListener("DOMContentLoaded", () => {
+    companionBubble = document.getElementById("companion-bubble");
+    if (companionBubble) {
+        companionBubble.style.left = bubbleX + "px";
+        companionBubble.style.top = bubbleY + "px";
+        
+        companionBubble.addEventListener("click", (e) => {
             e.stopPropagation();
             toggleChat();
         });
     }
+
+    document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    animate();
+
+    const userInput = document.getElementById("user-input");
+    if (userInput) {
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendInput();
+            }
+        });
+    }
 });
-
-function animate() {
-    if (!companionBubble) return;
-    let dx = mouseX - bubbleX;
-    let dy = mouseY - bubbleY;
-    
-    bubbleX += dx * 0.05;
-    bubbleY += dy * 0.05;
-    
-    const bubbleSize = companionBubble.offsetWidth || 60;
-    if (bubbleX < 0) bubbleX = 0;
-    if (bubbleY < 0) bubbleY = 0;
-    if (bubbleX > window.innerWidth - bubbleSize) bubbleX = window.innerWidth - bubbleSize;
-    if (bubbleY > window.innerHeight - bubbleSize) bubbleY = window.innerHeight - bubbleSize;
-    
-    companionBubble.style.left = bubbleX + "px";
-    companionBubble.style.top = bubbleY + "px";
-    
-    requestAnimationFrame(animate);
-}
-
 function toggleChat() {
     const chatContainer = document.getElementById("companion-container");
     const chatBubble = document.getElementById("companion-bubble");
