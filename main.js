@@ -214,6 +214,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (companionBubble) {
         companionBubble.style.left = bubbleX + "px";
         companionBubble.style.top = bubbleY + "px";
+        
+        companionBubble.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleChat();
+        });
     }
 
     document.addEventListener("mousemove", (e) => {
@@ -225,6 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const userInput = document.getElementById("user-input");
     if (userInput) {
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendInput();
+            }
+        });
+    }
+});
         userInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
                 sendInput();
