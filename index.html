@@ -80,33 +80,31 @@
 
 <script async src="//www.instagram.com/embed.js"></script>
 <script src="main.js"></script>
-
-  <script async src="//www.instagram.com/embed.js"></script>
-    <script src="main.js"></script>
-
-    <!-- FLOATING COMPANION -->
-    <div id="companion-container">
-        <div id="companion-header">
-            <div id="glow-orb"></div>
-            <span id="companion-title">What do you need?</span>
-            <button id="close-chat" onclick="toggleChat()">×</button>
-        </div>
-        
-        <div id="chat-messages">
-            <div class="bot-message">I can help connect you.</div>
-        </div>
-        
-        <div id="chat-input-area">
-            <input type="text" id="user-input" placeholder="e.g., 'Mountain sunrise + Geometry'">
-            <button id="send-btn" onclick="sendInput()">Send</button>
-        </div>
-    </div>
-
-    <div id="companion-bubble" onclick="toggleChat()">
-        <div id="glow-orb-small"></div>
-    </div>
-
 </body>
 </html>
-</body>
-</html>
+
+<!-- index.html (Before </body>) -->
+
+<div id="companion-container">
+    <div id="companion-header">
+        <!-- THE RED GLOW ELEMENT (Your 'Custom Image') -->
+        <div id="glow-orb"></div>
+        <span id="companion-title">Chalk & Canvas Concept Generator</span>
+        <button id="close-chat" onclick="toggleChat()">×</button>
+    </div>
+    
+    <div id="chat-messages">
+        <!-- Messages will populate here asynchronously -->
+        <div class="bot-message">Hello! Type two themes or materials and I'll describe a concept for you.</div>
+    </div>
+    
+    <div id="chat-input-area">
+        <input type="text" id="user-input" placeholder="e.g., 'Mountain sunrise + Geometry'">
+        <button id="send-btn" onclick="sendInput()">Send</button>
+    </div>
+</div>
+
+<!-- FLOATING COMPANION BUBBLE (Alternative view when collapsed) -->
+<div id="companion-bubble" onclick="toggleChat()">
+    <div id="glow-orb-small"></div>
+</div>
