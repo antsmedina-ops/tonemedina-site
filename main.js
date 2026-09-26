@@ -124,3 +124,85 @@ function copyText(text, element) {
     console.error('Failed to copy text: ', err);
   });
 }
+
+/* main.js - Update with these functions */
+
+function toggleChat() {
+    const chatContainer = document.getElementById('companion-container');
+    const chatBubble = document.getElementById('companion-bubble');
+
+    if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+        chatContainer.style.display = 'flex';
+        chatBubble.style.display = 'none';
+    } else {
+        chatContainer.style.display = 'none';
+        chatBubble.style.display = 'flex';
+    }
+}
+
+// Ensure the companion is hidden initially if set in CSS
+document.addEventListener("DOMContentLoaded", () => {
+    // Other initialization code if exists...
+    
+    // Allow 'Enter' key to send message
+    const userInput = document.getElementById("user-input");
+    userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            sendInput();
+        }
+    });
+});
+
+function addMessage(text, sender) {
+    const chatMessages = document.getElementById("chat-messages");
+    const messageDiv = document.createElement("div");
+    messageDiv.className = sender + "-message";
+    messageDiv.textContent = text;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+}
+
+async function sendInput() {
+    const userInputField = document.getElementById("user-input");
+    const userInput = userInputField.value;
+    if (userInput.trim() === "") return;
+
+    // Display user's message
+    addMessage(userInput, "user");
+    userInputField.value = ""; // Clear input
+
+    // Placeholder message while waiting
+    const loadingMessageId = "loading-" + Date.now();
+    addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
+
+    try {
+        // --- THIS PART CALLS THE AI ---
+        // REPLACE THIS URL WITH YOUR CLOUDFLARE WORKER / VERCEL FUNCTION URL
+        const backendURL = "https://your-serverless-function-url.workers.dev/api/concept";
+
+        const response = await fetch(backendURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                prompt: userInput // The visitor's input (themes/materials)
+            })
+        });
+
+        const data = await response.json();
+        
+        // Remove 'loading' placeholder and add final response
+        removeLoadingMessage(loadingMessageId);
+        addMessage(data.conceptDescription, "bot");
+
+    } catch (error) {
+        console.error("Error calling AI API:", error);
+        removeLoadingMessage(loadingMessageId);
+        addMessage("Apologies, my creative energy is momentarily blocked. Try again in a bit?", "bot");
+    }
+}
+
+function removeLoadingMessage(id) {
+    // Logic to replace the placeholder message if desired, 
+    // or simply add another message. Simplest for now is just 
+    // adding the new message.
+}
