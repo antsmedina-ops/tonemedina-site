@@ -159,40 +159,44 @@ document.addEventListener("DOMContentLoaded", () => {
     let audioCtx = null, noiseSource = null, filterNode = null, gainNode = null;
 
     function initStaticNoise() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const bufferSize = audioCtx.sampleRate * 2;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-        }
-        noiseSource = audioCtx.createBufferSource();
-        noiseSource.buffer = buffer;
-        noiseSource.loop = true;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const bufferSize = audioCtx.sampleRate * 2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            noiseSource = audioCtx.createBufferSource();
+            noiseSource.buffer = buffer;
+            noiseSource.loop = true;
 
-        filterNode = audioCtx.createBiquadFilter();
-        filterNode.type = "lowpass";
-        filterNode.frequency.value = 650;
+            filterNode = audioCtx.createBiquadFilter();
+            filterNode.type = "lowpass";
+            filterNode.frequency.value = 650;
 
-        gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0;
+            gainNode = audioCtx.createGain();
+            gainNode.gain.value = 0;
 
-        noiseSource.connect(filterNode);
-        filterNode.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        noiseSource.start();
+            noiseSource.connect(filterNode);
+            filterNode.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            noiseSource.start();
+        } catch (e) {}
     }
 
     soundCards.forEach(card => {
         card.addEventListener("mouseenter", () => {
             try {
                 if (!audioCtx) initStaticNoise();
-                if (audioCtx.state === "suspended") audioCtx.resume();
-                gainNode.gain.linearRampToValueAtTime(0.018, audioCtx.currentTime + 0.05);
+                if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+                if (gainNode && audioCtx) gainNode.gain.linearRampToValueAtTime(0.018, audioCtx.currentTime + 0.05);
             } catch (e) {}
         });
         card.addEventListener("mouseleave", () => {
-            if (gainNode && audioCtx) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+            try {
+                if (gainNode && audioCtx) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+            } catch (e) {}
         });
     });
 });
@@ -214,13 +218,13 @@ function copyText(text, element) {
 }
 
 // ===== FLOATING AI COMPANION & CHAT ENGINE =====
-let companionBubble = null;
 let mouseX = 0;
 let mouseY = 0;
 let bubbleX = window.innerWidth - 90;
 let bubbleY = window.innerHeight - 90;
 
 function animate() {
+    const companionBubble = document.getElementById("companion-bubble");
     if (companionBubble) {
         let dx = mouseX - 25 - bubbleX;
         let dy = mouseY - 25 - bubbleY;
@@ -233,7 +237,7 @@ function animate() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    companionBubble = document.getElementById("companion-bubble");
+    const companionBubble = document.getElementById("companion-bubble");
     if (companionBubble) {
         companionBubble.style.left = bubbleX + "px";
         companionBubble.style.top = bubbleY + "px";
@@ -249,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mouseY = e.clientY;
     });
 
-    animate();
+    requestAnimationFrame(animate);
 
     const userInput = document.getElementById("user-input");
     if (userInput) {
@@ -309,6 +313,8 @@ async function sendInput() {
     addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
     
     const chatMessagesEl = document.getElementById("chat-messages");
+    if (!chatMessagesEl) return;
+    
     const messageDivs = chatMessagesEl.querySelectorAll(".user-message, .bot-message");
     const history = [];
     
