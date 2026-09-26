@@ -75,14 +75,14 @@
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
-  // Dynamic organic placeholder sequence
+// Dynamic organic placeholder sequence
 inputArea.placeholder = "I'm watching you...";
 setTimeout(() => {
   inputArea.placeholder = ""; // Clear pause
   setTimeout(() => {
     inputArea.placeholder = "it's ok, talk to me";
-  }, 400); // 0.4s pause
-}, 4500); // Holds "I'm watching you..." for 4.5s
+  }, 1200); // 1.2s human breath pause
+}, 5000); // Holds "I'm watching you..." for 5.0s
 
    // Chat History Area
     const chatHistoryDiv = document.createElement('div');
