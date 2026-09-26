@@ -84,12 +84,18 @@ setTimeout(() => {
   }, 400); // 0.4s pause
 }, 4500); // Holds "I'm watching you..." for 4.5s
 
+   // Chat History Area
+    const chatHistoryDiv = document.createElement('div');
+    chatHistoryDiv.id = 'redeye-history';
+    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
+    chatWindowDiv.appendChild(chatHistoryDiv);
+
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
 
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
-    
+
     addRedeyeListeners(chatHistoryDiv, inputArea);
   }
 
