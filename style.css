@@ -832,32 +832,48 @@ nav .links a:hover {
     cursor: pointer;
 }
 
+/* style.css - UPDATE these sections */
+
 /* --- The Collapsed Floating Bubble --- */
 #companion-bubble {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
+    position: absolute; /* Changed from 'fixed' for mouse tracking */
+    /* Remove 'bottom' and 'right' from here; they will be handled by JS */
+    width: 60px; /* Small hit area for mouse interaction */
     height: 60px;
-    background-color: rgba(30,30,30,0.8);
+    background-color: transparent; /* Remove background circle */
     border-radius: 50%;
     cursor: pointer;
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease-out; /* Slower transition for a float feel */
 }
 
+/* Hover effect on the hit area (optional) */
 #companion-bubble:hover {
     transform: scale(1.1);
 }
 
 #glow-orb-small {
-    width: 30px;
-    height: 30px;
-    background-color: #ff3333;
+    /* Larger and far more vibrant orb and shadow */
+    width: 30px; 
+    height: 30px; 
+    background-color: #ff3333; /* Base vibrant red */
     border-radius: 50%;
-    box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333;
-    animation: glowPulse 3s infinite ease-in-out;
+    /* Stronger, more complex glow and reflection effects */
+    box-shadow: 
+        0 0 15px #ff3333, 
+        0 0 30px #ff3333, 
+        0 0 50px #ff0000, 
+        0 0 10px rgba(255, 0, 0, 0.5) inset, /* Inner glow for more intensity */
+        0 0 10px rgba(255, 255, 255, 0.1) inset; /* Subtle white reflection hint */
+    animation: glowPulse 2s infinite ease-in-out; /* Faster, more intense pulse */
+}
+
+/* Faster pulse animation */
+@keyframes glowPulse {
+    0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 15px #ff3333; }
+    50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 20px #ff3333, 0 0 40px #ff0000; }
+    100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 15px #ff3333; }
 }
