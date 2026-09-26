@@ -80,7 +80,7 @@
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
     
     // Dynamic organic placeholder sequence
-    inputArea.placeholder = "I've been watching you";
+    inputArea.placeholder = "eye am watching";
     setTimeout(() => {
       inputArea.placeholder = ""; // Brief clear pause
       setTimeout(() => {
