@@ -1,4 +1,4 @@
-/* ===== TONE MEDINA'S REDEYE AI COMPANION (SMOOTH FLOAT & TEASE) ===== */
+/* ===== TONE MEDINA'S REDEYE AI COMPANION (NATURAL AI DRIFT) ===== */
 (function() {
   const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
 
@@ -9,15 +9,18 @@
   const closeChatBtn = document.createElement('div');
   let isBotMuted = false;
 
-  // Mouse tracking targets vs current bot positions (for smooth lerp)
+  // Mouse tracking targets & state variables
   let targetX = window.innerWidth / 2;
   let targetY = window.innerHeight / 2;
   let currentX = targetX;
   let currentY = targetY;
 
-  // Config parameters for "watching/teasing" motion:
-  const LERP_SPEED = 0.035; // Lower number = slower, smoother float (e.g. 0.02 - 0.05)
-  const OFFSET_DISTANCE = 45; // Distance (px) the bot stays away from exact cursor center
+  // Movement Config
+  const LERP_SPEED = 0.015; // Much slower & smoother (was 0.035)
+  const BASE_OFFSET = 100;  // 100px distance from cursor
+  
+  // Dynamic AI organic drift variables
+  let time = 0;
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
   function createBotUi() {
@@ -85,23 +88,30 @@
     addRedeyeListeners(chatHistoryDiv, inputArea);
   }
 
-  // ===== 2. MOUSE TRACKING & SMOOTH LERP ANIMATION =====
+  // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE =====
   function trackMouse(e) {
     if (isBotMuted) return;
 
-    // Calculate angle from bot to cursor so it hovers slightly off-center
+    // Angle to mouse pointer
     const dx = e.clientX - currentX;
     const dy = e.clientY - currentY;
     const angle = Math.atan2(dy, dx);
 
-    // Target position maintains an offset distance so it doesn't sit underfoot
-    targetX = e.clientX - Math.cos(angle) * OFFSET_DISTANCE - 20;
-    targetY = e.clientY - Math.sin(angle) * OFFSET_DISTANCE - 20;
+    // Dynamic distance oscillating smoothly between 80px and 125px
+    const dynamicOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
+    
+    // Organic floating wander noise
+    const wanderX = Math.cos(time * 0.015) * 20;
+    const wanderY = Math.sin(time * 0.025) * 20;
+
+    targetX = e.clientX - Math.cos(angle) * dynamicOffset + wanderX - 20;
+    targetY = e.clientY - Math.sin(angle) * dynamicOffset + wanderY - 20;
   }
 
   function animateLoop() {
+    time++;
     if (!isBotMuted && botDiv) {
-      // Smoothly interpolate current position toward target position
+      // Lazy linear interpolation towards target
       currentX += (targetX - currentX) * LERP_SPEED;
       currentY += (targetY - currentY) * LERP_SPEED;
 
@@ -172,7 +182,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     createBotUi();
     document.addEventListener('mousemove', trackMouse);
-    requestAnimationFrame(animateLoop); // Continuous smooth movement loop
+    requestAnimationFrame(animateLoop);
   });
 
 })();
