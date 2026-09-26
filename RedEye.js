@@ -1,34 +1,45 @@
-/* ===== TONE MEDINA'S REDEYE AI COMPANION (BOT UI & LOGIC) ===== */
+/* ===== TONE MEDINA'S REDEYE AI COMPANION (SMOOTH FLOAT & TEASE) ===== */
 (function() {
-  // Use a IIFE to prevent variable collision with main.js
-  const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/'; // Your specific worker endpoint
+  const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
 
-  let chatMessages = []; // Local history
+  let chatMessages = [];
   const botDiv = document.createElement('div');
   const chatWindowDiv = document.createElement('div');
   const botInputDiv = document.createElement('div');
   const closeChatBtn = document.createElement('div');
   let isBotMuted = false;
 
+  // Mouse tracking targets vs current bot positions (for smooth lerp)
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let currentX = targetX;
+  let currentY = targetY;
+
+  // Config parameters for "watching/teasing" motion:
+  const LERP_SPEED = 0.035; // Lower number = slower, smoother float (e.g. 0.02 - 0.05)
+  const OFFSET_DISTANCE = 45; // Distance (px) the bot stays away from exact cursor center
+
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
   function createBotUi() {
-    // Style the main hollow circle bot
     botDiv.id = 'redeye-bot';
     botDiv.style.cssText = `
       position: fixed;
+      top: 0;
+      left: 0;
       width: 40px;
       height: 40px;
-      background: rgba(0, 0, 0, 0.9);
-      border: 3px solid #8B0000; /* Deep Red Border */
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid #8B0000;
       border-radius: 50%;
       cursor: pointer;
       z-index: 999999;
-      pointer-events: auto; /* Allow mouse events */
-      box-shadow: 0 0 25px 12px rgba(139, 0, 0, 0.7); /* Deep Red Glow */
-      transition: box-shadow 0.3s ease;
+      pointer-events: auto;
+      box-shadow: 0 0 25px 12px rgba(139, 0, 0, 0.75);
+      transition: box-shadow 0.3s ease, transform 0.05s linear;
+      will-change: transform;
     `;
     
-    botDiv.title = 'Redeye'; // Tooltip
+    botDiv.title = 'Redeye';
 
     // Chat Window Container
     chatWindowDiv.id = 'redeye-chat-window';
@@ -40,9 +51,9 @@
       height: 400px;
       background: rgba(10, 10, 10, 0.95);
       color: #fff;
-      border: 1px solid rgba(139, 0, 0, 0.5); /* Deep Red Hint */
+      border: 1px solid rgba(139, 0, 0, 0.5);
       border-radius: 8px;
-      display: none; /* Starts hidden */
+      display: none;
       z-index: 1000000;
       box-shadow: 0 5px 30px rgba(0,0,0,0.8);
       padding: 1rem;
@@ -60,7 +71,7 @@
     chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
     chatWindowDiv.appendChild(chatHistoryDiv);
 
-    // Input Area (Textarea)
+    // Input Area
     botInputDiv.id = 'redeye-input';
     const inputArea = document.createElement('textarea');
     inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
@@ -74,32 +85,43 @@
     addRedeyeListeners(chatHistoryDiv, inputArea);
   }
 
-  // ===== 2. MOUSE FOLLOWING LOGIC =====
-  function followMouse(e) {
-    if (!botDiv || isBotMuted) return; // Don't move if not listening or open
+  // ===== 2. MOUSE TRACKING & SMOOTH LERP ANIMATION =====
+  function trackMouse(e) {
+    if (isBotMuted) return;
 
-    // Adjust position to center the bot
-    const botX = e.clientX - 20; 
-    const botY = e.clientY - 20;
+    // Calculate angle from bot to cursor so it hovers slightly off-center
+    const dx = e.clientX - currentX;
+    const dy = e.clientY - currentY;
+    const angle = Math.atan2(dy, dx);
 
-    botDiv.style.transform = `translate(${botX}px, ${botY}px)`;
+    // Target position maintains an offset distance so it doesn't sit underfoot
+    targetX = e.clientX - Math.cos(angle) * OFFSET_DISTANCE - 20;
+    targetY = e.clientY - Math.sin(angle) * OFFSET_DISTANCE - 20;
+  }
+
+  function animateLoop() {
+    if (!isBotMuted && botDiv) {
+      // Smoothly interpolate current position toward target position
+      currentX += (targetX - currentX) * LERP_SPEED;
+      currentY += (targetY - currentY) * LERP_SPEED;
+
+      botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    }
+    requestAnimationFrame(animateLoop);
   }
 
   // ===== 3. CHAT INTERACTION LOGIC =====
   function addRedeyeListeners(historyArea, inputArea) {
-    // Open chat on bot click
     botDiv.addEventListener('click', () => {
       chatWindowDiv.style.display = 'flex';
-      isBotMuted = true; // Stop following mouse
+      isBotMuted = true;
     });
 
-    // Close chat
     closeChatBtn.addEventListener('click', () => {
       chatWindowDiv.style.display = 'none';
-      isBotMuted = false; // Resume mouse following
+      isBotMuted = false;
     });
 
-    // Send input on Enter (Shift+Enter for newline)
     inputArea.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -108,25 +130,23 @@
     });
   }
 
-  // Helper to append messages to UI
   function appendMessageToHistory(sender, text, historyArea) {
     const msgDiv = document.createElement('div');
-    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${sender === 'user' ? '#eee' : '#A00'};`; // AI text is deep red
+    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${sender === 'user' ? '#eee' : '#A00'};`;
     msgDiv.innerHTML = `<strong style="text-transform: capitalize;">${sender}:</strong> ${text}`;
     historyArea.appendChild(msgDiv);
-    historyArea.scrollTop = historyArea.scrollHeight; // Auto-scroll
+    historyArea.scrollTop = historyArea.scrollHeight;
   }
 
-  // Talk to the worker brain
   async function sendInputToWorker(inputArea, historyArea) {
     const userInput = inputArea.value.trim();
     if (!userInput) return;
 
-    inputArea.value = ''; // Clear input
-    inputArea.disabled = true; // Lock while loading
+    inputArea.value = '';
+    inputArea.disabled = true;
     
     appendMessageToHistory('user', userInput, historyArea);
-    chatMessages.push({ role: 'user', content: userInput }); // History for AI
+    chatMessages.push({ role: 'user', content: userInput });
 
     try {
       const response = await fetch(BOT_ENDPOINT, {
@@ -139,11 +159,11 @@
       const botResponse = data.conceptDescription || 'I am processing that...';
 
       appendMessageToHistory('redeye', botResponse, historyArea);
-      chatMessages.push({ role: 'assistant', content: botResponse }); // History for next time
+      chatMessages.push({ role: 'assistant', content: botResponse });
     } catch (err) {
       appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
     } finally {
-      inputArea.disabled = false; // Unlock
+      inputArea.disabled = false;
       inputArea.focus();
     }
   }
@@ -151,7 +171,8 @@
   // Initialize once DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     createBotUi();
-    document.addEventListener('mousemove', followMouse); // Start following
+    document.addEventListener('mousemove', trackMouse);
+    requestAnimationFrame(animateLoop); // Continuous smooth movement loop
   });
 
 })();
