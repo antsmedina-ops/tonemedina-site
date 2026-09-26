@@ -83,11 +83,11 @@
     inputArea.placeholder = "I'm watching you...";
 
     setTimeout(() => {
-      inputArea.placeholder = ""; // Brief clear pause
+      inputArea.placeholder = ""; // Clear pause
       setTimeout(() => {
         inputArea.placeholder = "talk to me";
-      }, 500); // 0.5s pause before second prompt
-    }, 4000); // 4s wait so "I'm watching you..." is clearly seen first
+      }, 400); // 0.4s pause
+    }, 4500); // Holds "I'm watching you..." for 4.5s
 
     botInputDiv.appendChild(inputArea);
     chatWindowDiv.appendChild(botInputDiv);
