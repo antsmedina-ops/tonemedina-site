@@ -65,25 +65,22 @@ window.addEventListener("click", (e) => {
     if (calendarModal && e.target === calendarModal) closeCalendar();
 });
 
-// ===== PAGE LOAD UTILITIES =====
+// ===== PAGE LOAD UTILITIES (Typewriter fade-out & embeds) =====
 window.addEventListener("load", () => {
     if (window.instgrm) {
         window.instgrm.Embeds.process();
     }
-    
-  // Typewriter Observer (Triggered on Load)
+
+    // Typewriter Observer & Fade-Out
     const typewriter = document.querySelector('.typewriter-container');
     if (typewriter) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('start-typing');
-                    
-                    // Wait 9.5 seconds so all lines finish typing before fading out
                     setTimeout(() => {
                         entry.target.classList.add('fade-out');
-                    }, 9500); 
-
+                    }, 9500);
                     observer.unobserve(entry.target);
                 }
             });
@@ -100,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLinksPage = window.location.pathname.includes('links');
     const urlParams = new URLSearchParams(window.location.search);
     const urlQuery = urlParams.get('q');
+
     if (urlQuery && isLinksPage) {
         searchInput.value = urlQuery;
         filterLinkCards(urlQuery.toLowerCase());
@@ -113,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const value = searchInput.value.trim();
-            if (!isLinksPage && value) window.location.href = `links?q=${encodeURIComponent(value)}`;
+            if (!isLinksPage && value) {
+                window.location.href = `links?q=${encodeURIComponent(value)}`;
+            }
         }
     });
 });
@@ -123,21 +123,24 @@ function filterLinkCards(searchTerm) {
     cards.forEach(card => {
         const items = card.querySelectorAll('.link-item, h3, p, a, li, em, strong, span');
         let cardHasMatches = false;
+
         if (searchTerm === '') {
             card.style.display = '';
             items.forEach(item => item.style.display = '');
             return;
         }
+
         items.forEach(item => {
             if (item.tagName === 'H2' || item.classList.contains('card-title')) return;
             const itemText = item.textContent.toLowerCase();
             if (itemText.includes(searchTerm)) {
                 item.style.display = '';
                 cardHasMatches = true;
-            } else if (item.tagName === 'A' || item.parentElement.classList.contains('link-item') || item.tagName === 'P' || item.tagName === 'LI' || item.tagName === 'SPAN') {
+            } else {
                 item.style.display = 'none';
             }
         });
+
         card.style.display = cardHasMatches ? '' : 'none';
     });
 }
@@ -202,14 +205,43 @@ function copyText(text, element) {
     });
 }
 
-/* --- Floating AI Companion & Concept Generator --- */
+// ===== FLOATING AI COMPANION & CHAT ENGINE =====
 let companionBubble = null;
 let mouseX = 0;
 let mouseY = 0;
 let bubbleX = window.innerWidth - 90;
 let bubbleY = window.innerHeight - 90;
 
+function animate() {
+    if (companionBubble) {
+        let dx = mouseX - 25 - bubbleX;
+        let dy = mouseY - 25 - bubbleY;
+        bubbleX += dx * 0.1;
+        bubbleY += dy * 0.1;
+        companionBubble.style.left = bubbleX + "px";
+        companionBubble.style.top = bubbleY + "px";
+    }
+    requestAnimationFrame(animate);
+}
 
+document.addEventListener("DOMContentLoaded", () => {
+    companionBubble = document.getElementById("companion-bubble");
+    if (companionBubble) {
+        companionBubble.style.left = bubbleX + "px";
+        companionBubble.style.top = bubbleY + "px";
+        
+        companionBubble.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleChat();
+        });
+    }
+
+    document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    animate();
 
     const userInput = document.getElementById("user-input");
     if (userInput) {
@@ -220,6 +252,7 @@ let bubbleY = window.innerHeight - 90;
         });
     }
 });
+
 function toggleChat() {
     const chatContainer = document.getElementById("companion-container");
     const chatBubble = document.getElementById("companion-bubble");
@@ -236,6 +269,7 @@ function toggleChat() {
         if (chatBubble) chatBubble.style.display = "flex";
     }
 }
+
 function addMessage(text, sender, id = null) {
     const chatMessages = document.getElementById("chat-messages");
     if (!chatMessages) return;
@@ -259,16 +293,17 @@ async function sendInput() {
     if (!userInputField) return;
     const userInput = userInputField.value;
     if (userInput.trim() === "") return;
-
+    
     addMessage(userInput, "user");
     userInputField.value = "";
-
+    
     const loadingMessageId = "loading-" + Date.now();
     addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
-
+    
     const chatMessagesEl = document.getElementById("chat-messages");
     const messageDivs = chatMessagesEl.querySelectorAll(".user-message, .bot-message");
     const history = [];
+    
     messageDivs.forEach(div => {
         if (div.id && div.id.startsWith("loading-")) return;
         const role = div.classList.contains("user-message") ? "user" : "assistant";
@@ -284,7 +319,7 @@ async function sendInput() {
         });
         const data = await response.json();
         removeLoadingMessage(loadingMessageId);
-
+        
         if (data.conceptDescription) {
             addMessage(data.conceptDescription, "bot");
         } else if (data.error) {
