@@ -48,8 +48,9 @@ if (typewriter) {
                     entry.target.classList.add('fade-out');
                 }, 4000); 
 
-                observer.unobserve(entry.target);
-           
+             observer.observe(typewriter);
+    }
+});
 
 // ===== GLOBAL SEARCH & LIVE FILTERING ENGINE =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,9 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLinksPage = window.location.pathname.includes('links');
     const urlParams = new URLSearchParams(window.location.search);
     const urlQuery = urlParams.get('q');
-    if (urlQuery && isLinksPage) { searchInput.value = urlQuery; filterLinkCards(urlQuery.toLowerCase()); }
+    if (urlQuery && isLinksPage) {
+        searchInput.value = urlQuery;
+        filterLinkCards(urlQuery.toLowerCase());
+    }
 
-    searchInput.addEventListener('input', (e) => { const value = e.target.value.toLowerCase().trim(); if (isLinksPage) filterLinkCards(value); });
+    searchInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase().trim();
+        if (isLinksPage) filterLinkCards(value);
+    });
+
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const value = searchInput.value.trim();
