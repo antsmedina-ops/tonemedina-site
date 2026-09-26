@@ -215,40 +215,49 @@ function removeLoadingMessage(id) {
 }
 
 async function sendInput() {
-    const userInputField = document.getElementById("user-input");
-    if (!userInputField) return;
+  const userInputField = document.getElementById("user-input");
+  if (!userInputField) return;
+  const userInput = userInputField.value;
+  if (userInput.trim() === "") return;
 
-    const userInput = userInputField.value;
-    if (userInput.trim() === "") return;
+  addMessage(userInput, "user");
+  userInputField.value = "";
 
-    addMessage(userInput, "user");
-    userInputField.value = "";
+  const loadingMessageId = "loading-" + Date.now();
+  addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
 
-    const loadingMessageId = "loading-" + Date.now();
-    addMessage("Hmm, let me sketch a concept...", "bot", loadingMessageId);
+  // Gather past conversation messages from the chat box DOM
+  const chatMessagesEl = document.getElementById("chat-messages");
+  const messageDivs = chatMessagesEl.querySelectorAll(".user-message, .bot-message");
+  const history = [];
+  
+  messageDivs.forEach(div => {
+    if (div.id && div.id.startsWith("loading-")) return;
+    const role = div.classList.contains("user-message") ? "user" : "assistant";
+    history.push({ role: role, content: div.textContent });
+  });
 
-    try {
-        const backendURL = "https://redeye.antsmedina.workers.dev";
+  try {
+    const backendURL = "https://redeye.antsmedina.workers.dev";
+    const response = await fetch(backendURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history })
+    });
 
-        const response = await fetch(backendURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: userInput })
-        });
+    const data = await response.json();
+    removeLoadingMessage(loadingMessageId);
 
-        const data = await response.json();
-        removeLoadingMessage(loadingMessageId);
-
-        if (data.conceptDescription) {
-            addMessage(data.conceptDescription, "bot");
-        } else if (data.error) {
-            addMessage("Error: " + data.error, "bot");
-        } else {
-            addMessage("Received an unexpected response. Please try again.", "bot");
-        }
-    } catch (error) {
-        console.error("Error calling AI API:", error);
-        removeLoadingMessage(loadingMessageId);
-        addMessage("Apologies, my creative energy is momentarily blocked. Try again in a bit?", "bot");
+    if (data.conceptDescription) {
+      addMessage(data.conceptDescription, "bot");
+    } else if (data.error) {
+      addMessage("Error: " + data.error, "bot");
+    } else {
+      addMessage("Received an unexpected response. Please try again.", "bot");
     }
+  } catch (error) {
+    console.error("Error calling AI API:", error);
+    removeLoadingMessage(loadingMessageId);
+    addMessage("Apologies, my creative energy is momentarily blocked. Try again in a bit?", "bot");
+  }
 }
