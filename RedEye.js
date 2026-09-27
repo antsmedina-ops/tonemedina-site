@@ -24,6 +24,20 @@
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
   function createBotUi() {
+    function createBotUi () {
+    // Load VT323 WOPR mainframe font dynamically
+    if (!document.getElementById('wopr-font')) {
+        const fontLink = document.createElement('link');
+        fontLink.id = 'wopr-font';
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
+        document.head.appendChild(fontLink);
+    }
+
+    botDiv.id = 'redeye-bot';
+    
+    // Check if device is mobile width
+    const isMobile = window.innerWidth <= 768;
     botDiv.id = 'redeye-bot';
     
     // Check if device is mobile width
@@ -199,16 +213,22 @@
     });
   }
 
-  function appendMessageToHistory(sender, text, historyArea) {
+ function appendMessageToHistory(sender, text, historyArea) {
     const msgDiv = document.createElement('div');
     const isUser = sender === 'user';
     const displayName = isUser ? 'You' : '¡Ojo!';
     
-    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? '#eee' : '#A00'};`;
-    msgDiv.innerHTML = `<strong>${displayName}:</strong> ${text}`;
+    // Light gray for ¡Ojo! (high contrast in direct sunlight on mobile & desktop)
+    // Silver gray for user prompt
+    const userColor = '#aaa'; 
+    const botColor = '#e0e0e0';
+
+    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? userColor : botColor}; font-size: 1.25rem; line-height: 1.3;`;
+    msgDiv.innerHTML = `<strong style="color: ${isUser ? '#888' : '#fff'};">${displayName}:</strong> ${text}`;
+    
     historyArea.appendChild(msgDiv);
     historyArea.scrollTop = historyArea.scrollHeight;
-  }
+}
 
  async function sendInputToWorker(inputArea, historyArea) {
   const userInput = inputArea.value.trim();
