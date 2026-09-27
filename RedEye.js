@@ -50,7 +50,7 @@
     function typeWriter(element, text, speed, callback) {
         if (typeWriterInterval) clearInterval(typeWriterInterval);
         let charIndex = 0;
-        element.innerHTML = '<span class="redeye-blink-cursor">█</span>'; // Start with cursor
+        element.innerHTML = '<span class="redeye-blink-cursor">█</span>';
         
         typeWriterInterval = setInterval(() => {
             if (charIndex < text.length) {
@@ -58,25 +58,22 @@
                 charIndex++;
             } else {
                 clearInterval(typeWriterInterval);
-                if (callback) callback(); // Keeps cursor blinking while waiting
+                if (callback) callback();
             }
         }, speed);
     }
 
     // ===== Helper: Page-Specific Greeting Transition =====
     function triggerGreeting(greetingOverlay, inputArea) {
-        // Clear previous timers
         if (placeholderTimer) clearTimeout(placeholderTimer);
         if (typeWriterInterval) clearInterval(typeWriterInterval);
 
-        // Reset overlay visuals
         greetingOverlay.innerHTML = '';
         greetingOverlay.style.transition = 'none';
         greetingOverlay.style.opacity = '1';
         greetingOverlay.style.display = 'block';
-        inputArea.placeholder = ''; // Keep textarea clear while overlay is active
+        inputArea.placeholder = '';
 
-        // Determine path-specific text
         const path = window.location.pathname.toLowerCase();
         let greetingText = "I'm watching you...";
         if (path.includes('works')) greetingText = "looking at the works?";
@@ -84,7 +81,6 @@
         else if (path.includes('news')) greetingText = "checking what's next?";
         else if (path.includes('contact')) greetingText = "ready to reach out?";
 
-        // Type out text and leave cursor blinking indefinitely until user clicks
         typeWriter(greetingOverlay, greetingText, 70);
     }
 
@@ -92,7 +88,6 @@
     function createBotUi() {
         injectCursorStyle();
 
-        // Load VT323 WOPR font
         if (!document.getElementById('wopr-font')) {
             const fontLink = document.createElement('link');
             fontLink.id = 'wopr-font';
@@ -121,7 +116,6 @@
         `;
         botDiv.title = '¡Ojo!';
 
-        // Responsive Chat Window Container
         chatWindowDiv.id = 'redeye-chat-window';
         chatWindowDiv.style.cssText = `
             position: fixed;
@@ -150,17 +144,14 @@
         closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa; font-size: 16px; padding: 5px;';
         chatWindowDiv.appendChild(closeChatBtn);
 
-        // Chat History Area
         const chatHistoryDiv = document.createElement('div');
         chatHistoryDiv.id = 'redeye-history';
         chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
         chatWindowDiv.appendChild(chatHistoryDiv);
 
-        // Input Area Container
         botInputDiv.id = 'redeye-input-container';
         botInputDiv.style.cssText = 'position: relative; width: 100%; height: 60px;';
 
-        // Greeting Overlay Div
         const greetingOverlay = document.createElement('div');
         greetingOverlay.id = 'redeye-greeting-overlay';
         greetingOverlay.style.cssText = `
@@ -176,7 +167,6 @@
             z-index: 2;
         `;
 
-        // Textarea
         const inputArea = document.createElement('textarea');
         inputArea.id = 'redeye-textarea';
         inputArea.style.cssText = 'width: 100%; height: 100%; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px; resize: none; font-family: inherit; font-size: 0.95rem; display: block; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 1;';
@@ -282,7 +272,6 @@
             }
         });
 
-        // Clear overlay instantly when user interacts with input
         const clearOverlayOnInteraction = () => {
             if (greetingOverlay.style.display !== 'none') {
                 if (typeWriterInterval) clearInterval(typeWriterInterval);
@@ -341,21 +330,52 @@
 
             const data = await response.json();
 
-            let botResponse = '';
+            let rawResponse = '';
             if (data.conceptDescription) {
-                botResponse = data.conceptDescription;
+                rawResponse = data.conceptDescription;
             } else if (data.response) {
-                botResponse = typeof data.response === 'string' ? data.response : data.response.response;
+                rawResponse = typeof data.response === 'string' ? data.response : data.response.response;
             } else if (data.text) {
-                botResponse = data.text;
+                rawResponse = data.text;
             } else if (data.error) {
-                botResponse = `Error: ${data.error}`;
+                rawResponse = `Error: ${data.error}`;
             } else {
-                botResponse = JSON.stringify(data);
+                rawResponse = JSON.stringify(data);
             }
 
-            appendMessageToHistory('redeye', botResponse, historyArea);
-            chatMessages.push({ role: 'assistant', content: botResponse });
+            // ===== REAL-TIME NAVIGATION & LINK PARSING =====
+            let navTarget = null;
+            let openTarget = null;
+
+            // Check for [NAVIGATE: url] tag
+            const navMatch = rawResponse.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
+            if (navMatch) {
+                navTarget = navMatch[1].trim();
+                rawResponse = rawResponse.replace(navMatch[0], '').trim();
+            }
+
+            // Check for [OPEN: url] tag
+            const openMatch = rawResponse.match(/\[OPEN:\s*([^\]]+)\]/i);
+            if (openMatch) {
+                openTarget = openMatch[1].trim();
+                rawResponse = rawResponse.replace(openMatch[0], '').trim();
+            }
+
+            // Display clean message to user
+            appendMessageToHistory('redeye', rawResponse, historyArea);
+            chatMessages.push({ role: 'assistant', content: rawResponse });
+
+            // Execute navigation after short reading delay
+            if (navTarget) {
+                setTimeout(() => {
+                    window.location.href = navTarget;
+                }, 1200); // 1.2s delay to let visitor read message
+            } else if (openTarget) {
+                setTimeout(() => {
+                    window.open(openTarget, '_blank');
+                }, 800);
+            }
+
         } catch (err) {
             appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
         } finally {
