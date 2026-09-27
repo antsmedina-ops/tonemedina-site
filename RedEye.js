@@ -24,7 +24,7 @@
 
   // ===== 1. CORE BLACK HOLE BODY & GLOW =====
   function createBotUi() {
-    function createBotUi () {
+    
     // Load VT323 WOPR mainframe font dynamically
     if (!document.getElementById('wopr-font')) {
         const fontLink = document.createElement('link');
@@ -38,10 +38,9 @@
     
     // Check if device is mobile width
     const isMobile = window.innerWidth <= 768;
-    botDiv.id = 'redeye-bot';
     
-    // Check if device is mobile width
-    const isMobile = window.innerWidth <= 768;
+    
+    
 
     botDiv.style.cssText = `
       position: fixed;
