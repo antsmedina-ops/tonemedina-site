@@ -84,104 +84,72 @@
         typeWriter(greetingOverlay, greetingText, 70);
     }
 
-    // ===== 1. CORE BLACK HOLE BODY & GLOW & UI =====
-    function createBotUi() {
-        injectCursorStyle();
+  // ===== 3. CHAT INTERACTION LOGIC =====
+let leaveTimer = null;
 
-        if (!document.getElementById('wopr-font')) {
-            const fontLink = document.createElement('link');
-            fontLink.id = 'wopr-font';
-            fontLink.rel = 'stylesheet';
-            fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
-            document.head.appendChild(fontLink);
-        }
+function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn) {
+  const isMobile = window.innerWidth <= 768;
 
-        botDiv.id = 'redeye-bot';
-        const isMobile = window.innerWidth <= 768;
+  const toggleChat = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (leaveTimer) clearTimeout(leaveTimer);
 
-        botDiv.style.cssText = `
-            position: fixed;
-            ${isMobile ? 'bottom: 25px; right: 25px;' : 'top: 0; left: 0;'}
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 3px solid #8B0000;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 999999;
-            pointer-events: auto;
-            box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
-            transition: box-shadow 0.3s ease, transform 0.05s linear;
-            will-change: transform;
-        `;
-        botDiv.title = '¡Ojo!';
+    const isOpening = chatWindowDiv.style.display !== 'flex';
+    chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
+    isBotMuted = isOpening;
 
-        chatWindowDiv.id = 'redeye-chat-window';
-        chatWindowDiv.style.cssText = `
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: calc(100vw - 40px);
-            max-width: 340px;
-            height: 380px;
-            max-height: 65vh;
-            background: rgba(10, 10, 10, 0.95);
-            color: #fff;
-            border: 1px solid rgba(139, 0, 0, 0.5);
-            border-radius: 12px;
-            display: none;
-            z-index: 1000000;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.85);
-            padding: 1rem;
-            flex-direction: column;
-            font-family: 'VT323', 'Courier New', monospace;
-            font-size: 1.05rem;
-            letter-spacing: 0.05em;
-            box-sizing: border-box;
-        `;
-
-        closeChatBtn.innerHTML = '✕';
-        closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa; font-size: 16px; padding: 5px;';
-        chatWindowDiv.appendChild(closeChatBtn);
-
-        const chatHistoryDiv = document.createElement('div');
-        chatHistoryDiv.id = 'redeye-history';
-        chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
-        chatWindowDiv.appendChild(chatHistoryDiv);
-
-        botInputDiv.id = 'redeye-input-container';
-        botInputDiv.style.cssText = 'position: relative; width: 100%; height: 60px;';
-
-        const greetingOverlay = document.createElement('div');
-        greetingOverlay.id = 'redeye-greeting-overlay';
-        greetingOverlay.style.cssText = `
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            color: #aaa;
-            font-family: 'VT323', monospace;
-            font-size: 0.95rem;
-            letter-spacing: 0.05em;
-            pointer-events: none;
-            white-space: pre-wrap;
-            z-index: 2;
-        `;
-
-        const inputArea = document.createElement('textarea');
-        inputArea.id = 'redeye-textarea';
-        inputArea.style.cssText = 'width: 100%; height: 100%; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px; resize: none; font-family: inherit; font-size: 0.95rem; display: block; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 1;';
-        inputArea.placeholder = '';
-
-        botInputDiv.appendChild(inputArea);
-        botInputDiv.appendChild(greetingOverlay);
-        chatWindowDiv.appendChild(botInputDiv);
-
-        document.body.appendChild(botDiv);
-        document.body.appendChild(chatWindowDiv);
-
-        addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay);
+    if (isOpening) {
+      triggerGreeting(greetingOverlay, inputArea);
     }
+  };
 
+  botDiv.addEventListener('touchstart', toggleChat, { passive: false });
+  botDiv.addEventListener('click', (e) => {
+    if (!('ontouchstart' in window)) toggleChat(e);
+  });
+
+  closeChatBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (leaveTimer) clearTimeout(leaveTimer);
+    chatWindowDiv.style.display = 'none';
+    isBotMuted = false;
+  });
+
+  chatWindowDiv.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+  chatWindowDiv.addEventListener('click', (e) => e.stopPropagation());
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (leaveTimer) clearTimeout(leaveTimer);
+    sendInputToWorker(inputArea, historyArea);
+  };
+
+  sendBtn.addEventListener('click', handleSend);
+
+  inputArea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(e);
+    }
+  });
+
+  const clearOverlayOnInteraction = () => {
+    if (greetingOverlay.style.display !== 'none') {
+      if (typeWriterInterval) clearInterval(typeWriterInterval);
+      if (placeholderTimer) clearTimeout(placeholderTimer);
+      greetingOverlay.style.transition = 'opacity 0.2s ease';
+      greetingOverlay.style.opacity = '0';
+      setTimeout(() => {
+        greetingOverlay.style.display = 'none';
+        inputArea.placeholder = "it's ok, talk to me";
+      }, 200);
+    }
+  };
+
+  inputArea.addEventListener('focus', clearOverlayOnInteraction);
+  inputArea.addEventListener('touchstart', clearOverlayOnInteraction, { passive: true });
+}
     // ===== 2. MOUSE TRACKING =====
     function trackMouse(e) {
         if (isBotMuted || window.innerWidth <= 768) return;
