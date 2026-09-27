@@ -333,46 +333,44 @@
   }
 
   // ===== 5. INTERACTION & TOUCH EVENT LISTENERS =====
-  let leaveTimer = null;
+let leaveTimer = null;
 
-  function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn) {
-    const toggleChat = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      if (leaveTimer) clearTimeout(leaveTimer);
+function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn) {
+  const toggleChat = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (leaveTimer) clearTimeout(leaveTimer);
+    const isOpening = chatWindowDiv.style.display !== 'flex';
+    chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
+    isBotMuted = isOpening;
 
-      const isOpening = chatWindowDiv.style.display !== 'flex';
-      chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
-      isBotMuted = isOpening;
+    if (isOpening) {
+      triggerGreeting(greetingOverlay, inputArea);
+    }
+  };
 
-      if (isOpening) {
-        triggerGreeting(greetingOverlay, inputArea);
-      }
-    };
+  let touchMoved = false;
+  botDiv.addEventListener('touchstart', () => {
+    touchMoved = false;
+  }, { passive: true });
 
-    let touchMoved = false;
+  botDiv.addEventListener('touchmove', () => {
+    touchMoved = true;
+  }, { passive: true });
 
-    botDiv.addEventListener('touchstart', () => {
-      touchMoved = false;
-    }, { passive: true });
+  botDiv.addEventListener('touchend', (e) => {
+    if (!touchMoved) {
+      toggleChat(e);
+    }
+  });
 
-    botDiv.addEventListener('touchmove', () => {
-      touchMoved = true;
-    }, { passive: true });
-
-    botDiv.addEventListener('touchend', (e) => {
-      if (!touchMoved) {
-        toggleChat(e);
-      }
-    });
-
-    botDiv.addEventListener('click', (e) => {
-      if (!('ontouchstart' in window)) {
-        toggleChat(e);
-      }
-    });
+  botDiv.addEventListener('click', (e) => {
+    if (!('ontouchstart' in window)) {
+      toggleChat(e);
+    }
+  });
 
     closeChatBtn.addEventListener('click', (e) => {
       e.stopPropagation();
