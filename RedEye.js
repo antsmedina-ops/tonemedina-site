@@ -1,7 +1,7 @@
 /* ===== TONE MEDINA'S REDEYE / ¡OJO! AI COMPANION ===== */
 
 (function () {
-  const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
+  const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev';
   let chatMessages = [];
 
   const botDiv = document.createElement('div');
