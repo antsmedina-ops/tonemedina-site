@@ -46,13 +46,19 @@
         vertical-align: middle;
         animation: redeyeBlink 0.8s infinite;
       }
-      .redeye-mobile-idle {
-        animation: redeyePulse 2.5s infinite ease-in-out;
+     .redeye-mobile-idle {
+      animation: redeyePulse 3s infinite ease-in-out;
+    }
+    @keyframes redeyePulse {
+      0%, 100% {
+        box-shadow: 0 0 12px 3px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(139, 0, 0, 0.8);
+        transform: scale(1);
       }
-      @keyframes redeyePulse {
-        0%, 100% { box-shadow: 0 0 15px 5px rgba(139, 0, 0, 0.6); transform: scale(1); }
-        50% { box-shadow: 0 0 25px 12px rgba(139, 0, 0, 0.9); transform: scale(1.05); }
+      50% {
+        box-shadow: 0 0 22px 8px rgba(255, 0, 0, 0.85), inset 0 0 12px rgba(255, 50, 50, 0.9);
+        transform: scale(1.06);
       }
+    }
       .redeye-mobile-label {
         position: absolute;
         bottom: -22px;
