@@ -295,11 +295,14 @@
       const response = await fetch(BOT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: text })
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: text }],
+          pageContext: document.body.innerText.substring(0, 1500)
+        })
       });
 
       const data = await response.json();
-      botMsg.textContent = `¡Ojo!: ${data.reply || data.response || "No response received."}`;
+      botMsg.textContent = `¡Ojo!: ${data.response || data.reply || "No response received."}`;
     } catch (err) {
       botMsg.textContent = '¡Ojo!: Connection lost... try again.';
     }
