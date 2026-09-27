@@ -1,286 +1,280 @@
 /* ===== TONE MEDINA'S REDEYE / ¡OJO! AI COMPANION ===== */
 (function() {
-  const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
+    const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev/';
+    let chatMessages = [];
+    const botDiv = document.createElement('div');
+    const chatWindowDiv = document.createElement('div');
+    const botInputDiv = document.createElement('div');
+    const closeChatBtn = document.createElement('div');
+    let isBotMuted = false;
 
-  let chatMessages = [];
-  const botDiv = document.createElement('div');
-  const chatWindowDiv = document.createElement('div');
-  const botInputDiv = document.createElement('div');
-  const closeChatBtn = document.createElement('div');
-  let isBotMuted = false;
+    // Mouse tracking targets & state variables
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
 
-  // Mouse tracking targets & state variables
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
-  let currentX = targetX;
-  let currentY = targetY;
+    // Movement Config
+    const LERP_SPEED = 0.015;
+    const BASE_OFFSET = 400; // Hovering distance
+    let time = 0;
+    let effectiveOffset = BASE_OFFSET;
 
-  // Movement Config
-  const LERP_SPEED = 0.015;
-  const BASE_OFFSET = 400; // Hovering distance
+    // ===== 1. CORE BLACK HOLE BODY & GLOW =====
+    function createBotUi() {
+        // Load VT323 WOPR mainframe font dynamically
+        if (!document.getElementById('wopr-font')) {
+            const fontLink = document.createElement('link');
+            fontLink.id = 'wopr-font';
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
+            document.head.appendChild(fontLink);
+        }
 
-  let time = 0;
-  let effectiveOffset = BASE_OFFSET;
+        botDiv.id = 'redeye-bot';
 
-  // ===== 1. CORE BLACK HOLE BODY & GLOW =====
-  function createBotUi() {
-    
-    // Load VT323 WOPR mainframe font dynamically
-    if (!document.getElementById('wopr-font')) {
-        const fontLink = document.createElement('link');
-        fontLink.id = 'wopr-font';
-        fontLink.rel = 'stylesheet';
-        fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
-        document.head.appendChild(fontLink);
+        // Check if device is mobile width
+        const isMobile = window.innerWidth <= 768;
+
+        botDiv.style.cssText = `
+            position: fixed;
+            ${isMobile ? 'bottom: 25px; right: 25px;' : 'top: 0; left: 0;'}
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #8B0000;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999999;
+            pointer-events: auto;
+            box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
+            transition: box-shadow 0.3s ease, transform 0.05s linear;
+            will-change: transform;
+        `;
+        botDiv.title = '¡Ojo!';
+
+        // Responsive Chat Window Container
+        chatWindowDiv.id = 'redeye-chat-window';
+        chatWindowDiv.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: calc(100vw - 40px);
+            max-width: 340px;
+            height: 380px;
+            max-height: 65vh;
+            background: rgba(10, 10, 10, 0.95);
+            color: #fff;
+            border: 1px solid rgba(139, 0, 0, 0.5);
+            border-radius: 12px;
+            display: none;
+            z-index: 1000000;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.85);
+            padding: 1rem;
+            flex-direction: column;
+            font-family: 'VT323', 'Courier New', monospace;
+            font-size: 1.05rem;
+            letter-spacing: 0.05em;
+            box-sizing: border-box;
+        `;
+
+        closeChatBtn.innerHTML = '✕';
+        closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa; font-size: 16px; padding: 5px;';
+        chatWindowDiv.appendChild(closeChatBtn);
+
+        // Chat History Area
+        const chatHistoryDiv = document.createElement('div');
+        chatHistoryDiv.id = 'redeye-history';
+        chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
+        chatWindowDiv.appendChild(chatHistoryDiv);
+
+        // Input Area
+        botInputDiv.id = 'redeye-input';
+        const inputArea = document.createElement('textarea');
+        inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none; font-family: inherit; font-size: 0.95rem;';
+
+        // Dynamic organic placeholder sequence
+        inputArea.placeholder = "I'm watching you...";
+        setTimeout(() => {
+            inputArea.placeholder = ""; // Clear pause
+            setTimeout(() => {
+                inputArea.placeholder = "it's ok, talk to me";
+            }, 1200); // 1.2s human breath pause
+        }, 5000); // Holds "I'm watching you..." for 5.0s
+
+        botInputDiv.appendChild(inputArea);
+        chatWindowDiv.appendChild(botInputDiv);
+
+        document.body.appendChild(botDiv);
+        document.body.appendChild(chatWindowDiv);
+
+        addRedeyeListeners(chatHistoryDiv, inputArea);
     }
 
-    botDiv.id = 'redeye-bot';
-    
-    // Check if device is mobile width
-    const isMobile = window.innerWidth <= 768;
-    
-    
-    
+    // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
+    function trackMouse(e) {
+        if (isBotMuted || window.innerWidth <= 768) return; // Skip tracking on mobile
+        const dx = e.clientX - currentX;
+        const dy = e.clientY - currentY;
+        const distanceToCursor = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+        const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
 
-    botDiv.style.cssText = `
-      position: fixed;
-      ${isMobile ? 'bottom: 25px; right: 25px;' : 'top: 0; left: 0;'}
-      width: 44px;
-      height: 44px;
-      background: rgba(0, 0, 0, 0.95);
-      border: 3px solid #8B0000;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999999;
-      pointer-events: auto;
-      box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
-      transition: box-shadow 0.3s ease, transform 0.05s linear;
-      will-change: transform;
-    `;
-    
-    botDiv.title = '¡Ojo!';
+        // Curiosity detection: collapse offset toward 30px when cursor approaches
+        if (distanceToCursor < 450) {
+            effectiveOffset += (30 - effectiveOffset) * 0.08;
+        } else {
+            effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
+        }
 
-    // Responsive Chat Window Container
-    chatWindowDiv.id = 'redeye-chat-window';
-    chatWindowDiv.style.cssText = `
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: calc(100vw - 40px);
-      max-width: 340px;
-      height: 380px;
-      max-height: 65vh;
-      background: rgba(10, 10, 10, 0.95);
-      color: #fff;
-      border: 1px solid rgba(139, 0, 0, 0.5);
-      border-radius: 12px;
-      display: none;
-      z-index: 1000000;
-      box-shadow: 0 5px 30px rgba(0,0,0,0.85);
-      padding: 1rem;
-      flex-direction: column;
-      font-family: 'SFMono-Regular', Consolas, monospace;
-      box-sizing: border-box;
-    `;
-    
-    closeChatBtn.innerHTML = '✕';
-    closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; cursor: pointer; color: #aaa; font-size: 16px; padding: 5px;';
-    chatWindowDiv.appendChild(closeChatBtn);
+        const wanderX = Math.cos(time * 0.015) * 15;
+        const wanderY = Math.sin(time * 0.025) * 15;
 
-    // Chat History Area
-    const chatHistoryDiv = document.createElement('div');
-    chatHistoryDiv.id = 'redeye-history';
-    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
-    chatWindowDiv.appendChild(chatHistoryDiv);
-
-    // Input Area
-    botInputDiv.id = 'redeye-input';
-    const inputArea = document.createElement('textarea');
-    inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none;';
-    
-    // Dynamic organic placeholder sequence
-    inputArea.placeholder = "I'm watching you...";
-    setTimeout(() => {
-      inputArea.placeholder = ""; // Clear pause
-      setTimeout(() => {
-        inputArea.placeholder = "it's ok, talk to me";
-      }, 1200); // 1.2s human breath pause
-    }, 5000); // Holds "I'm watching you..." for 5.0s
-
-    botInputDiv.appendChild(inputArea);
-    chatWindowDiv.appendChild(botInputDiv);
-
-    document.body.appendChild(botDiv);
-    document.body.appendChild(chatWindowDiv);
-    
-    addRedeyeListeners(chatHistoryDiv, inputArea);
-  }
-
-  // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
-  function trackMouse(e) {
-    if (isBotMuted || window.innerWidth <= 768) return; // Skip tracking on mobile
-
-    const dx = e.clientX - currentX;
-    const dy = e.clientY - currentY;
-    const distanceToCursor = Math.hypot(dx, dy);
-    const angle = Math.atan2(dy, dx);
-
-    const breathingOffset = BASE_OFFSET + Math.sin(time * 0.02) * 25;
-
-    // Curiosity detection: collapse offset toward 30px when cursor approaches
-    if (distanceToCursor < 450) {
-      effectiveOffset += (30 - effectiveOffset) * 0.08;
-    } else {
-      effectiveOffset += (breathingOffset - effectiveOffset) * 0.03;
+        targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
+        targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
     }
 
-    const wanderX = Math.cos(time * 0.015) * 15;
-    const wanderY = Math.sin(time * 0.025) * 15;
-
-    targetX = e.clientX - Math.cos(angle) * effectiveOffset + wanderX - 20;
-    targetY = e.clientY - Math.sin(angle) * effectiveOffset + wanderY - 20;
-  }
-
-  function animateLoop() {
-    time++;
-    if (!isBotMuted && botDiv && window.innerWidth > 768) {
-      const currentLerp = effectiveOffset < 100 ? 0.008 : LERP_SPEED;
-      currentX += (targetX - currentX) * currentLerp;
-      currentY += (targetY - currentY) * currentLerp;
-      botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    function animateLoop() {
+        time++;
+        if (!isBotMuted && botDiv && window.innerWidth > 768) {
+            const currentLerp = effectiveOffset < 100 ? 0.008 : LERP_SPEED;
+            currentX += (targetX - currentX) * currentLerp;
+            currentY += (targetY - currentY) * currentLerp;
+            botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        }
+        requestAnimationFrame(animateLoop);
     }
-    requestAnimationFrame(animateLoop);
-  }
 
-  // ===== 3. CHAT INTERACTION LOGIC =====
-  let leaveTimer = null;
+    // ===== 3. CHAT INTERACTION LOGIC =====
+    let leaveTimer = null;
 
-  function addRedeyeListeners(historyArea, inputArea) {
-    // Open/toggle chat when clicking or tapping the bot icon
-    const toggleChat = (e) => {
-      e.stopPropagation();
-      if (leaveTimer) clearTimeout(leaveTimer);
-      const isOpening = chatWindowDiv.style.display !== 'flex';
-      chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
-      isBotMuted = isOpening;
-    };
+    function addRedeyeListeners(historyArea, inputArea) {
+        const toggleChat = (e) => {
+            e.stopPropagation();
+            if (leaveTimer) clearTimeout(leaveTimer);
+            const isOpening = chatWindowDiv.style.display !== 'flex';
+            chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
+            isBotMuted = isOpening;
+        };
 
-    botDiv.addEventListener('click', toggleChat);
-    botDiv.addEventListener('touchstart', toggleChat, { passive: true });
+        botDiv.addEventListener('click', toggleChat);
+        botDiv.addEventListener('touchstart', toggleChat, { passive: true });
 
-    // Close button
-    closeChatBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (leaveTimer) clearTimeout(leaveTimer);
-      chatWindowDiv.style.display = 'none';
-      isBotMuted = false;
+        // Close button
+        closeChatBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (leaveTimer) clearTimeout(leaveTimer);
+            chatWindowDiv.style.display = 'none';
+            isBotMuted = false;
+        });
+
+        // Prevent clicks inside chat window from bubbling up
+        chatWindowDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Mouse leaves the chat window -> Start 4-second delay before closing
+        chatWindowDiv.addEventListener('mouseleave', () => {
+            leaveTimer = setTimeout(() => {
+                chatWindowDiv.style.display = 'none';
+                isBotMuted = false;
+            }, 4000);
+        });
+
+        // Mouse re-enters the chat window -> Cancel the closing timer
+        chatWindowDiv.addEventListener('mouseenter', () => {
+            if (leaveTimer) clearTimeout(leaveTimer);
+        });
+
+        // Click anywhere outside on document to close immediately
+        document.addEventListener('click', () => {
+            if (chatWindowDiv.style.display === 'flex') {
+                if (leaveTimer) clearTimeout(leaveTimer);
+                chatWindowDiv.style.display = 'none';
+                isBotMuted = false;
+            }
+        });
+
+        inputArea.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (leaveTimer) clearTimeout(leaveTimer);
+                sendInputToWorker(inputArea, historyArea);
+            }
+        });
+    }
+
+    function appendMessageToHistory(sender, text, historyArea) {
+        const msgDiv = document.createElement('div');
+        const isUser = sender === 'user';
+        const displayName = isUser ? 'You' : '¡Ojo!';
+
+        // Light gray for ¡Ojo! text, silver gray for user prompt
+        const userColor = '#aaa';
+        const botColor = '#e0e0e0';
+
+        // Set response font size to 1.05rem
+        msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? userColor : botColor}; font-size: 1.05rem; line-height: 1.35;`;
+
+        // ¡Ojo! label is highlighted in red (#ff3333)
+        msgDiv.innerHTML = `<strong style="color: ${isUser ? '#888' : '#ff3333'};">${displayName}:</strong> ${text}`;
+
+        historyArea.appendChild(msgDiv);
+        historyArea.scrollTop = historyArea.scrollHeight;
+    }
+
+    async function sendInputToWorker(inputArea, historyArea) {
+        const userInput = inputArea.value.trim();
+        if (!userInput) return;
+
+        inputArea.value = '';
+        inputArea.disabled = true;
+
+        appendMessageToHistory('user', userInput, historyArea);
+        chatMessages.push({ role: 'user', content: userInput });
+
+        // Scrape visible page text so ¡Ojo! knows what the user is looking at
+        const pageContext = document.body.innerText.substring(0, 3000);
+
+        try {
+            const response = await fetch(BOT_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: chatMessages,
+                    pageContext: pageContext
+                })
+            });
+
+            const data = await response.json();
+
+            let botResponse = '';
+            if (data.conceptDescription) {
+                botResponse = data.conceptDescription;
+            } else if (data.response) {
+                botResponse = typeof data.response === 'string' ? data.response : data.response.response;
+            } else if (data.text) {
+                botResponse = data.text;
+            } else if (data.error) {
+                botResponse = `Error: ${data.error}`;
+            } else {
+                botResponse = JSON.stringify(data);
+            }
+
+            appendMessageToHistory('redeye', botResponse, historyArea);
+            chatMessages.push({ role: 'assistant', content: botResponse });
+        } catch (err) {
+            appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
+        } finally {
+            inputArea.disabled = false;
+            inputArea.focus();
+        }
+    }
+
+    // Initialize once DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        createBotUi();
+        document.addEventListener('mousemove', trackMouse);
+        requestAnimationFrame(animateLoop);
     });
-
-    // Prevent clicks inside chat window from bubbling up
-    chatWindowDiv.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-
-    // Mouse leaves the chat window -> Start 4-second delay before closing
-    chatWindowDiv.addEventListener('mouseleave', () => {
-      leaveTimer = setTimeout(() => {
-        chatWindowDiv.style.display = 'none';
-        isBotMuted = false;
-      }, 4000);
-    });
-
-    // Mouse re-enters the chat window -> Cancel the closing timer
-    chatWindowDiv.addEventListener('mouseenter', () => {
-      if (leaveTimer) clearTimeout(leaveTimer);
-    });
-
-    // Click anywhere outside on document to close immediately
-    document.addEventListener('click', () => {
-      if (chatWindowDiv.style.display === 'flex') {
-        if (leaveTimer) clearTimeout(leaveTimer);
-        chatWindowDiv.style.display = 'none';
-        isBotMuted = false;
-      }
-    });
-
-    inputArea.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        if (leaveTimer) clearTimeout(leaveTimer);
-        sendInputToWorker(inputArea, historyArea);
-      }
-    });
-  }
-
- function appendMessageToHistory(sender, text, historyArea) {
-    const msgDiv = document.createElement('div');
-    const isUser = sender === 'user';
-    const displayName = isUser ? 'You' : '¡Ojo!';
-    
-    // Light gray for ¡Ojo! (high contrast in direct sunlight on mobile & desktop)
-    // Silver gray for user prompt
-    const userColor = '#aaa'; 
-    const botColor = '#e0e0e0';
-
-    msgDiv.style.cssText = `margin-bottom: 0.75rem; color: ${isUser ? userColor : botColor}; font-size: 1.25rem; line-height: 1.3;`;
-    msgDiv.innerHTML = `<strong style="color: ${isUser ? '#888' : '#fff'};">${displayName}:</strong> ${text}`;
-    
-    historyArea.appendChild(msgDiv);
-    historyArea.scrollTop = historyArea.scrollHeight;
-}
-
- async function sendInputToWorker(inputArea, historyArea) {
-  const userInput = inputArea.value.trim();
-  if (!userInput) return;
-
-  inputArea.value = '';
-  inputArea.disabled = true;
-
-  appendMessageToHistory('user', userInput, historyArea);
-  chatMessages.push({ role: 'user', content: userInput });
-
-  // Scrape visible page text so ¡Ojo! knows what the user is looking at
-  const pageContext = document.body.innerText.substring(0, 3000);
-
-  try {
-    const response = await fetch(BOT_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        messages: chatMessages,
-        pageContext: pageContext 
-      })
-    });
-
-    const data = await response.json();
-let botResponse = '';
-if (data.conceptDescription) {
-    botResponse = data.conceptDescription;
-} else if (data.response) {
-    botResponse = typeof data.response === 'string' ? data.response : data.response.response;
-} else if (data.text) {
-    botResponse = data.text;
-} else if (data.error) {
-    botResponse = `Error: ${data.error}`;
-} else {
-    botResponse = JSON.stringify(data);
-}
-
-    appendMessageToHistory('redeye', botResponse, historyArea);
-    chatMessages.push({ role: 'assistant', content: botResponse });
-  } catch (err) {
-    appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
-  } finally {
-    inputArea.disabled = false;
-    inputArea.focus();
-  }
-}
-
-  // Initialize once DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    createBotUi();
-    document.addEventListener('mousemove', trackMouse);
-    requestAnimationFrame(animateLoop);
-  });
-
 })();
