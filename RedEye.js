@@ -93,14 +93,27 @@
         const inputArea = document.createElement('textarea');
         inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none; font-family: inherit; font-size: 0.95rem;';
 
-        // Dynamic organic placeholder sequence
-        inputArea.placeholder = "I'm watching you...";
+// Page-aware dynamic greetings based on active URL
+        const path = window.location.pathname.toLowerCase();
+        let defaultPlaceholder = "I'm watching you...";
+
+        if (path.includes('works')) {
+            defaultPlaceholder = "looking at the works?";
+        } else if (path.includes('bio')) {
+            defaultPlaceholder = "curious about Tone?";
+        } else if (path.includes('news')) {
+            defaultPlaceholder = "checking what's next?";
+        } else if (path.includes('contact')) {
+            defaultPlaceholder = "ready to reach out?";
+        }
+
+        inputArea.placeholder = defaultPlaceholder;
         setTimeout(() => {
-            inputArea.placeholder = ""; // Clear pause
+            inputArea.placeholder = "";
             setTimeout(() => {
                 inputArea.placeholder = "it's ok, talk to me";
-            }, 1200); // 1.2s human breath pause
-        }, 5000); // Holds "I'm watching you..." for 5.0s
+            }, 1200);
+        }, 4500);
 
         botInputDiv.appendChild(inputArea);
         chatWindowDiv.appendChild(botInputDiv);
