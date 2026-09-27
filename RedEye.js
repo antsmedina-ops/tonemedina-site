@@ -308,7 +308,24 @@
       });
 
       const data = await response.json();
-      botMsg.textContent = `¡Ojo!: ${data.response || data.reply || "No response received."}`;
+      let replyText = data.response || data.reply || "No response received.";
+
+      // 1. Check if the AI wants to navigate to a page on your site
+      const navMatch = replyText.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
+      if (navMatch) {
+        replyText = replyText.replace(navMatch[0], '').trim(); // Remove tag from chat
+        setTimeout(() => window.location.href = navMatch[1].trim(), 1200); // Change page
+      }
+
+      // 2. Check if the AI wants to open an external link in a new tab
+      const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
+      if (openMatch) {
+        replyText = replyText.replace(openMatch[0], '').trim(); // Remove tag from chat
+        setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
+      }
+
+      // Display the cleaned-up text
+      botMsg.textContent = `¡Ojo!: ${replyText}`;
     } catch (err) {
       botMsg.textContent = '¡Ojo!: Connection lost... try again.';
     }
