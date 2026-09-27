@@ -324,6 +324,19 @@
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
       }
 
+      // 3. Check if the AI wants to open the Music overlay
+      const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
+      if (actionMatch) {
+        const action = actionMatch[1].trim().toLowerCase();
+        replyText = replyText.replace(actionMatch[0], '').trim();
+        if (action === 'music') {
+          setTimeout(() => {
+            const musicBtn = Array.from(document.querySelectorAll('a, button')).find(el => el.textContent.trim().toLowerCase() === 'music');
+            if (musicBtn) musicBtn.click();
+          }, 1200);
+        }
+      }
+
       // Display the cleaned-up text
       botMsg.textContent = `¡Ojo!: ${replyText}`;
     } catch (err) {
