@@ -20,7 +20,65 @@
     let time = 0;
     let effectiveOffset = BASE_OFFSET;
 
-    // ===== 1. CORE BLACK HOLE BODY & GLOW =====
+    // State & Timer Variables for Typing Animation
+    let typeWriterInterval = null;
+    let placeholderTimer = null;
+
+    // ===== Helper: Typing Animation =====
+    function typeWriter(element, text, speed, callback) {
+        if (typeWriterInterval) clearInterval(typeWriterInterval);
+        let charIndex = 0;
+        element.innerHTML = ''; // Clear before starting
+        typeWriterInterval = setInterval(() => {
+            if (charIndex < text.length) {
+                element.innerHTML += text.charAt(charIndex);
+                charIndex++;
+            } else {
+                clearInterval(typeWriterInterval);
+                if (callback) callback(); // Run transition after finish
+            }
+        }, speed); // `speed` in ms per char
+    }
+
+    // ===== Helper: Page-Specific Greeting Transition =====
+    function triggerGreeting(greetingOverlay, inputArea) {
+        // 1. Clear all animation timers immediately
+        if (placeholderTimer) clearTimeout(placeholderTimer);
+        if (typeWriterInterval) clearInterval(typeWriterInterval);
+
+        // 2. Reset visual elements
+        greetingOverlay.innerHTML = '';
+        greetingOverlay.style.transition = 'none'; // remove fade transition
+        greetingOverlay.style.opacity = '1';
+        greetingOverlay.style.display = 'block'; // Show overlay
+        inputArea.placeholder = ''; // Clear textarea placeholder while typing
+
+        // 3. Get the dynamic greeting
+        const path = window.location.pathname.toLowerCase();
+        let greetingText = "I'm watching you...";
+        if (path.includes('works')) greetingText = "looking at the works?";
+        else if (path.includes('bio')) greetingText = "curious about Tone?";
+        else if (path.includes('news')) greetingText = "checking what's next?";
+        else if (path.includes('contact')) greetingText = "ready to reach out?";
+
+        // 4. Start typing animation on the overlay
+        typeWriter(greetingOverlay, greetingText, 100, () => { // callback runs after finish
+            // 5. Short pause after typing finishes, then initiate transition
+            placeholderTimer = setTimeout(() => {
+                // optional: fade out overlay for smoothness
+                greetingOverlay.style.transition = 'opacity 0.5s ease';
+                greetingOverlay.style.opacity = '0';
+
+                // 6. Set final textarea placeholder and completely hide overlay
+                placeholderTimer = setTimeout(() => {
+                    greetingOverlay.style.display = 'none'; // remove from display
+                    inputArea.placeholder = "it's ok, talk to me"; // reveal main placeholder
+                }, 500); // must match fade transition duration
+            }, 1200); // 1.2s human breath pause
+        });
+    }
+
+    // ===== 1. CORE BLACK HOLE BODY & GLOW & UI =====
     function createBotUi() {
         // Load VT323 WOPR mainframe font dynamically
         if (!document.getElementById('wopr-font')) {
@@ -88,40 +146,42 @@
         chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; padding-right: 5px;';
         chatWindowDiv.appendChild(chatHistoryDiv);
 
-        // Input Area
-        botInputDiv.id = 'redeye-input';
+        // Input Area Container for absolute positioning
+        botInputDiv.id = 'redeye-input-container';
+        botInputDiv.style.cssText = 'position: relative; width: 100%; height: 60px;';
+
+        // 1. New: Absolutely Positioned Greeting Overlay Div
+        const greetingOverlay = document.createElement('div');
+        greetingOverlay.id = 'redeye-greeting-overlay';
+        // Matches inputArea typography and padding, positioned at TOP-LEFT
+        greetingOverlay.style.cssText = `
+            position: absolute;
+            top: 6px; /* Match input padding to align with text start */
+            left: 6px;
+            color: #aaa; /* classic terminal silver-gray */
+            font-family: 'VT323', monospace;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            pointer-events: none; /* Let clicks pass through to the textarea */
+            white-space: pre-wrap; /* handle potential newlines */
+            z-index: 2; /* ensure it is over the textarea */
+        `;
+
+        // 2. The standard textarea for user input
         const inputArea = document.createElement('textarea');
-        inputArea.style.cssText = 'width: 100%; height: 60px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 5px; resize: none; font-family: inherit; font-size: 0.95rem;';
-
-// Page-aware dynamic greetings based on active URL
-        const path = window.location.pathname.toLowerCase();
-        let defaultPlaceholder = "I'm watching you...";
-
-        if (path.includes('works')) {
-            defaultPlaceholder = "looking at the works?";
-        } else if (path.includes('bio')) {
-            defaultPlaceholder = "curious about Tone?";
-        } else if (path.includes('news')) {
-            defaultPlaceholder = "checking what's next?";
-        } else if (path.includes('contact')) {
-            defaultPlaceholder = "ready to reach out?";
-        }
-
-        inputArea.placeholder = defaultPlaceholder;
-        setTimeout(() => {
-            inputArea.placeholder = "";
-            setTimeout(() => {
-                inputArea.placeholder = "it's ok, talk to me";
-            }, 1200);
-        }, 4500);
+        inputArea.id = 'redeye-textarea';
+        // Base styles with NO placeholder and matching padding
+        inputArea.style.cssText = 'width: 100%; height: 100%; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px; resize: none; font-family: inherit; font-size: 0.95rem; display: block; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 1;';
+        inputArea.placeholder = ''; // start empty
 
         botInputDiv.appendChild(inputArea);
+        botInputDiv.appendChild(greetingOverlay); // overlay is conceptually "on top"
         chatWindowDiv.appendChild(botInputDiv);
 
         document.body.appendChild(botDiv);
         document.body.appendChild(chatWindowDiv);
 
-        addRedeyeListeners(chatHistoryDiv, inputArea);
+        addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay);
     }
 
     // ===== 2. MOUSE TRACKING WITH DYNAMIC NATURAL DISTANCE & CURIOSITY =====
@@ -161,13 +221,18 @@
     // ===== 3. CHAT INTERACTION LOGIC =====
     let leaveTimer = null;
 
-    function addRedeyeListeners(historyArea, inputArea) {
+    function addRedeyeListeners(historyArea, inputArea, greetingOverlay) {
         const toggleChat = (e) => {
             e.stopPropagation();
             if (leaveTimer) clearTimeout(leaveTimer);
             const isOpening = chatWindowDiv.style.display !== 'flex';
             chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
             isBotMuted = isOpening;
+
+            if (isOpening) {
+                // Re-trigger the page-aware typing animation on open
+                triggerGreeting(greetingOverlay, inputArea);
+            }
         };
 
         botDiv.addEventListener('click', toggleChat);
@@ -215,6 +280,22 @@
                 sendInputToWorker(inputArea, historyArea);
             }
         });
+
+        // 2. New: Listener to clear greeting overlay if user clicks to type
+        const clearOverlayOnInteraction = () => {
+            if (greetingOverlay.style.display !== 'none') {
+                // Halt typing and transition immediately
+                if (typeWriterInterval) clearInterval(typeWriterInterval);
+                if (placeholderTimer) clearTimeout(placeholderTimer);
+
+                // Hide overlay and reveal standard placeholder
+                greetingOverlay.style.display = 'none';
+                inputArea.placeholder = "it's ok, talk to me";
+            }
+        };
+
+        inputArea.addEventListener('focus', clearOverlayOnInteraction);
+        inputArea.addEventListener('click', clearOverlayOnInteraction);
     }
 
     function appendMessageToHistory(sender, text, historyArea) {
