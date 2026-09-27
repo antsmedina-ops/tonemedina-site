@@ -343,18 +343,20 @@
                 rawResponse = JSON.stringify(data);
             }
 
-            // ===== REAL-TIME NAVIGATION & LINK PARSING =====
+           // ===== REAL-TIME NAVIGATION & LINK PARSING =====
             let navTarget = null;
             let openTarget = null;
 
-            // Check for [NAVIGATE: url] tag
-            const navMatch = rawResponse.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
+            // 1. Check for standard [NAVIGATE: target] or paraphrased [Opening target in...]
+            const navMatch = rawResponse.match(/\[NAVIGATE:\s*([^\]]+)\]/i) || 
+                             rawResponse.match(/\[Opening\s+([a-zA-Z0-9_\-\.]+)/i);
             if (navMatch) {
                 navTarget = navMatch[1].trim();
-                rawResponse = rawResponse.replace(navMatch[0], '').trim();
+                // Clean tag out of visible response text
+                rawResponse = rawResponse.replace(/\[(NAVIGATE:|Opening)[^\]]+\]/gi, '').trim();
             }
 
-            // Check for [OPEN: url] tag
+            // 2. Check for external [OPEN: url]
             const openMatch = rawResponse.match(/\[OPEN:\s*([^\]]+)\]/i);
             if (openMatch) {
                 openTarget = openMatch[1].trim();
@@ -369,13 +371,13 @@
             if (navTarget) {
                 setTimeout(() => {
                     window.location.href = navTarget;
-                }, 1200); // 1.2s delay to let visitor read message
+                }, 1000);
             } else if (openTarget) {
                 setTimeout(() => {
                     window.open(openTarget, '_blank');
                 }, 800);
             }
-
+            
         } catch (err) {
             appendMessageToHistory('redeye', 'Sorry, I lost my connection.', historyArea);
         } finally {
