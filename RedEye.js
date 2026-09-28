@@ -260,7 +260,7 @@
 function initDesktopTracking() {
   let isHovered = false;
 
-  // Lock ¡Ojo! in place instantly when hovered
+  // Lock ¡Ojo! in place when mouse hovers over it
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
@@ -272,32 +272,30 @@ function initDesktopTracking() {
   function animate(timestamp) {
     if (window.innerWidth > 768) {
       if (!isHovered && chatWindowDiv.style.display !== 'flex') {
-        const time = timestamp * 0.0012;
+        const time = timestamp * 0.001;
 
-        // Calculate distance between mouse cursor and ¡Ojo!
+        // Distance between cursor and ¡Ojo!
         const dx = targetX - currentX;
         const dy = targetY - currentY;
         const dist = Math.hypot(dx, dy);
 
-        // Smooth transition factor: stays far away until cursor gets close
-        const approach = Math.min(1, Math.max(0, (dist - 50) / 200));
+        // LOCK IN PLACE: When cursor comes within 110px, ¡Ojo! freezes so you can click easily
+        if (dist > 110) {
+          // Gentle ambient drift
+          const driftX = Math.sin(time) * 10 + Math.cos(time * 0.7) * 5;
+          const driftY = Math.cos(time * 0.8) * 10 + Math.sin(time * 0.5) * 5;
 
-        // Gentle organic float wave
-        const driftX = (Math.sin(time) * 14 + Math.cos(time * 0.7) * 7) * approach;
-        const driftY = (Math.cos(time * 0.8) * 14 + Math.sin(time * 0.5) * 7) * approach;
+          // Fixed resting offset (90px right, 60px down)
+          const destX = targetX + 90 + driftX;
+          const destY = targetY + 60 + driftY;
 
-        // OFFSETS: 350px right, 280px down so ¡Ojo! hovers comfortably clear of cursor
-        const offsetX = (350 * approach) + driftX;
-        const offsetY = (280 * approach) + driftY;
+          // SLOW & FLOATY: Lowered speed to 0.02 for a slow, watchful lag
+          const lerpSpeed = 0.02;
+          currentX += (destX - currentX) * lerpSpeed;
+          currentY += (destY - currentY) * lerpSpeed;
 
-        const destX = targetX + offsetX;
-        const destY = targetY + offsetY;
-
-        const lerpSpeed = 0.045;
-        currentX += (destX - currentX) * lerpSpeed;
-        currentY += (destY - currentY) * lerpSpeed;
-
-        botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+          botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        }
       }
     }
     requestAnimationFrame(animate);
