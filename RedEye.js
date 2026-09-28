@@ -260,7 +260,7 @@
 function initDesktopTracking() {
   let isHovered = false;
 
-  // Freeze ¡Ojo! instantly when hover state changes so it's simple to click
+  // Lock ¡Ojo! in place instantly when hovered
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
@@ -272,30 +272,30 @@ function initDesktopTracking() {
   function animate(timestamp) {
     if (window.innerWidth > 768) {
       if (!isHovered && chatWindowDiv.style.display !== 'flex') {
-        const time = timestamp * 0.0015;
-        const driftX = Math.sin(time) * 10 + Math.cos(time * 0.7) * 5;
-        const driftY = Math.cos(time * 0.8) * 10 + Math.sin(time * 0.5) * 5;
+        const time = timestamp * 0.0012;
 
-        // Calculate distance between cursor and ¡Ojo!
+        // Calculate distance between mouse cursor and ¡Ojo!
         const dx = targetX - currentX;
         const dy = targetY - currentY;
         const dist = Math.hypot(dx, dy);
 
-        let destX, destY;
+        // Smooth transition factor: stays far away until cursor gets close
+        const approach = Math.min(1, Math.max(0, (dist - 50) / 200));
 
-        if (dist < 160) {
-          // APPROACHING: Remove offset so ¡Ojo! glides directly to meet your cursor
-          destX = targetX + (driftX * 0.2);
-          destY = targetY + (driftY * 0.2);
-        } else {
-          // FAR AWAY: Maintain a watchful trailing offset
-          destX = targetX + 60 + driftX;
-          destY = targetY + 40 + driftY;
-        }
+        // Gentle organic float wave
+        const driftX = (Math.sin(time) * 14 + Math.cos(time * 0.7) * 7) * approach;
+        const driftY = (Math.cos(time * 0.8) * 14 + Math.sin(time * 0.5) * 7) * approach;
 
-        const slowLerp = 0.035;
-        currentX += (destX - currentX) * slowLerp;
-        currentY += (destY - currentY) * slowLerp;
+        // DOUBLED OFFSETS: 120px right, 80px down so ¡Ojo! hovers comfortably clear of cursor
+        const offsetX = (120 * approach) + driftX;
+        const offsetY = (80 * approach) + driftY;
+
+        const destX = targetX + offsetX;
+        const destY = targetY + offsetY;
+
+        const lerpSpeed = 0.035;
+        currentX += (destX - currentX) * lerpSpeed;
+        currentY += (destY - currentY) * lerpSpeed;
 
         botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
       }
@@ -304,7 +304,6 @@ function initDesktopTracking() {
   }
   requestAnimationFrame(animate);
 }
-
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
