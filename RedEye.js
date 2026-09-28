@@ -260,7 +260,7 @@
 function initDesktopTracking() {
   let isHovered = false;
 
-  // Freeze ¡Ojo! when the cursor touches it so it's easy to click
+  // Freeze ¡Ojo! instantly when hover state changes so it's simple to click
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
@@ -271,27 +271,31 @@ function initDesktopTracking() {
 
   function animate(timestamp) {
     if (window.innerWidth > 768) {
-      // Only track if not hovering and chat isn't open
       if (!isHovered && chatWindowDiv.style.display !== 'flex') {
         const time = timestamp * 0.0015;
-        const driftX = Math.sin(time) * 12 + Math.cos(time * 0.7) * 6;
-        const driftY = Math.cos(time * 0.8) * 12 + Math.sin(time * 0.5) * 6;
+        const driftX = Math.sin(time) * 10 + Math.cos(time * 0.7) * 5;
+        const driftY = Math.cos(time * 0.8) * 10 + Math.sin(time * 0.5) * 5;
 
-        // Calculate distance between mouse and ¡Ojo!
+        // Calculate distance between cursor and ¡Ojo!
         const dx = targetX - currentX;
         const dy = targetY - currentY;
         const dist = Math.hypot(dx, dy);
 
-        // As mouse gets close (within 180px), shrink offset to 0 so ¡Ojo! stops fleeing
-        const approachFactor = Math.min(1, Math.max(0, dist / 180));
+        let destX, destY;
 
-        const offsetX = (60 * approachFactor) + driftX;
-        const offsetY = (40 * approachFactor) + driftY;
+        if (dist < 160) {
+          // APPROACHING: Remove offset so ¡Ojo! glides directly to meet your cursor
+          destX = targetX + (driftX * 0.2);
+          destY = targetY + (driftY * 0.2);
+        } else {
+          // FAR AWAY: Maintain a watchful trailing offset
+          destX = targetX + 60 + driftX;
+          destY = targetY + 40 + driftY;
+        }
 
-        const slowLerp = 0.03;
-
-        currentX += (targetX + offsetX - currentX) * slowLerp;
-        currentY += (targetY + offsetY - currentY) * slowLerp;
+        const slowLerp = 0.035;
+        currentX += (destX - currentX) * slowLerp;
+        currentY += (destY - currentY) * slowLerp;
 
         botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
       }
