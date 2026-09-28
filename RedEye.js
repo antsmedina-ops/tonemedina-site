@@ -7,7 +7,6 @@
   const botDiv = document.createElement('div');
   const chatWindowDiv = document.createElement('div');
   const botInputDiv = document.createElement('div');
-  const closeChatBtn = document.createElement('div');
 
   let isBotMuted = false;
 
@@ -33,24 +32,23 @@
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-
-    #redeye-header {
-  background: #1a0000;
-  padding: 10px 14px;
-  border-bottom: 1px solid #ff3333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  color: #ff4d4d;
-  letter-spacing: 1px;
-}
-#redeye-close-btn {
-  cursor: pointer;
-  color: #ff4d4d;
-  font-size: 18px;
-  padding: 0 4px;
-}
+      #redeye-header {
+        background: #1a0000;
+        padding: 10px 14px;
+        border-bottom: 1px solid #ff3333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        color: #ff4d4d;
+        letter-spacing: 1px;
+      }
+      #redeye-close-btn {
+        cursor: pointer;
+        color: #ff4d4d;
+        font-size: 18px;
+        padding: 0 4px;
+      }
       @keyframes redeyeBlink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
@@ -64,19 +62,19 @@
         vertical-align: middle;
         animation: redeyeBlink 0.8s infinite;
       }
-     .redeye-mobile-idle {
-      animation: redeyePulse 3s infinite ease-in-out;
-    }
-    @keyframes redeyePulse {
-      0%, 100% {
-        box-shadow: 0 0 12px 3px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(139, 0, 0, 0.8);
-        transform: scale(1);
+      .redeye-mobile-idle {
+        animation: redeyePulse 3s infinite ease-in-out;
       }
-      50% {
-        box-shadow: 0 0 22px 8px rgba(255, 0, 0, 0.85), inset 0 0 12px rgba(255, 50, 50, 0.9);
-        transform: scale(1.06);
+      @keyframes redeyePulse {
+        0%, 100% {
+          box-shadow: 0 0 12px 3px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(139, 0, 0, 0.8);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 0 22px 8px rgba(255, 0, 0, 0.85), inset 0 0 12px rgba(255, 50, 50, 0.9);
+          transform: scale(1.06);
+        }
       }
-    }
       .redeye-mobile-label {
         position: absolute;
         bottom: -22px;
@@ -170,6 +168,7 @@
       box-sizing: border-box;
     `;
 
+    // Clean single header with integrated close button
     const headerDiv = document.createElement('div');
     headerDiv.id = 'redeye-header';
     headerDiv.innerHTML = '<span>¡OJO! ASSISTANT</span><span id="redeye-close-btn">✕</span>';
@@ -178,11 +177,8 @@
     headerDiv.querySelector('#redeye-close-btn').addEventListener('click', () => {
       isChatOpen = false;
       chatWindowDiv.style.display = 'none';
+      isBotMuted = false;
     });
-
-    closeChatBtn.innerHTML = '✕';
-    closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 12px; cursor: pointer; color: #aaa; font-size: 20px; padding: 5px; z-index: 10;';
-    chatWindowDiv.appendChild(closeChatBtn);
 
     const chatHistoryDiv = document.createElement('div');
     chatHistoryDiv.id = 'redeye-history';
@@ -257,7 +253,7 @@
       initDesktopTracking();
     }
 
-    addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn);
+    addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
   }
 
   // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
@@ -335,115 +331,110 @@
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+
       const data = await response.json();
       let replyText = data.response || data.reply || "No response received.";
 
       // 1. Check if the AI wants to navigate to a page on your site
       const navMatch = replyText.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
       if (navMatch) {
-        replyText = replyText.replace(navMatch[0], '').trim(); // Remove tag from chat
-        setTimeout(() => window.location.href = navMatch[1].trim(), 1200); // Change page
+        replyText = replyText.replace(navMatch[0], '').trim(); 
+        setTimeout(() => window.location.href = navMatch[1].trim(), 1200); 
       }
 
- // 2. Check if the AI wants to open an external link in a new tab
-        const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
-        if (openMatch) {
-          replyText = replyText.replace(openMatch[0], '').trim(); 
-          setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
-        }
-
-        // 3. Check if the AI wants to trigger an action or navigate to a header link
-        const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
-
-        if (actionMatch) {
-          const targetAction = actionMatch[1].trim().toLowerCase();
-          replyText = replyText.replace(actionMatch[0], '').trim();
-
-  setTimeout(() => {
-    // 1. First, search for any matching navigation link or button by text content
-    const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
-    const matchedEl = navLinks.find(el => {
-      const text = el.textContent.trim().toLowerCase();
-      return text === targetAction || text.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
-    });
-
-    if (matchedEl) {
-      matchedEl.click();
-    } else {
-      // 2. Fallback routing if text matching isn't exact
-      const routeMap = {
-        'art': 'works.html',
-        'artwork': 'works.html',
-        'works': 'works.html',
-        'gallery': 'works.html',
-        'news': 'news.html',
-        'contact': 'contact.html',
-        'links': 'links.html',
-        'bio': 'bio.html',
-        'biography': 'bio.html',
-        'home': 'index.html'
-      };
-
-      if (routeMap[targetAction]) {
-        window.location.href = routeMap[targetAction];
+      // 2. Check if the AI wants to open an external link in a new tab
+      const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
+      if (openMatch) {
+        replyText = replyText.replace(openMatch[0], '').trim(); 
+        setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
       }
-    }
-  }, 1200);
-}
 
-      // Display the cleaned-up text
+      // 3. Check if the AI wants to trigger an action or navigate to a header link
+      const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
+
+      if (actionMatch) {
+        const targetAction = actionMatch[1].trim().toLowerCase();
+        replyText = replyText.replace(actionMatch[0], '').trim();
+
+        setTimeout(() => {
+          const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
+          const matchedEl = navLinks.find(el => {
+            const linkText = el.textContent.trim().toLowerCase();
+            return linkText === targetAction || linkText.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
+          });
+
+          if (matchedEl) {
+            matchedEl.click();
+          } else {
+            const routeMap = {
+              'art': 'works.html',
+              'artwork': 'works.html',
+              'works': 'works.html',
+              'gallery': 'works.html',
+              'news': 'news.html',
+              'contact': 'contact.html',
+              'links': 'links.html',
+              'bio': 'bio.html',
+              'biography': 'bio.html',
+              'home': 'index.html'
+            };
+
+            if (routeMap[targetAction]) {
+              window.location.href = routeMap[targetAction];
+            }
+          }
+        }, 1200);
+      }
+
       botMsg.textContent = `¡Ojo!: ${replyText}`;
     } catch (err) {
+      console.error('¡Ojo! Error:', err);
       botMsg.textContent = '¡Ojo!: Connection lost... try again.';
     }
     historyArea.scrollTop = historyArea.scrollHeight;
   }
 
   // ===== 5. INTERACTION & TOUCH EVENT LISTENERS =====
-let leaveTimer = null;
+  let leaveTimer = null;
 
-function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn) {
-  const toggleChat = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (leaveTimer) clearTimeout(leaveTimer);
-    const isOpening = chatWindowDiv.style.display !== 'flex';
-    chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
-    isBotMuted = isOpening;
-
-    if (isOpening) {
-      triggerGreeting(greetingOverlay, inputArea);
-    }
-  };
-
-  let touchMoved = false;
-  botDiv.addEventListener('touchstart', () => {
-    touchMoved = false;
-  }, { passive: true });
-
-  botDiv.addEventListener('touchmove', () => {
-    touchMoved = true;
-  }, { passive: true });
-
-  botDiv.addEventListener('touchend', (e) => {
-    if (!touchMoved) {
-      toggleChat(e);
-    }
-  });
-
-  botDiv.addEventListener('click', (e) => {
-    if (!('ontouchstart' in window)) {
-      toggleChat(e);
-    }
-  });
-
-    closeChatBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+  function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn, headerDiv) {
+    const toggleChat = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       if (leaveTimer) clearTimeout(leaveTimer);
-      chatWindowDiv.style.display = 'none';
-      isBotMuted = false;
+      const isOpening = chatWindowDiv.style.display !== 'flex';
+      chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
+      isBotMuted = isOpening;
+
+      if (isOpening) {
+        triggerGreeting(greetingOverlay, inputArea);
+      }
+    };
+
+    let touchMoved = false;
+    botDiv.addEventListener('touchstart', () => {
+      touchMoved = false;
+    }, { passive: true });
+
+    botDiv.addEventListener('touchmove', () => {
+      touchMoved = true;
+    }, { passive: true });
+
+    botDiv.addEventListener('touchend', (e) => {
+      if (!touchMoved) {
+        toggleChat(e);
+      }
+    });
+
+    botDiv.addEventListener('click', (e) => {
+      if (!('ontouchstart' in window)) {
+        toggleChat(e);
+      }
     });
 
     chatWindowDiv.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
