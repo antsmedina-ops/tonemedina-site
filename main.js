@@ -124,3 +124,16 @@ function copyText(text, element) {
     console.error('Failed to copy text: ', err);
   });
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.location.hash === '#archives') {
+    const target = document.getElementById('archives');
+    if (target) {
+      const details = target.closest('details') || (target.tagName === 'DETAILS' ? target : null);
+      if (details) {
+        details.open = true;
+      }
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
