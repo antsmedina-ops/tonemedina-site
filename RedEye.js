@@ -33,6 +33,24 @@
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
+
+    #redeye-header {
+  background: #1a0000;
+  padding: 10px 14px;
+  border-bottom: 1px solid #ff3333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #ff4d4d;
+  letter-spacing: 1px;
+}
+#redeye-close-btn {
+  cursor: pointer;
+  color: #ff4d4d;
+  font-size: 18px;
+  padding: 0 4px;
+}
       @keyframes redeyeBlink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
