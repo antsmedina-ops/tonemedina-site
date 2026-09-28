@@ -170,6 +170,16 @@
       box-sizing: border-box;
     `;
 
+    const headerDiv = document.createElement('div');
+    headerDiv.id = 'redeye-header';
+    headerDiv.innerHTML = '<span>¡OJO! ASSISTANT</span><span id="redeye-close-btn">✕</span>';
+    chatWindowDiv.appendChild(headerDiv);
+
+    headerDiv.querySelector('#redeye-close-btn').addEventListener('click', () => {
+      isChatOpen = false;
+      chatWindowDiv.style.display = 'none';
+    });
+
     closeChatBtn.innerHTML = '✕';
     closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 12px; cursor: pointer; color: #aaa; font-size: 20px; padding: 5px; z-index: 10;';
     chatWindowDiv.appendChild(closeChatBtn);
