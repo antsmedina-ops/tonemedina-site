@@ -279,8 +279,8 @@ function initDesktopTracking() {
         const dy = targetY - currentY;
         const dist = Math.hypot(dx, dy);
 
-        // LOCK IN PLACE: When cursor comes within 110px, ¡Ojo! freezes so you can click easily
-        if (dist > 110) {
+        // LOCK IN PLACE: When cursor comes within 210px, ¡Ojo! freezes so you can click easily
+        if (dist > 210) {
           // Gentle ambient drift
           const driftX = Math.sin(time) * 10 + Math.cos(time * 0.7) * 5;
           const driftY = Math.cos(time * 0.8) * 10 + Math.sin(time * 0.5) * 5;
