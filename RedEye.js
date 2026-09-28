@@ -345,16 +345,19 @@
         setTimeout(() => window.location.href = navMatch[1].trim(), 1200); // Change page
       }
 
-      // 2. Check if the AI wants to open an external link in a new tab
-      const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
-      if (openMatch) {
-        replyText = replyText.replace(openMatch[0], '').trim(); // Remove tag from chat
-        setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
-      }
-// 3. Check if the AI wants to trigger an action or navigate to a header link
-if (actionMatch) {
-  const targetAction = actionMatch[1].trim().toLowerCase();
-  replyText = replyText.replace(actionMatch[0], '').trim();
+ // 2. Check if the AI wants to open an external link in a new tab
+        const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
+        if (openMatch) {
+          replyText = replyText.replace(openMatch[0], '').trim(); 
+          setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
+        }
+
+        // 3. Check if the AI wants to trigger an action or navigate to a header link
+        const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
+
+        if (actionMatch) {
+          const targetAction = actionMatch[1].trim().toLowerCase();
+          replyText = replyText.replace(actionMatch[0], '').trim();
 
   setTimeout(() => {
     // 1. First, search for any matching navigation link or button by text content
