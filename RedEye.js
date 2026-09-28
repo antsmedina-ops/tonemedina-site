@@ -323,19 +323,42 @@
         replyText = replyText.replace(openMatch[0], '').trim(); // Remove tag from chat
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
       }
+// 3. Check if the AI wants to trigger an action or navigate to a header link
+if (actionMatch) {
+  const targetAction = actionMatch[1].trim().toLowerCase();
+  replyText = replyText.replace(actionMatch[0], '').trim();
 
-      // 3. Check if the AI wants to open the Music overlay
-      const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
-      if (actionMatch) {
-        const action = actionMatch[1].trim().toLowerCase();
-        replyText = replyText.replace(actionMatch[0], '').trim();
-        if (action === 'music') {
-          setTimeout(() => {
-            const musicBtn = Array.from(document.querySelectorAll('a, button')).find(el => el.textContent.trim().toLowerCase() === 'music');
-            if (musicBtn) musicBtn.click();
-          }, 1200);
-        }
+  setTimeout(() => {
+    // 1. First, search for any matching navigation link or button by text content
+    const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
+    const matchedEl = navLinks.find(el => {
+      const text = el.textContent.trim().toLowerCase();
+      return text === targetAction || text.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
+    });
+
+    if (matchedEl) {
+      matchedEl.click();
+    } else {
+      // 2. Fallback routing if text matching isn't exact
+      const routeMap = {
+        'art': 'works.html',
+        'artwork': 'works.html',
+        'works': 'works.html',
+        'gallery': 'works.html',
+        'news': 'news.html',
+        'contact': 'contact.html',
+        'links': 'links.html',
+        'bio': 'bio.html',
+        'biography': 'bio.html',
+        'home': 'index.html'
+      };
+
+      if (routeMap[targetAction]) {
+        window.location.href = routeMap[targetAction];
       }
+    }
+  }, 1200);
+}
 
       // Display the cleaned-up text
       botMsg.textContent = `¡Ojo!: ${replyText}`;
