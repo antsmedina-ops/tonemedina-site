@@ -369,14 +369,17 @@
           if (matchedEl) {
             matchedEl.click();
           } else {
-            // Fallback: Search page headings to smooth-scroll to sections like "Archives"
-            const headingEl = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).find(el => {
-              const hText = el.textContent.trim().toLowerCase();
-              return hText.includes(targetAction);
+           // Fallback: Search page elements and details accordions to open and smooth-scroll
+            const targetEl = document.getElementById(targetAction) || Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, details')).find(el => {
+              return el.textContent.trim().toLowerCase().includes(targetAction);
             });
 
-            if (headingEl) {
-              headingEl.scrollIntoView({ behavior: 'smooth' });
+            if (targetEl) {
+              const detailsEl = targetEl.closest('details') || (targetEl.tagName === 'DETAILS' ? targetEl : null);
+              if (detailsEl) {
+                detailsEl.open = true;
+              }
+              targetEl.scrollIntoView({ behavior: 'smooth' });
             } else {
 const routeMap = {
               'art': 'works.html',
