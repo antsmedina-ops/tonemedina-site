@@ -352,7 +352,7 @@
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
       }
 
-      // 3. Check if the AI wants to trigger an action or navigate to a header link
+// 3. Check if the AI wants to trigger an action or scroll to a section
       const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
 
       if (actionMatch) {
@@ -369,21 +369,31 @@
           if (matchedEl) {
             matchedEl.click();
           } else {
-            const routeMap = {
-              'art': 'works.html',
-              'artwork': 'works.html',
-              'works': 'works.html',
-              'gallery': 'works.html',
-              'news': 'news.html',
-              'contact': 'contact.html',
-              'links': 'links.html',
-              'bio': 'bio.html',
-              'biography': 'bio.html',
-              'home': 'index.html'
-            };
+            // Fallback: Search page headings to smooth-scroll to sections like "Archives"
+            const headingEl = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).find(el => {
+              const hText = el.textContent.trim().toLowerCase();
+              return hText.includes(targetAction);
+            });
 
-            if (routeMap[targetAction]) {
-              window.location.href = routeMap[targetAction];
+            if (headingEl) {
+              headingEl.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              const routeMap = {
+                'art': 'works.html',
+                'artwork': 'works.html',
+                'works': 'works.html',
+                'gallery': 'works.html',
+                'news': 'news.html',
+                'contact': 'contact.html',
+                'links': 'links.html',
+                'bio': 'bio.html',
+                'biography': 'bio.html',
+                'home': 'index.html'
+              };
+
+              if (routeMap[targetAction]) {
+                window.location.href = routeMap[targetAction];
+              }
             }
           }
         }, 1200);
