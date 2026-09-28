@@ -286,9 +286,9 @@ function initDesktopTracking() {
         const driftX = (Math.sin(time) * 14 + Math.cos(time * 0.7) * 7) * approach;
         const driftY = (Math.cos(time * 0.8) * 14 + Math.sin(time * 0.5) * 7) * approach;
 
-        // DOUBLED OFFSETS: 120px right, 80px down so ¡Ojo! hovers comfortably clear of cursor
-        const offsetX = (120 * approach) + driftX;
-        const offsetY = (80 * approach) + driftY;
+        // OFFSETS: 220px right, 180px down so ¡Ojo! hovers comfortably clear of cursor
+        const offsetX = (220 * approach) + driftX;
+        const offsetY = (180 * approach) + driftY;
 
         const destX = targetX + offsetX;
         const destY = targetY + offsetY;
