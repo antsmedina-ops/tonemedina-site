@@ -378,13 +378,13 @@
             if (headingEl) {
               headingEl.scrollIntoView({ behavior: 'smooth' });
             } else {
-     const routeMap = {
+const routeMap = {
               'art': 'works.html',
               'artwork': 'works.html',
               'works': 'works.html',
               'gallery': 'works.html',
-              'archive': 'works.html',
-              'archives': 'works.html',
+              'archive': 'works.html#archives',
+              'archives': 'works.html#archives',
               'news': 'news.html',
               'contact': 'contact.html',
               'links': 'links.html',
