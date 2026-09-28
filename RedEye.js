@@ -206,7 +206,7 @@
       botDiv.style.bottom = '25px';
       botDiv.style.right = '25px';
     } else {
-      // Desktop: Floating mouse-tracking behavior
+      // Desktop: Slower, smoother floating mouse-tracking behavior
       let mouseX = window.innerWidth - 100;
       let mouseY = window.innerHeight - 100;
       let widgetX = window.innerWidth - 100;
@@ -218,9 +218,9 @@
       });
 
       function animateWidget() {
-        // Smooth lerp following the cursor unobtrusively with a slight offset
-        widgetX += (mouseX - widgetX - 40) * 0.06;
-        widgetY += (mouseY - widgetY - 40) * 0.06;
+        // Reduced multiplier (0.025 instead of 0.06) for a gentle, lagged trail
+        widgetX += (mouseX - widgetX - 50) * 0.025;
+        widgetY += (mouseY - widgetY - 50) * 0.025;
         botDiv.style.left = `${widgetX}px`;
         botDiv.style.top = `${widgetY}px`;
         requestAnimationFrame(animateWidget);
