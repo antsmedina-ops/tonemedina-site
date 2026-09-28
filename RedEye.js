@@ -324,17 +324,55 @@
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
       }
 // 3. Check if the AI wants to trigger an action or navigate to a header link
+// 3. Check if the AI wants to trigger an action or navigate to a header link
+const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
 if (actionMatch) {
   const targetAction = actionMatch[1].trim().toLowerCase();
   replyText = replyText.replace(actionMatch[0], '').trim();
 
   setTimeout(() => {
-    // 1. First, search for any matching navigation link or button by text content
+    // 1. Search for any matching navigation link or button by text content
     const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
     const matchedEl = navLinks.find(el => {
       const text = el.textContent.trim().toLowerCase();
       return text === targetAction || text.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
     });
+
+    if (matchedEl) {
+      matchedEl.click();
+    } else {
+      // 2. Fallback routing if text matching isn't exact or target is a page section
+      const routeMap = {
+        'art': 'works.html',
+        'artwork': 'works.html',
+        'works': 'works.html',
+        'gallery': 'works.html',
+        'archives': 'works.html#archives',
+        'archive': 'works.html#archives',
+        'news': 'news.html',
+        'contact': 'contact.html',
+        'links': 'links.html',
+        'bio': 'bio.html',
+        'biography': 'bio.html',
+        'home': 'index.html'
+      };
+
+      if (routeMap[targetAction]) {
+        if (routeMap[targetAction].includes('#')) {
+          const [page, hash] = routeMap[targetAction].split('#');
+          const targetSection = document.getElementById(hash) || document.querySelector(`.${hash}`);
+          if (window.location.pathname.endsWith(page) && targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.location.href = routeMap[targetAction];
+          }
+        } else {
+          window.location.href = routeMap[targetAction];
+        }
+      }
+    }
+  }, 1200);
+}
 
     if (matchedEl) {
       matchedEl.click();
