@@ -378,18 +378,20 @@
             if (headingEl) {
               headingEl.scrollIntoView({ behavior: 'smooth' });
             } else {
-              const routeMap = {
-                'art': 'works.html',
-                'artwork': 'works.html',
-                'works': 'works.html',
-                'gallery': 'works.html',
-                'news': 'news.html',
-                'contact': 'contact.html',
-                'links': 'links.html',
-                'bio': 'bio.html',
-                'biography': 'bio.html',
-                'home': 'index.html'
-              };
+     const routeMap = {
+              'art': 'works.html',
+              'artwork': 'works.html',
+              'works': 'works.html',
+              'gallery': 'works.html',
+              'archive': 'works.html',
+              'archives': 'works.html',
+              'news': 'news.html',
+              'contact': 'contact.html',
+              'links': 'links.html',
+              'bio': 'bio.html',
+              'biography': 'bio.html',
+              'home': 'index.html'
+            };
 
               if (routeMap[targetAction]) {
                 window.location.href = routeMap[targetAction];
