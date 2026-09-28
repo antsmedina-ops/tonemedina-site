@@ -25,13 +25,13 @@
       }
       #redeye-widget {
         position: fixed;
+        bottom: 25px;
+        right: 25px;
         width: 52px;
         height: 52px;
         border-radius: 50%;
-        /* Dark black aesthetic matching site */
-        background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 70%, #000000 100%);
-        border: 1px solid #440000;
-        box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(255, 0, 0, 0.3);
+        background: radial-gradient(circle, #ff3333 20%, #990000 70%, #330000 100%);
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), inset 0 0 10px rgba(0, 0, 0, 0.8);
         cursor: pointer;
         z-index: 99999;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -41,15 +41,14 @@
       }
       #redeye-widget:hover {
         transform: scale(1.1);
-        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), inset 0 0 12px rgba(255, 0, 0, 0.6);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.9), inset 0 0 12px rgba(255, 50, 50, 0.9);
       }
       #redeye-pupil {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        /* Glowing red eye/pupil */
-        background: #ff0000;
-        box-shadow: 0 0 10px #ff0000, inset 0 0 4px #550000;
+        background: #000;
+        box-shadow: inset 0 0 4px #ff0000;
         pointer-events: none;
         transition: transform 0.05s ease-out;
       }
@@ -198,46 +197,6 @@
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
 
-    // Platform Check
-    const isMobile = window.innerWidth <= 768;
-
-    if (isMobile) {
-      // Mobile: Fixed in corner
-      botDiv.style.bottom = '25px';
-      botDiv.style.right = '25px';
-    } else {
-      // Desktop: Slower, smoother floating mouse-tracking behavior
-      let mouseX = window.innerWidth - 100;
-      let mouseY = window.innerHeight - 100;
-      let widgetX = window.innerWidth - 100;
-      let widgetY = window.innerHeight - 100;
-
-      window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      function animateWidget() {
-        // Reduced multiplier (0.025 instead of 0.06) for a gentle, lagged trail
-        widgetX += (mouseX - widgetX - 50) * 0.025;
-        widgetY += (mouseY - widgetY - 50) * 0.025;
-        botDiv.style.left = `${widgetX}px`;
-        botDiv.style.top = `${widgetY}px`;
-        requestAnimationFrame(animateWidget);
-      }
-      requestAnimationFrame(animateWidget);
-
-      // Pupil micro-tracking
-      window.addEventListener('mousemove', (e) => {
-        const rect = botDiv.getBoundingClientRect();
-        const eyeX = rect.left + rect.width / 2;
-        const eyeY = rect.top + rect.height / 2;
-        const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
-        const distance = Math.min(6, Math.hypot(e.clientX - eyeX, e.clientY - eyeY) / 30);
-        pupilDiv.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-      });
-    }
-
     // Toggle Chat Window
     botDiv.addEventListener('click', () => {
       isChatOpen = !isChatOpen;
@@ -250,11 +209,24 @@
       chatWindowDiv.style.display = 'none';
     });
 
-    // Message Sending Logic & Action Handling
+    // Eye Pupil Mouse Tracking
+    window.addEventListener('mousemove', (e) => {
+      const rect = botDiv.getBoundingClientRect();
+      const eyeX = rect.left + rect.width / 2;
+      const eyeY = rect.top + rect.height / 2;
+      const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+      const distance = Math.min(10, Math.hypot(e.clientX - eyeX, e.clientY - eyeY) / 15);
+      const pupilX = Math.cos(angle) * distance;
+      const pupilY = Math.sin(angle) * distance;
+      pupilDiv.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+    });
+
+    // Message Sending Logic
     async function sendMessage() {
       const text = inputEl.value.trim();
       if (!text) return;
 
+      // Add user message to UI
       const userMsgEl = document.createElement('div');
       userMsgEl.className = 'redeye-msg redeye-msg-user';
       userMsgEl.textContent = text;
@@ -264,6 +236,7 @@
       inputEl.value = '';
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+      // Add Bot Loading Placeholder
       const botMsgEl = document.createElement('div');
       botMsgEl.className = 'redeye-msg redeye-msg-bot';
       botMsgEl.textContent = 'Thinking...';
@@ -281,12 +254,14 @@
         let replyText = data.reply || data.response || 'No response received.';
         chatMessages.push({ role: 'assistant', content: replyText });
 
+        // Check if the AI wants to trigger an action or navigate to a header link
         const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
         if (actionMatch) {
           const targetAction = actionMatch[1].trim().toLowerCase();
           replyText = replyText.replace(actionMatch[0], '').trim();
 
           setTimeout(() => {
+            // 1. Search for any matching navigation link or button by text content
             const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
             const matchedEl = navLinks.find(el => {
               const text = el.textContent.trim().toLowerCase();
@@ -296,6 +271,7 @@
             if (matchedEl) {
               matchedEl.click();
             } else {
+              // 2. Fallback routing if text matching isn't exact or target is a page section
               const routeMap = {
                 'art': 'works.html',
                 'artwork': 'works.html',
