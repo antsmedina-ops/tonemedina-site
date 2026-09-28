@@ -293,7 +293,7 @@ function initDesktopTracking() {
         const destX = targetX + offsetX;
         const destY = targetY + offsetY;
 
-        const lerpSpeed = 0.035;
+        const lerpSpeed = 0.015;
         currentX += (destX - currentX) * lerpSpeed;
         currentY += (destY - currentY) * lerpSpeed;
 
