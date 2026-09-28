@@ -256,23 +256,36 @@
     addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
   }
 
-  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
-  function initDesktopTracking() {
-    window.addEventListener('mousemove', (e) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-    });
+// ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
+function initDesktopTracking() {
+  window.addEventListener('mousemove', (e) => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+  });
 
-    function animate() {
-      if (window.innerWidth > 768) {
-        currentX += (targetX - currentX - 24) * LERP_SPEED;
-        currentY += (targetY - currentY - 24) * LERP_SPEED;
-        botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
-      requestAnimationFrame(animate);
+  function animate(timestamp) {
+    if (window.innerWidth > 768) {
+      // 1. ORGANIC DRIFT: Subtle wave motion so ¡Ojo! floats naturally
+      const time = timestamp * 0.0015;
+      const driftX = Math.sin(time) * 14 + Math.cos(time * 0.7) * 8;
+      const driftY = Math.cos(time * 0.8) * 14 + Math.sin(time * 0.5) * 8;
+
+      // 2. OFFSET DISTANCE: Keeps ¡Ojo! offset at a distance from the cursor
+      const offsetX = 70 + driftX; // Offset to the right
+      const offsetY = 50 + driftY; // Offset below
+
+      // 3. SLOWER LAG: 0.03 makes ¡Ojo! float smoothly behind the cursor
+      const slowLerp = 0.03; 
+
+      currentX += (targetX + offsetX - currentX) * slowLerp;
+      currentY += (targetY + offsetY - currentY) * slowLerp;
+
+      botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
     }
-    animate();
+    requestAnimationFrame(animate);
   }
+  requestAnimationFrame(animate);
+}
 
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
