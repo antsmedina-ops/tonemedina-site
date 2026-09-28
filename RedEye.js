@@ -1,37 +1,14 @@
 /* ===== TONE MEDINA'S REDEYE / ¡OJO! AI COMPANION ===== */
-
 (function () {
   const BOT_ENDPOINT = 'https://redeye.antsmedina.workers.dev';
   let chatMessages = [];
+  let isChatOpen = false;
 
-  const botDiv = document.createElement('div');
-  const chatWindowDiv = document.createElement('div');
-  const botInputDiv = document.createElement('div');
-  const closeChatBtn = document.createElement('div');
-
-  let isBotMuted = false;
-
-  // Mouse tracking targets & state variables
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
-  let currentX = targetX;
-  let currentY = targetY;
-
-  // Movement Config
-  const LERP_SPEED = 0.015;
-  const BASE_OFFSET = 400; 
-  let time = 0;
-  let effectiveOffset = BASE_OFFSET;
-
-  // State & Timer Variables for Typing Animation
-  let typeWriterInterval = null;
-  let placeholderTimer = null;
-
-  // ===== Helper: Inject Cursor Blink Animation =====
-  function injectCursorStyle() {
-    if (document.getElementById('redeye-cursor-style')) return;
+  // ===== Helper: Inject CSS Styles =====
+  function injectStyles() {
+    if (document.getElementById('redeye-styles')) return;
     const style = document.createElement('style');
-    style.id = 'redeye-cursor-style';
+    style.id = 'redeye-styles';
     style.textContent = `
       @keyframes redeyeBlink {
         0%, 100% { opacity: 1; }
@@ -41,456 +18,310 @@
         display: inline-block;
         width: 8px;
         height: 15px;
-        background-color: #aaa;
+        background-color: #ff0000;
         margin-left: 2px;
         vertical-align: middle;
         animation: redeyeBlink 0.8s infinite;
       }
-     .redeye-mobile-idle {
-      animation: redeyePulse 3s infinite ease-in-out;
-    }
-    @keyframes redeyePulse {
-      0%, 100% {
-        box-shadow: 0 0 12px 3px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(139, 0, 0, 0.8);
-        transform: scale(1);
+      #redeye-widget {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #ff3333 20%, #990000 70%, #330000 100%);
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), inset 0 0 10px rgba(0, 0, 0, 0.8);
+        cursor: pointer;
+        z-index: 99999;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      50% {
-        box-shadow: 0 0 22px 8px rgba(255, 0, 0, 0.85), inset 0 0 12px rgba(255, 50, 50, 0.9);
-        transform: scale(1.06);
+      #redeye-widget:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.9), inset 0 0 12px rgba(255, 50, 50, 0.9);
       }
-    }
-      .redeye-mobile-label {
-        position: absolute;
-        bottom: -22px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-family: 'VT323', monospace;
-        font-size: 14px;
-        color: #ff3333;
-        text-shadow: 0 0 4px #000;
+      #redeye-pupil {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #000;
+        box-shadow: inset 0 0 4px #ff0000;
         pointer-events: none;
-        white-space: nowrap;
+        transition: transform 0.05s ease-out;
       }
-      #redeye-chat-window textarea:focus {
+      #redeye-chat-window {
+        position: fixed;
+        bottom: 90px;
+        right: 25px;
+        width: 340px;
+        max-width: calc(100vw - 40px);
+        height: 440px;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid #ff3333;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        display: none;
+        flex-direction: column;
+        z-index: 99998;
+        font-family: 'Courier New', monospace;
+        color: #eee;
+        overflow: hidden;
+      }
+      #redeye-header {
+        background: #1a0000;
+        padding: 10px 14px;
+        border-bottom: 1px solid #ff3333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        color: #ff4d4d;
+        letter-spacing: 1px;
+      }
+      #redeye-close-btn {
+        cursor: pointer;
+        color: #ff4d4d;
+        font-size: 18px;
+        padding: 0 4px;
+      }
+      #redeye-messages {
+        flex: 1;
+        padding: 12px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .redeye-msg {
+        max-width: 85%;
+        padding: 8px 12px;
+        border-radius: 6px;
+        word-wrap: break-word;
+      }
+      .redeye-msg-user {
+        align-self: flex-end;
+        background: #330000;
+        color: #fff;
+        border: 1px solid #660000;
+      }
+      .redeye-msg-bot {
+        align-self: flex-start;
+        background: #111;
+        color: #ffb3b3;
+        border: 1px solid #440000;
+      }
+      #redeye-input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #333;
+        background: #050505;
+      }
+      #redeye-input {
+        flex: 1;
+        background: #111;
+        border: 1px solid #444;
+        color: #fff;
+        padding: 8px;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 13px;
         outline: none;
-        border-color: rgba(139, 0, 0, 0.8) !important;
       }
-      #redeye-history::-webkit-scrollbar {
-        width: 6px;
+      #redeye-input:focus {
+        border-color: #ff3333;
       }
-      #redeye-history::-webkit-scrollbar-thumb {
-        background: rgba(139, 0, 0, 0.5);
-        border-radius: 3px;
+      #redeye-send-btn {
+        background: #800000;
+        color: #fff;
+        border: none;
+        padding: 8px 14px;
+        margin-left: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: bold;
+      }
+      #redeye-send-btn:hover {
+        background: #b30000;
       }
     `;
     document.head.appendChild(style);
   }
 
-  // ===== 1. CORE BOT UI SETUP =====
-  function createBotUi() {
-    injectCursorStyle();
+  // ===== Create Widget DOM Elements =====
+  function initWidget() {
+    injectStyles();
 
-    if (!document.getElementById('wopr-font')) {
-      const fontLink = document.createElement('link');
-      fontLink.id = 'wopr-font';
-      fontLink.rel = 'stylesheet';
-      fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
-      document.head.appendChild(fontLink);
-    }
-
-    const isMobile = window.innerWidth <= 768;
-
-    botDiv.id = 'redeye-bot';
-    if (isMobile) botDiv.classList.add('redeye-mobile-idle');
-
-    botDiv.style.cssText = `
-      position: fixed;
-      ${isMobile ? 'bottom: 40px; right: 20px;' : 'top: 0; left: 0;'}
-      width: 48px;
-      height: 48px;
-      background: rgba(0, 0, 0, 0.95);
-      border: 3px solid #8B0000;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999999;
-      pointer-events: auto;
-      touch-action: manipulation;
-      -webkit-user-select: none;
-      user-select: none;
-      box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
-      transition: box-shadow 0.3s ease, transform 0.05s linear;
-      will-change: transform;
-      -webkit-tap-highlight-color: transparent;
-    `;
+    const botDiv = document.createElement('div');
+    botDiv.id = 'redeye-widget';
     botDiv.title = '¡Ojo!';
 
-    if (isMobile) {
-      const mobileLabel = document.createElement('span');
-      mobileLabel.className = 'redeye-mobile-label';
-      mobileLabel.textContent = '¡OJO!';
-      botDiv.appendChild(mobileLabel);
-    }
+    const pupilDiv = document.createElement('div');
+    pupilDiv.id = 'redeye-pupil';
+    botDiv.appendChild(pupilDiv);
 
+    const chatWindowDiv = document.createElement('div');
     chatWindowDiv.id = 'redeye-chat-window';
-    chatWindowDiv.style.cssText = `
-      position: fixed;
-      ${isMobile ? 'bottom: 95px; right: 12px; left: 12px; width: auto;' : 'bottom: 80px; right: 20px; width: 340px;'}
-      height: 380px;
-      max-height: calc(100dvh - 120px);
-      background: rgba(10, 10, 10, 0.98);
-      color: #fff;
-      border: 1px solid rgba(139, 0, 0, 0.6);
-      border-radius: 12px;
-      display: none;
-      z-index: 1000000;
-      box-shadow: 0 5px 30px rgba(0,0,0,0.9);
-      padding: 1rem;
-      flex-direction: column;
-      font-family: 'VT323', 'Courier New', monospace;
-      font-size: 1.05rem;
-      letter-spacing: 0.05em;
-      box-sizing: border-box;
-    `;
 
-    closeChatBtn.innerHTML = '✕';
-    closeChatBtn.style.cssText = 'position: absolute; top: 10px; right: 12px; cursor: pointer; color: #aaa; font-size: 20px; padding: 5px; z-index: 10;';
-    chatWindowDiv.appendChild(closeChatBtn);
+    const headerDiv = document.createElement('div');
+    headerDiv.id = 'redeye-header';
+    headerDiv.innerHTML = '<span>¡OJO! ASSISTANT</span><span id="redeye-close-btn">✕</span>';
 
-    const chatHistoryDiv = document.createElement('div');
-    chatHistoryDiv.id = 'redeye-history';
-    chatHistoryDiv.style.cssText = 'flex-grow: 1; overflow-y: auto; margin-bottom: 0.75rem; padding-right: 5px; -webkit-overflow-scrolling: touch;';
-    chatWindowDiv.appendChild(chatHistoryDiv);
+    const messagesDiv = document.createElement('div');
+    messagesDiv.id = 'redeye-messages';
 
-    botInputDiv.id = 'redeye-input-container';
-    botInputDiv.style.cssText = 'position: relative; width: 100%; height: 50px; display: flex; gap: 8px; align-items: center;';
+    const inputContainer = document.createElement('div');
+    inputContainer.id = 'redeye-input-container';
 
-    const greetingOverlay = document.createElement('div');
-    greetingOverlay.id = 'redeye-greeting-overlay';
-    greetingOverlay.style.cssText = `
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      color: #aaa;
-      font-family: 'VT323', monospace;
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      pointer-events: none;
-      white-space: pre-wrap;
-      z-index: 2;
-    `;
-
-    const inputArea = document.createElement('textarea');
-    inputArea.id = 'redeye-textarea';
-    inputArea.style.cssText = `
-      flex-grow: 1;
-      height: 100%;
-      background: transparent;
-      color: white;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      padding: 8px;
-      resize: none;
-      font-family: inherit;
-      font-size: 16px;
-      display: block;
-      box-sizing: border-box;
-      z-index: 1;
-    `;
+    const inputEl = document.createElement('input');
+    inputEl.id = 'redeye-input';
+    inputEl.type = 'text';
+    inputEl.placeholder = 'Ask ¡Ojo!...';
 
     const sendBtn = document.createElement('button');
     sendBtn.id = 'redeye-send-btn';
-    sendBtn.textContent = 'SEND';
-    sendBtn.style.cssText = `
-      height: 100%;
-      padding: 0 12px;
-      background: rgba(139, 0, 0, 0.4);
-      color: #fff;
-      border: 1px solid #8B0000;
-      border-radius: 6px;
-      font-family: 'VT323', monospace;
-      font-size: 1rem;
-      cursor: pointer;
-      z-index: 2;
-    `;
+    sendBtn.textContent = 'Send';
 
-    const inputWrapper = document.createElement('div');
-    inputWrapper.style.cssText = 'position: relative; flex-grow: 1; height: 100%;';
-    inputWrapper.appendChild(inputArea);
-    inputWrapper.appendChild(greetingOverlay);
+    inputContainer.appendChild(inputEl);
+    inputContainer.appendChild(sendBtn);
 
-    botInputDiv.appendChild(inputWrapper);
-    botInputDiv.appendChild(sendBtn);
-    chatWindowDiv.appendChild(botInputDiv);
+    chatWindowDiv.appendChild(headerDiv);
+    chatWindowDiv.appendChild(messagesDiv);
+    chatWindowDiv.appendChild(inputContainer);
 
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
 
-    if (!isMobile) {
-      initDesktopTracking();
-    }
-
-    addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn);
-  }
-
-  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
-  function initDesktopTracking() {
-    window.addEventListener('mousemove', (e) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
+    // Toggle Chat Window
+    botDiv.addEventListener('click', () => {
+      isChatOpen = !isChatOpen;
+      chatWindowDiv.style.display = isChatOpen ? 'flex' : 'none';
+      if (isChatOpen) inputEl.focus();
     });
 
-    function animate() {
-      if (window.innerWidth > 768) {
-        currentX += (targetX - currentX - 24) * LERP_SPEED;
-        currentY += (targetY - currentY - 24) * LERP_SPEED;
-        botDiv.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
-      requestAnimationFrame(animate);
-    }
-    animate();
-  }
-
-  // ===== 3. GREETING TYPEWRITER LOGIC =====
-  function triggerGreeting(greetingOverlay, inputArea) {
-    greetingOverlay.style.display = 'block';
-    greetingOverlay.style.opacity = '1';
-    greetingOverlay.textContent = '';
-    const text = 'ask me anything...';
-    let i = 0;
-
-    if (typeWriterInterval) clearInterval(typeWriterInterval);
-
-    typeWriterInterval = setInterval(() => {
-      if (i < text.length) {
-        greetingOverlay.textContent += text.charAt(i);
-        i++;
-      } else {
-        clearInterval(typeWriterInterval);
-        placeholderTimer = setTimeout(() => {
-          greetingOverlay.style.transition = 'opacity 0.3s ease';
-          greetingOverlay.style.opacity = '0';
-          setTimeout(() => {
-            greetingOverlay.style.display = 'none';
-            inputArea.placeholder = "it's ok, talk to me";
-          }, 300);
-        }, 1500);
-      }
-    }, 60);
-  }
-
-  // ===== 4. WORKER API CALL =====
-  async function sendInputToWorker(inputArea, historyArea) {
-    const text = inputArea.value.trim();
-    if (!text) return;
-
-    inputArea.value = '';
-
-    const userMsg = document.createElement('div');
-    userMsg.style.cssText = 'margin-bottom: 8px; color: #66ccff; word-break: break-word;';
-    userMsg.textContent = `You: ${text}`;
-    historyArea.appendChild(userMsg);
-    historyArea.scrollTop = historyArea.scrollHeight;
-
-    const botMsg = document.createElement('div');
-    botMsg.style.cssText = 'margin-bottom: 12px; color: #ff6666; word-break: break-word;';
-    botMsg.textContent = '¡Ojo!: thinking...';
-    historyArea.appendChild(botMsg);
-    historyArea.scrollTop = historyArea.scrollHeight;
-
-    try {
-      const response = await fetch(BOT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: text }],
-          pageContext: document.body.innerText.substring(0, 1500)
-        })
-      });
-
-      const data = await response.json();
-      let replyText = data.response || data.reply || "No response received.";
-
-      // 1. Check if the AI wants to navigate to a page on your site
-      const navMatch = replyText.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
-      if (navMatch) {
-        replyText = replyText.replace(navMatch[0], '').trim(); // Remove tag from chat
-        setTimeout(() => window.location.href = navMatch[1].trim(), 1200); // Change page
-      }
-
-      // 2. Check if the AI wants to open an external link in a new tab
-      const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
-      if (openMatch) {
-        replyText = replyText.replace(openMatch[0], '').trim(); // Remove tag from chat
-        setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); // Open new tab
-      }
-// 3. Check if the AI wants to trigger an action or navigate to a header link
-// 3. Check if the AI wants to trigger an action or navigate to a header link
-const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
-if (actionMatch) {
-  const targetAction = actionMatch[1].trim().toLowerCase();
-  replyText = replyText.replace(actionMatch[0], '').trim();
-
-  setTimeout(() => {
-    // 1. Search for any matching navigation link or button by text content
-    const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
-    const matchedEl = navLinks.find(el => {
-      const text = el.textContent.trim().toLowerCase();
-      return text === targetAction || text.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
-    });
-
-    if (matchedEl) {
-      matchedEl.click();
-    } else {
-      // 2. Fallback routing if text matching isn't exact or target is a page section
-      const routeMap = {
-        'art': 'works.html',
-        'artwork': 'works.html',
-        'works': 'works.html',
-        'gallery': 'works.html',
-        'archives': 'works.html#archives',
-        'archive': 'works.html#archives',
-        'news': 'news.html',
-        'contact': 'contact.html',
-        'links': 'links.html',
-        'bio': 'bio.html',
-        'biography': 'bio.html',
-        'home': 'index.html'
-      };
-
-      if (routeMap[targetAction]) {
-        if (routeMap[targetAction].includes('#')) {
-          const [page, hash] = routeMap[targetAction].split('#');
-          const targetSection = document.getElementById(hash) || document.querySelector(`.${hash}`);
-          if (window.location.pathname.endsWith(page) && targetSection) {
-            targetSection.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            window.location.href = routeMap[targetAction];
-          }
-        } else {
-          window.location.href = routeMap[targetAction];
-        }
-      }
-    }
-  }, 1200);
-}
-
-    if (matchedEl) {
-      matchedEl.click();
-    } else {
-      // 2. Fallback routing if text matching isn't exact
-      const routeMap = {
-        'art': 'works.html',
-        'artwork': 'works.html',
-        'works': 'works.html',
-        'gallery': 'works.html',
-        'news': 'news.html',
-        'contact': 'contact.html',
-        'links': 'links.html',
-        'bio': 'bio.html',
-        'biography': 'bio.html',
-        'home': 'index.html'
-      };
-
-      if (routeMap[targetAction]) {
-        window.location.href = routeMap[targetAction];
-      }
-    }
-  }, 1200);
-}
-
-      // Display the cleaned-up text
-      botMsg.textContent = `¡Ojo!: ${replyText}`;
-    } catch (err) {
-      botMsg.textContent = '¡Ojo!: Connection lost... try again.';
-    }
-    historyArea.scrollTop = historyArea.scrollHeight;
-  }
-
-  // ===== 5. INTERACTION & TOUCH EVENT LISTENERS =====
-let leaveTimer = null;
-
-function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn) {
-  const toggleChat = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (leaveTimer) clearTimeout(leaveTimer);
-    const isOpening = chatWindowDiv.style.display !== 'flex';
-    chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
-    isBotMuted = isOpening;
-
-    if (isOpening) {
-      triggerGreeting(greetingOverlay, inputArea);
-    }
-  };
-
-  let touchMoved = false;
-  botDiv.addEventListener('touchstart', () => {
-    touchMoved = false;
-  }, { passive: true });
-
-  botDiv.addEventListener('touchmove', () => {
-    touchMoved = true;
-  }, { passive: true });
-
-  botDiv.addEventListener('touchend', (e) => {
-    if (!touchMoved) {
-      toggleChat(e);
-    }
-  });
-
-  botDiv.addEventListener('click', (e) => {
-    if (!('ontouchstart' in window)) {
-      toggleChat(e);
-    }
-  });
-
-    closeChatBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (leaveTimer) clearTimeout(leaveTimer);
+    headerDiv.querySelector('#redeye-close-btn').addEventListener('click', () => {
+      isChatOpen = false;
       chatWindowDiv.style.display = 'none';
-      isBotMuted = false;
     });
 
-    chatWindowDiv.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
-    chatWindowDiv.addEventListener('click', (e) => e.stopPropagation());
-
-    const handleSend = (e) => {
-      if (e) e.preventDefault();
-      if (leaveTimer) clearTimeout(leaveTimer);
-      sendInputToWorker(inputArea, historyArea);
-    };
-
-    sendBtn.addEventListener('click', handleSend);
-
-    inputArea.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend(e);
-      }
+    // Eye Pupil Mouse Tracking
+    window.addEventListener('mousemove', (e) => {
+      const rect = botDiv.getBoundingClientRect();
+      const eyeX = rect.left + rect.width / 2;
+      const eyeY = rect.top + rect.height / 2;
+      const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+      const distance = Math.min(10, Math.hypot(e.clientX - eyeX, e.clientY - eyeY) / 15);
+      const pupilX = Math.cos(angle) * distance;
+      const pupilY = Math.sin(angle) * distance;
+      pupilDiv.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
     });
 
-    const clearOverlayOnInteraction = () => {
-      if (greetingOverlay.style.display !== 'none') {
-        if (typeWriterInterval) clearInterval(typeWriterInterval);
-        if (placeholderTimer) clearTimeout(placeholderTimer);
-        greetingOverlay.style.transition = 'opacity 0.2s ease';
-        greetingOverlay.style.opacity = '0';
-        setTimeout(() => {
-          greetingOverlay.style.display = 'none';
-          inputArea.placeholder = "it's ok, talk to me";
-        }, 200);
-      }
-    };
+    // Message Sending Logic
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
 
-    inputArea.addEventListener('focus', clearOverlayOnInteraction);
-    inputArea.addEventListener('touchstart', clearOverlayOnInteraction, { passive: true });
+      // Add user message to UI
+      const userMsgEl = document.createElement('div');
+      userMsgEl.className = 'redeye-msg redeye-msg-user';
+      userMsgEl.textContent = text;
+      messagesDiv.appendChild(userMsgEl);
+
+      chatMessages.push({ role: 'user', content: text });
+      inputEl.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      // Add Bot Loading Placeholder
+      const botMsgEl = document.createElement('div');
+      botMsgEl.className = 'redeye-msg redeye-msg-bot';
+      botMsgEl.textContent = 'Thinking...';
+      messagesDiv.appendChild(botMsgEl);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      try {
+        const response = await fetch(BOT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatMessages })
+        });
+
+        const data = await response.json();
+        let replyText = data.reply || data.response || 'No response received.';
+        chatMessages.push({ role: 'assistant', content: replyText });
+
+        // Check if the AI wants to trigger an action or navigate to a header link
+        const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
+        if (actionMatch) {
+          const targetAction = actionMatch[1].trim().toLowerCase();
+          replyText = replyText.replace(actionMatch[0], '').trim();
+
+          setTimeout(() => {
+            // 1. Search for any matching navigation link or button by text content
+            const navLinks = Array.from(document.querySelectorAll('header a, nav a, .nav-link, button, a'));
+            const matchedEl = navLinks.find(el => {
+              const text = el.textContent.trim().toLowerCase();
+              return text === targetAction || text.replace(/\s+/g, '') === targetAction.replace(/\s+/g, '');
+            });
+
+            if (matchedEl) {
+              matchedEl.click();
+            } else {
+              // 2. Fallback routing if text matching isn't exact or target is a page section
+              const routeMap = {
+                'art': 'works.html',
+                'artwork': 'works.html',
+                'works': 'works.html',
+                'gallery': 'works.html',
+                'archives': 'works.html#archives',
+                'archive': 'works.html#archives',
+                'news': 'news.html',
+                'contact': 'contact.html',
+                'links': 'links.html',
+                'bio': 'bio.html',
+                'biography': 'bio.html',
+                'home': 'index.html'
+              };
+
+              if (routeMap[targetAction]) {
+                const dest = routeMap[targetAction];
+                if (dest.includes('#')) {
+                  const [page, hash] = dest.split('#');
+                  const targetSection = document.getElementById(hash) || document.querySelector(`.${hash}`);
+                  if (window.location.pathname.endsWith(page) && targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = dest;
+                  }
+                } else {
+                  window.location.href = dest;
+                }
+              }
+            }
+          }, 1200);
+        }
+
+        botMsgEl.textContent = replyText;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        botMsgEl.textContent = 'Error connecting to ¡Ojo!. Please try again.';
+        console.error('¡Ojo! error:', err);
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createBotUi);
+    document.addEventListener('DOMContentLoaded', initWidget);
   } else {
-    createBotUi();
+    initWidget();
   }
 })();
