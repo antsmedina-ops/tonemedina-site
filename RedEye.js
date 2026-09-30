@@ -415,12 +415,12 @@ function initDesktopTracking() {
       const response = await fetch(BOT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+       body: JSON.stringify({
           messages: [{ role: 'user', content: text }],
-          pageContext: document.body.innerText.substring(0, 1500)
+          pageContext: (document.querySelector('main') || document.body).innerText.replace(/SEND/g, '').substring(0, 1500)
         })
       });
-
+    
       if (!response.ok) {
         throw new Error(`Server returned status ${response.status}`);
       }
