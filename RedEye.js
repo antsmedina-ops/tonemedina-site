@@ -10,6 +10,14 @@
 
   let isBotMuted = false;
 
+// Ambient speech messages & bubble element
+const OJO_WHISPERS = [
+  "i'm watchin",
+  "what are you doing?",
+  "done yet?"
+];
+const bubbleDiv = document.createElement('div');  
+
 // Mouse tracking targets & state variables
   const savedX = sessionStorage.getItem('ojo_x');
   const savedY = sessionStorage.getItem('ojo_y');
@@ -145,6 +153,28 @@
     `;
     botDiv.title = '¡Ojo!';
 
+bubbleDiv.id = 'ojo-ambient-bubble';
+  bubbleDiv.style.cssText = `
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 0, 0, 0.95);
+    color: #ff4d4d;
+    border: 1px solid #8B0000;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: monospace;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
+    z-index: 1000000;
+  `;
+  botDiv.appendChild(bubbleDiv);
+    
     if (isMobile) {
       const mobileLabel = document.createElement('span');
       mobileLabel.className = 'redeye-mobile-label';
@@ -271,6 +301,26 @@ function initDesktopTracking() {
   let isHovered = false;
   let mouseIdleTimer = null;
   let isHesitating = true;
+
+ // Unprompted ambient whispers
+  function speakAmbientWhisper() {
+    if (chatWindowDiv.style.display === 'flex') return;
+
+    const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
+    bubbleDiv.textContent = text;
+    bubbleDiv.style.opacity = '1';
+    bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
+
+    setTimeout(() => {
+      bubbleDiv.style.opacity = '0';
+      bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+    }, 4000);
+  }
+
+  // Trigger first whisper after 12s, then repeat every 30s
+  setTimeout(speakAmbientWhisper, 12000);
+  setInterval(speakAmbientWhisper, 30000);
+
 
   // Lock ¡Ojo! in place when mouse hovers over it
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
