@@ -293,7 +293,6 @@ bubbleDiv.id = 'ojo-ambient-bubble';
 
 // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
 function initDesktopTracking() {
-  // Smoothly fade ¡Ojo! in at restored coordinates
   requestAnimationFrame(() => {
     botDiv.style.opacity = '1';
   });
@@ -302,10 +301,9 @@ function initDesktopTracking() {
   let mouseIdleTimer = null;
   let isHesitating = true;
 
- // Unprompted ambient whispers
+  // Unprompted ambient whispers
   function speakAmbientWhisper() {
     if (chatWindowDiv.style.display === 'flex') return;
-
     const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
     bubbleDiv.textContent = text;
     bubbleDiv.style.opacity = '1';
@@ -317,26 +315,20 @@ function initDesktopTracking() {
     }, 4000);
   }
 
-  // Trigger first whisper after 12s, then repeat every 30s
   setTimeout(speakAmbientWhisper, 12000);
   setInterval(speakAmbientWhisper, 30000);
 
-
-  // Lock ¡Ojo! in place when mouse hovers over it
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
-  // Mousemove listener with hesitation delay
   window.addEventListener('mousemove', (e) => {
     targetX = e.clientX;
     targetY = e.clientY;
 
-    // Hesitate for 300ms before starting to follow new mouse movements
     isHesitating = true;
     if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
-    
     mouseIdleTimer = setTimeout(() => {
-      isHesitating = false; // "Decides" to follow after watching
+      isHesitating = false;
     }, 300);
   });
 
@@ -345,31 +337,24 @@ function initDesktopTracking() {
       if (!isHovered && chatWindowDiv.style.display !== 'flex') {
         const time = timestamp * 0.001;
 
-        // Distance between cursor and ¡Ojo!
         const dx = targetX - currentX;
         const dy = targetY - currentY;
         const dist = Math.hypot(dx, dy);
 
-        // Gentle breathing/watching drift even while hesitating or frozen
         const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
         const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
 
-        // Only drift around current position if hesitating or within click radius
         if (dist > 210 && !isHesitating) {
           const destX = targetX + 90 + driftX;
           const destY = targetY + 60 + driftY;
-
-          // Floatier lag speed (0.012) for a thoughtful, heavy glide
           const lerpSpeed = 0.012;
           currentX += (destX - currentX) * lerpSpeed;
           currentY += (destY - currentY) * lerpSpeed;
         } else {
-          // Subtle breathing in place while watching/thinking
           currentX += (driftX * 0.05);
           currentY += (driftY * 0.05);
         }
 
-        // Render clean, unjittered position
         botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
         sessionStorage.setItem('ojo_x', currentX);
         sessionStorage.setItem('ojo_y', currentY);
