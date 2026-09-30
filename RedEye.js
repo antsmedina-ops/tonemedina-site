@@ -369,7 +369,7 @@ function initDesktopTracking() {
     greetingOverlay.style.display = 'block';
     greetingOverlay.style.opacity = '1';
     greetingOverlay.textContent = '';
-    const text = 'ask me anything...';
+    const text = 'doing ok?';
     let i = 0;
 
     if (typeWriterInterval) clearInterval(typeWriterInterval);
@@ -385,9 +385,9 @@ function initDesktopTracking() {
           greetingOverlay.style.opacity = '0';
           setTimeout(() => {
             greetingOverlay.style.display = 'none';
-            inputArea.placeholder = "it's ok, talk to me";
+            inputArea.placeholder = "you can talk to me";
           }, 300);
-        }, 1500);
+        }, 5000);
       }
     }, 60);
   }
