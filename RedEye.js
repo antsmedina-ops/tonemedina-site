@@ -432,7 +432,7 @@ function initDesktopTracking() {
       const navMatch = replyText.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
       if (navMatch) {
         replyText = replyText.replace(navMatch[0], '').trim(); 
-        setTimeout(() => window.location.href = navMatch[1].trim(), 1200); 
+        setTimeout(() => window.location.href = navMatch[1].trim(), 2000); 
       }
 
       // 2. Check if the AI wants to open an external link in a new tab
@@ -492,7 +492,7 @@ const routeMap = {
               }
             }
           }
-        }, 1200);
+        }, 2000);
       }
 
       botMsg.textContent = `¡Ojo!: ${replyText}`;
