@@ -49,7 +49,7 @@ const bubbleDiv = document.createElement('div');
   font-weight: bold;
   letter-spacing: 2px;         /* Prevents letters from squishing */
   color: #ff4d4d;
-  margin-top: 12px;            /* Adds clear breathing room below the eye animation */
+  margin-top: 18px;            /* Adds clear breathing room below the eye animation */
   text-align: center;
   text-transform: uppercase;
 }
