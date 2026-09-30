@@ -10,11 +10,14 @@
 
   let isBotMuted = false;
 
-  // Mouse tracking targets & state variables
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
-  let currentX = targetX;
-  let currentY = targetY;
+// Mouse tracking targets & state variables
+  const savedX = sessionStorage.getItem('ojo_x');
+  const savedY = sessionStorage.getItem('ojo_y');
+
+  let currentX = savedX !== null ? parseFloat(savedX) : window.innerWidth / 2;
+  let currentY = savedY !== null ? parseFloat(savedY) : window.innerHeight / 2;
+  let targetX = currentX;
+  let targetY = currentY;
 
   // Movement Config
   const LERP_SPEED = 0.015;
@@ -120,11 +123,13 @@
     if (isMobile) botDiv.classList.add('redeye-mobile-idle');
 
     botDiv.style.cssText = `
-      position: fixed;
+  position: fixed;
       ${isMobile ? 'bottom: 40px; right: 20px;' : 'top: 0; left: 0;'}
+      transform: translate3d(${currentX}px, ${currentY}px, 0);
+      opacity: ${isMobile ? '1' : '0'};
       width: 48px;
       height: 48px;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 0, 0.95);;
       border: 3px solid #8B0000;
       border-radius: 50%;
       cursor: pointer;
@@ -134,7 +139,7 @@
       -webkit-user-select: none;
       user-select: none;
       box-shadow: 0 0 20px 8px rgba(139, 0, 0, 0.75);
-      transition: box-shadow 0.3s ease, transform 0.05s linear;
+     transition: opacity 0.4s ease, box-shadow 0.3s ease, transform 0.05s linear;
       will-change: transform;
       -webkit-tap-highlight-color: transparent;
     `;
@@ -259,7 +264,17 @@
 // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
 function initDesktopTracking() {
   let isHovered = false;
+// Smoothly fade ¡Ojo! in at restored coordinates
+    requestAnimationFrame(() => {
+      botDiv.style.opacity = '1';
+    });
 
+    // Save position right before page unloads
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('ojo_x', currentX);
+      sessionStorage.setItem('ojo_y', currentY);
+    });
+  
   // Lock ¡Ojo! in place when mouse hovers over it
   botDiv.addEventListener('mouseenter', () => { isHovered = true; });
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
