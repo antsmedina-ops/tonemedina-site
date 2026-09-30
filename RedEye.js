@@ -43,17 +43,15 @@ const bubbleDiv = document.createElement('div');
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-  #redeye-header {
-  background: #1a0000;
-  padding: 10px 14px;
-  border-bottom: 1px solid #ff3333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.redeye-mobile-label {
+  display: block;
+  font-size: 14px;            /* Increases legibility on small screens */
   font-weight: bold;
-  font-size: 14px;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;         /* Prevents letters from squishing */
   color: #ff4d4d;
+  margin-top: 12px;            /* Adds clear breathing room below the eye animation */
+  text-align: center;
+  text-transform: uppercase;
 }
       }
       #redeye-close-btn {
