@@ -43,16 +43,18 @@ const bubbleDiv = document.createElement('div');
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-      #redeye-header {
-        background: #1a0000;
-        padding: 10px 14px;
-        border-bottom: 1px solid #ff3333;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-weight: bold;
-        color: #ff4d4d;
-        letter-spacing: 1px;
+  #redeye-header {
+  background: #1a0000;
+  padding: 10px 14px;
+  border-bottom: 1px solid #ff3333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  color: #ff4d4d;
+}
       }
       #redeye-close-btn {
         cursor: pointer;
@@ -132,7 +134,7 @@ const bubbleDiv = document.createElement('div');
 
     botDiv.style.cssText = `
   position: fixed;
-      ${isMobile ? 'bottom: 40px; right: 20px;' : 'top: 0; left: 0;'}
+      ${isMobile ? 'bottom: 50px; right: 25px;' : 'top: 0; left: 0;'}
       transform: translate3d(${currentX}px, ${currentY}px, 0);
       opacity: ${isMobile ? '1' : '0'};
       width: 48px;
