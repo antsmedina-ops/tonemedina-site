@@ -946,6 +946,12 @@ nav .links a:hover {
    ========================================================================== */
 body.neon-dead::before {
   animation: neonBurnout 1.8s forwards !important;
+  color: rgba(15, 15, 15, 0.4) !important;
+  text-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8) !important;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.18) !important;
+  -webkit-text-stroke-linejoin: round !important;
+  paint-order: stroke fill !important;
+  opacity: 0.85 !important;
 }
 
 @keyframes neonBurnout {
