@@ -1057,3 +1057,20 @@ iframe[src*="calendar.google.com"]:hover {
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
   filter: invert(0.9) hue-rotate(180deg) contrast(1.2);
 }
+
+/* ===== FORCE ALL LINKS ON LINKS PAGE TO BE WHITE WITH RED HOVER ===== */
+.selectable-link-item a,
+.selectable-link-item a:visited,
+.selectable-link-item .list-title {
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease;
+}
+
+/* Red Neon Glow on Hover */
+.selectable-link-item:hover a,
+.selectable-link-item:hover .list-title {
+  color: #ff3333 !important;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+}
