@@ -943,7 +943,8 @@ nav .links a:hover {
 
 /* ==========================================================================
    NEON SIGN SURGE & POWER OUTAGE
-   ===============================================================body.neon-dead::before {
+   ========================================================================== */
+body.neon-dead::before {
   animation: neonBurnout 1.8s forwards !important;
   color: transparent !important;
   -webkit-text-fill-color: transparent !important;
