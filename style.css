@@ -593,11 +593,13 @@ nav .links a:hover {
 
 #contact .grid {
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
+  align-items: stretch;
 }
 
 #contactCard, #calendarCard {
-  flex: 1;
+  flex: 1 1 320px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -608,7 +610,7 @@ nav .links a:hover {
 }
 
 #calendarCard:hover {
-  transform: scale(1.05) translateY(-8px) !important;
+  transform: scale(1.04) translateY(-6px) !important;
   border-color: #ff3333 !important;
   box-shadow: 0 20px 40px rgba(255, 0, 0, 0.5), 0 0 25px rgba(255, 0, 0, 0.3) !important;
   z-index: 99 !important;
