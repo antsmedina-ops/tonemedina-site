@@ -1058,17 +1058,22 @@ iframe[src*="calendar.google.com"]:hover {
   filter: invert(0.9) hue-rotate(180deg) contrast(1.2);
 }
 
-/* ===== FORCE LINKS PAGE CARDS TO BE WHITE WITH RED HOVER ===== */
-a.selectable-link-item,
-a.selectable-link-item:visited {
+/* ===== FIX BLUE LINKS ON LINKS PAGE ===== */
+.card a,
+.card a:visited,
+.selectable-link-item,
+.selectable-link-item a,
+.selectable-link-item a:visited {
   color: #ffffff !important;
   font-family: 'Inter', sans-serif !important;
   text-decoration: none !important;
   transition: all 0.3s ease;
 }
 
-/* Hover Red Neon Glow & Scale */
-a.selectable-link-item:hover {
+/* Red Neon Glow on Hover */
+.card a:hover,
+.selectable-link-item:hover,
+.selectable-link-item:hover a {
   color: #ff3333 !important;
   text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4) !important;
 }
