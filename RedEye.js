@@ -483,10 +483,27 @@ const routeMap = {
   'news': 'news.html',
   'contact': 'contact.html',
   'links': 'links.html',
+  'social': 'links.html',
+  'socials': 'links.html',
+  'social media': 'links.html',
+  'instagram': 'https://www.instagram.com/tonemedina',
+  'bluesky': 'https://bsky.app/profile/tonemedina.bsky.social',
+  'wordpress': 'https://tonemedina.wordpress.com',
   'bio': 'bio.html',
   'biography': 'bio.html',
   'home': 'index.html'
 };
+
+if (routeMap[targetAction]) {
+  if (routeMap[targetAction].startsWith('http')) {
+    window.open(routeMap[targetAction], '_blank');
+  } else {
+    window.location.href = routeMap[targetAction];
+  }
+}
+if (routeMap[targetAction]) {
+  window.location.href = routeMap[targetAction];
+}
 
               if (routeMap[targetAction]) {
                 window.location.href = routeMap[targetAction];
