@@ -954,19 +954,20 @@ body.neon-dead::before {
     text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 18px #ff0033, 0 0 35px #ff0033, 0 0 70px #ff0033, 0 0 100px #ff0033;
     opacity: 1;
   }
-  15% {
+ 15% {
     /* Power Surge: Hot White Overbright Flare */
     color: #ffffff;
     text-shadow: 0 0 20px #ffffff, 0 0 50px #ffffff, 0 0 100px #ff0033, 0 0 150px #ff0033;
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.02);
+    transform: translate(-50%, -50%);
   }
   25% {
     /* Short Circuit Pop / Arc Flash */
     color: #ff3300;
     text-shadow: 0 0 5px #ff0000;
     opacity: 0.15;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
+  }
   }
   30% {
     /* Secondary Arc Flash */
