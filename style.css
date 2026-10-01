@@ -770,18 +770,18 @@ nav .links a:hover {
 }
 
 #companion-title {
-  color: #ff3333; /* Updated to red */
+  color: #ff3333; /* Make ¡OJO! red */
   font-weight: bold;
   font-size: 14px;
   flex-grow: 1;
 }
 
 #close-chat {
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 20px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  color: #ff3333; /* Change close X to red */
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* --- Messages Area --- */
