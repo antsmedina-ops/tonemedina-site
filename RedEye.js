@@ -483,6 +483,7 @@ const routeMap = {
   'news': 'news.html',
   'contact': 'contact.html',
   'links': 'links.html',
+  'calendar': 'news.html', // Or whichever page holds your event calendar / schedule
   'social': 'links.html',
   'socials': 'links.html',
   'social media': 'links.html',
