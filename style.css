@@ -998,3 +998,16 @@ body.neon-dead::before {
     opacity: 0.75;
   }
 }
+/* Interactive Calendar Hover Effect */
+iframe[src*="calendar.google.com"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  filter: saturate(0.95);
+}
+
+iframe[src*="calendar.google.com"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  filter: saturate(1.05);
+}
+
