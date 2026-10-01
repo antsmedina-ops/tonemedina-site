@@ -137,3 +137,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
+
+// Burn out the background neon sign after 12 seconds
+setTimeout(() => {
+  document.body.classList.add('neon-dead');
+}, 12000);
