@@ -337,9 +337,18 @@ footer.wrap {
   padding: 1.25rem;
 }
 
-/* ===== GOOGLE CALENDAR DARK MODE ===== */
-iframe[src*="calendar.google.com"] {
-  filter: invert(0.9) hue-rotate(180deg);
+/* Calendar Dark Theme & Interactive Hover */
+iframe[src*="calendar.google.com"],
+.calendar-container {
+  background-color: #121212;
+  border-radius: 12px;
+  filter: invert(0.9) hue-rotate(180deg) contrast(1.15);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+iframe[src*="calendar.google.com"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
 }
 
 #calendarModal iframe {
@@ -998,16 +1007,16 @@ body.neon-dead::before {
     opacity: 0.75;
   }
 }
-/* Interactive Calendar Hover Effect */
+/* Interactive Calendar Dark Theme & Hover Effect */
 iframe[src*="calendar.google.com"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 12px;
-  filter: saturate(0.95);
+  background-color: #121212;
+  filter: invert(0.9) hue-rotate(180deg) contrast(1.15);
 }
 
 iframe[src*="calendar.google.com"]:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-  filter: saturate(1.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+  filter: invert(0.9) hue-rotate(180deg) contrast(1.2);
 }
-
