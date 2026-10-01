@@ -142,3 +142,4 @@ window.addEventListener('DOMContentLoaded', () => {
 setTimeout(() => {
   document.body.classList.add('neon-dead');
 }, 12000);
+
