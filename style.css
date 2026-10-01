@@ -993,7 +993,6 @@ body.neon-dead::before {
     opacity: 0;
   }
 100% {
-    100% {
     /* Dead Glass Tube State */
     color: transparent;
     -webkit-text-fill-color: transparent;
