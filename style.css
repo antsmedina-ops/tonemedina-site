@@ -1058,19 +1058,17 @@ iframe[src*="calendar.google.com"]:hover {
   filter: invert(0.9) hue-rotate(180deg) contrast(1.2);
 }
 
-/* ===== FORCE ALL LINKS ON LINKS PAGE TO BE WHITE WITH RED HOVER ===== */
-.selectable-link-item a,
-.selectable-link-item a:visited,
-.selectable-link-item .list-title {
+/* ===== FORCE LINKS PAGE CARDS TO BE WHITE WITH RED HOVER ===== */
+a.selectable-link-item,
+a.selectable-link-item:visited {
   color: #ffffff !important;
   font-family: 'Inter', sans-serif !important;
   text-decoration: none !important;
   transition: all 0.3s ease;
 }
 
-/* Red Neon Glow on Hover */
-.selectable-link-item:hover a,
-.selectable-link-item:hover .list-title {
+/* Hover Red Neon Glow & Scale */
+a.selectable-link-item:hover {
   color: #ff3333 !important;
-  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4);
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4) !important;
 }
