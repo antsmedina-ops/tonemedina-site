@@ -203,14 +203,15 @@ bubbleDiv.id = 'ojo-ambient-bubble';
       box-sizing: border-box;
     `;
 
-    // Clean single header with integrated close button
+   // Clean single header with integrated close button
     const headerDiv = document.createElement('div');
     headerDiv.id = 'redeye-header';
-    headerDiv.innerHTML = '<span>¡OJO! ASSISTANT</span><span id="redeye-close-btn">✕</span>';
+    headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: bold; color: #ff3333;';
+    headerDiv.innerHTML = '<span style="color: #ff3333; font-weight: bold;">¡OJO! ASSISTANT</span><span id="redeye-close-btn" style="color: #ff3333; cursor: pointer; font-size: 18px; padding: 0 4px; font-weight: bold;">✕</span>';
     chatWindowDiv.appendChild(headerDiv);
 
-    headerDiv.querySelector('#redeye-close-btn').addEventListener('click', () => {
-      isChatOpen = false;
+    headerDiv.querySelector('#redeye-close-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
       chatWindowDiv.style.display = 'none';
       isBotMuted = false;
     });
