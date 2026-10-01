@@ -995,3 +995,8 @@ body.neon-dead::before {
     opacity: 0.85;
   }
 }
+
+// Trigger neon burnout after 12 seconds
+setTimeout(() => {
+  document.body.classList.add('neon-dead');
+}, 12000);
