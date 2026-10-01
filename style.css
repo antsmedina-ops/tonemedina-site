@@ -947,11 +947,12 @@ nav .links a:hover {
 body.neon-dead::before {
   animation: neonBurnout 1.8s forwards !important;
   color: transparent !important;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25) !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4) !important;
   -webkit-text-stroke-linejoin: round !important;
   paint-order: stroke fill !important;
-  text-shadow: 0 0 2px rgba(255, 255, 255, 0.1), inset 0 0 2px rgba(0, 0, 0, 0.8) !important;
-  opacity: 0.85 !important;
+  text-shadow: none !important;
+  opacity: 0.75 !important;
 }
 
 @keyframes neonBurnout {
@@ -992,12 +993,14 @@ body.neon-dead::before {
     opacity: 0;
   }
 100% {
+    100% {
     /* Dead Glass Tube State */
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
     -webkit-text-stroke-linejoin: round;
     paint-order: stroke fill;
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.1), inset 0 0 2px rgba(0, 0, 0, 0.8);
-    opacity: 0.85;
+    text-shadow: none;
+    opacity: 0.75;
   }
 }
