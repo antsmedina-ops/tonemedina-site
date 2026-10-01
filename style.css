@@ -977,14 +977,13 @@ nav .links a:hover {
       untypeLine2 2.0s steps(33, end) 13.0s forwards !important;
   }
 
-  .line-3 {
-    animation: 
-      typeLine3 3.5s steps(25, end) 5.0s forwards,
-      blink 0.75s step-end 5 5.0s,
-      untypeLine3 2.0s steps(25, end) 11.0s forwards !important;
-  }
+.line-3 {
+  animation: 
+    typeLine3 3.5s steps(25, end) 5.0s forwards,
+    blink 0.75s step-end 5 5.0s,
+    untypeLine3 2.0s steps(25, end) 11.0s forwards !important;
 }
-
+   
 /* ==========================================================================
    NEON SIGN SURGE & POWER OUTAGE
    ========================================================================== */
