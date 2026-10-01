@@ -948,7 +948,7 @@ body.neon-dead::before {
   animation: neonBurnout 1.8s forwards !important;
   color: transparent !important;
   -webkit-text-fill-color: transparent !important;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4) !important;
+  -webkit-text-stroke: 1.5px #111115 !important; /* Changed from light white/grey to near-black */
   -webkit-text-stroke-linejoin: round !important;
   paint-order: stroke fill !important;
   text-shadow: none !important;
