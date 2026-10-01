@@ -770,10 +770,10 @@ nav .links a:hover {
 }
 
 #companion-title {
-    color: #ccc;
-    font-weight: bold;
-    font-size: 14px;
-    flex-grow: 1;
+  color: #ff3333; /* Updated to red */
+  font-weight: bold;
+  font-size: 14px;
+  flex-grow: 1;
 }
 
 #close-chat {
