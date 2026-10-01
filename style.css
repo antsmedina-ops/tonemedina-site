@@ -940,3 +940,54 @@ nav .links a:hover {
       untypeLine3 2.0s steps(25, end) 13.0s forwards !important;
   }
 }
+
+/* ==========================================================================
+   NEON SIGN SURGE & POWER OUTAGE
+   ========================================================================== */
+body::before.neon-dead {
+  animation: neonBurnout 1.8s forwards !important;
+}
+
+@keyframes neonBurnout {
+  0% {
+    color: #fff;
+    text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 18px #ff0033, 0 0 35px #ff0033, 0 0 70px #ff0033, 0 0 100px #ff0033;
+    opacity: 1;
+  }
+  15% {
+    /* Power Surge: Hot White Overbright Flare */
+    color: #ffffff;
+    text-shadow: 0 0 20px #ffffff, 0 0 50px #ffffff, 0 0 100px #ff0033, 0 0 150px #ff0033;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+  25% {
+    /* Short Circuit Pop / Arc Flash */
+    color: #ff3300;
+    text-shadow: 0 0 5px #ff0000;
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  30% {
+    /* Secondary Arc Flash */
+    color: #ffffff;
+    text-shadow: 0 0 40px #ffffff, 0 0 80px #ff0033;
+    opacity: 1;
+  }
+  45% {
+    /* Dying Glow */
+    color: #ff0033;
+    text-shadow: 0 0 10px #ff0033;
+    opacity: 0.1;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    /* Dead Glass Tube State */
+    color: rgba(20, 20, 20, 0.35);
+    text-shadow: none;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+    opacity: 0.75;
+  }
+}
