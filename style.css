@@ -968,8 +968,9 @@ body.neon-dead::before {
     opacity: 0.15;
     transform: translate(-50%, -50%);
   }
-  }
+  
   30% {
+
     /* Secondary Arc Flash */
     color: #ffffff;
     text-shadow: 0 0 40px #ffffff, 0 0 80px #ff0033;
