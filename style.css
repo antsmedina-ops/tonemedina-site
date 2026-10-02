@@ -543,19 +543,19 @@ iframe[src*="calendar.google.com"]:hover {
 }
 
 /* ==========================================================================
-   CONTACT & CALENDAR SECTION (STACKED / REVERSED ORDER)
+   CONTACT & CALENDAR SECTION (CONTAINED SITE GRID + NAV SPACING)
    ========================================================================== */
 #contact {
   width: 100% !important;
   max-width: 1200px !important;
   margin: 0 auto !important;
-  padding: 0 1.5rem !important;
+  padding: 3rem 1.5rem !important; /* Restores 3rem top padding under navigation */
   box-sizing: border-box !important;
 }
 
 #contact .grid {
   display: flex !important;
-  flex-direction: column !important; /* Stacked layout */
+  flex-direction: column !important;
   gap: 2rem !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -563,7 +563,7 @@ iframe[src*="calendar.google.com"]:hover {
 
 /* 1. Art Calendar / Events Card (Top) */
 #calendarCard {
-  order: 1 !important; /* Alphabetically first */
+  order: 1 !important;
   width: 100% !important;
   box-sizing: border-box !important;
   position: relative;
@@ -579,9 +579,9 @@ iframe[src*="calendar.google.com"]:hover {
   display: block;
 }
 
-/* 2. Contact Card (Bottom - Pops Downward) */
+/* 2. Contact Card (Bottom) */
 #contactCard {
-  order: 2 !important; /* Alphabetically second */
+  order: 2 !important;
   width: 100% !important;
   box-sizing: border-box !important;
   position: relative;
@@ -598,44 +598,15 @@ iframe[src*="calendar.google.com"]:hover {
   z-index: 10 !important;
 }
 
-/* Mobile Padding Adjustments */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   #contact {
-    padding: 0 1rem !important;
+    padding: 2rem 1rem !important; /* Keeps comfortable breathing room on mobile */
   }
   #calendarCard iframe {
     min-height: 360px;
   }
 }
-
-  #calendarCard {
-    max-height: 380px;
-  }
-
-  #calendarCard:hover,
-  #calendarCard:active {
-    max-height: 620px;
-    transform: scale(1.01) translateY(-4px) !important;
-  }
-
-  #calendarCard iframe {
-    height: 600px !important;
-  }
-}
-  #contact .grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-  }
-
-  #calendarCard iframe {
-    min-height: 360px;
-    transition: min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  }
-
-  #calendarCard:hover iframe,
-  #calendarCard:focus-within iframe {
-    min-height: 560px;
-  }
 }
 .list-desc {
   font-family: 'Inter', sans-serif;
