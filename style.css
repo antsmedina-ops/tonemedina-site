@@ -571,25 +571,29 @@ iframe[src*="calendar.google.com"]:hover {
   z-index: 1;
 }
 
-/* Calendar Card (Right) */
+/* Calendar Card (Right - Prominent & Expandable) */
 #calendarCard {
   width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
   position: relative;
   z-index: 1;
-  transform-origin: center center;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
+  display: flex;
+  flex-direction: column;
+  transform-origin: top center;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, border-color 0.35s ease !important;
 }
 
-#calendarCard:hover {
+/* Red Neon Hover Glow & Lift */
+#calendarCard:hover,
+#calendarCard:focus-within {
   transform: scale(1.015) translateY(-3px) !important;
   border-color: #ff3333 !important;
-  box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4), 0 0 20px rgba(255, 0, 0, 0.25) !important;
-  z-index: 10 !important;
+  box-shadow: 0 20px 40px rgba(255, 0, 0, 0.45), 0 0 25px rgba(255, 0, 0, 0.3) !important;
+  z-index: 20 !important;
 }
 
-/* Calendar iFrame (Contained to Card Frame) */
+/* Calendar iFrame Sizing & Smooth Height Transition */
 #calendarCard iframe {
   width: 100% !important;
   height: 100% !important;
@@ -598,9 +602,16 @@ iframe[src*="calendar.google.com"]:hover {
   border-radius: 8px;
   box-sizing: border-box !important;
   display: block;
+  transition: min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Mobile Responsiveness (Stacked Vertically) */
+/* Expand Frame Height on Hover/Focus to Reveal Events */
+#calendarCard:hover iframe,
+#calendarCard:focus-within iframe {
+  min-height: 720px;
+}
+
+/* Mobile Responsiveness (Stacked Vertically + Expandable) */
 @media (max-width: 768px) {
   #contact {
     padding: 0 1rem !important;
@@ -612,10 +623,15 @@ iframe[src*="calendar.google.com"]:hover {
   }
 
   #calendarCard iframe {
-    min-height: 320px;
+    min-height: 360px;
+    transition: min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  #calendarCard:hover iframe,
+  #calendarCard:focus-within iframe {
+    min-height: 560px;
   }
 }
-
 .list-desc {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
