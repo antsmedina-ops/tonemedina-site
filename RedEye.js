@@ -240,7 +240,6 @@
       transition: opacity 0.4s ease, box-shadow 0.3s ease;
       will-change: transform;
       -webkit-tap-highlight-color: transparent;
-      overflow: hidden;
     `;
     botDiv.title = '¡Ojo!';
 
