@@ -88,13 +88,13 @@ const bubbleDiv = document.createElement('div');
       }
      .redeye-mobile-label {
   position: absolute;
-  bottom: -34px;                  /* Pushes text lower to create buffer space below the eye */
-  left: 50%;
+  bottom: -50px;                  /* Pushes text lower to create buffer space below the eye */
+  left: 60%;
   transform: translateX(-50%);
   font-family: 'VT323', monospace;
-  font-size: 18px;                /* Increases text size for mobile readability */
+  font-size: 20px;                /* Increases text size for mobile readability */
   font-weight: bold;
-  letter-spacing: 2px;            /* Adds breathing room between characters */
+  letter-spacing: 4px;            /* Adds breathing room between characters */
   color: #ff3333;
   text-shadow: 0 0 6px #000;
   pointer-events: none;
