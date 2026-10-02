@@ -14,9 +14,9 @@
 const OJO_WHISPERS = [
   "i'm watchin",
   "what are you doing?",
-  "done yet?"
+  "done yet?",
   "you know, this all seems pointless"
-  ];
+];
 const bubbleDiv = document.createElement('div');  
 
 // Mouse tracking targets & state variables
