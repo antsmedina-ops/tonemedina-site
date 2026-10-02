@@ -996,3 +996,13 @@ body.neon-dead::before {
     letter-spacing: 0 !important;
   }
 }
+
+/* Uniform Archive Image Sizing */
+#archives img,
+.archive-card img,
+.archives img {
+  width: 100% !important;
+  height: 260px !important;    /* Adjust height as preferred */
+  object-fit: cover !important; /* Crops images cleanly without stretching */
+  border-radius: 8px;
+}
