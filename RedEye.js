@@ -368,7 +368,7 @@ function initDesktopTracking() {
   requestAnimationFrame(animate);
 }
   // ===== 3. GREETING TYPEWRITER LOGIC =====
-  function triggerGreeting(greetingOverlay, inputArea) {
+ function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
     greetingOverlay.style.opacity = '1';
     greetingOverlay.textContent = '';
@@ -383,16 +383,17 @@ function initDesktopTracking() {
         i++;
       } else {
         clearInterval(typeWriterInterval);
+        /* Waits 9 seconds (9000ms) before fading out "doing ok?" */
         placeholderTimer = setTimeout(() => {
-          greetingOverlay.style.transition = 'opacity 0.3s ease';
+          greetingOverlay.style.transition = 'opacity 0.5s ease';
           greetingOverlay.style.opacity = '0';
           setTimeout(() => {
             greetingOverlay.style.display = 'none';
             inputArea.placeholder = "you can talk to me";
-          }, 300);
-        }, 5000);
+          }, 500);
+        }, 9000); 
       }
-    }, 60);
+    }, 70);
   }
 
   // ===== 4. WORKER API CALL =====
