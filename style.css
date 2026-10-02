@@ -952,3 +952,28 @@ body.neon-dead::before {
   color: var(--accent-bright) !important;
   text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 16px rgba(255, 0, 0, 0.4) !important;
 }
+
+/* ==========================================================================
+   MOBILE NAVIGATION FIX (PREVENTS "BIOGRAPHY" FROM WRAPPING)
+   ========================================================================== */
+@media (max-width: 768px) {
+  header nav,
+  nav {
+    display: flex !important;
+    flex-wrap: nowrap !important;       /* Locks all links onto one single line */
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 0.35rem !important;            /* Tightens gaps between nav items */
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  header nav a,
+  header a,
+  nav a {
+    font-size: 0.82rem !important;      /* Slightly smaller font to fit 6 items */
+    padding: 0.2rem 0.2rem !important;  /* Reduces side padding around text */
+    white-space: nowrap !important;     /* Prevents "Art Work" or "Biography" from breaking */
+    letter-spacing: 0 !important;
+  }
+}
