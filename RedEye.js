@@ -158,26 +158,26 @@ const bubbleDiv = document.createElement('div');
     `;
     botDiv.title = '¡Ojo!';
 
-bubbleDiv.id = 'ojo-ambient-bubble';
-  bubbleDiv.style.cssText = `
-    position: absolute;
-    bottom: 55px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 0, 0, 0.95);
-    color: #ff4d4d;
-    border: 1px solid #8B0000;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-family: monospace;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
-    z-index: 1000000;
-  `;
+bbubbleDiv.id = 'ojo-ambient-bubble';
+bubbleDiv.style.cssText = `
+  position: absolute;
+  bottom: 55px;
+  ${isMobile ? 'right: 0; left: auto;' : 'left: 50%;'}
+  background: rgba(15, 0, 0, 0.95);
+  color: #ff4d4d;
+  border: 1px solid #8B0000;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
+  z-index: 1000000;
+`;
+    
   botDiv.appendChild(bubbleDiv);
     
     if (isMobile) {
@@ -299,27 +299,29 @@ bubbleDiv.id = 'ojo-ambient-bubble';
     restoreChatState(chatHistoryDiv); // Restores chat window on page load
     initAmbientWhispers();
   }
-// ===== AMBIENT WHISPERS (RANDOMIZED 10s - 30s) =====
+// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
   function initAmbientWhispers() {
     function speakAmbientWhisper() {
       if (chatWindowDiv.style.display !== 'flex') {
         const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
+        const isMobileScreen = window.innerWidth <= 768;
+
         bubbleDiv.textContent = text;
         bubbleDiv.style.opacity = '1';
-        bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
+        bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
 
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
-          bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+          bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
         }, 4000);
       }
 
-      // Schedule the next whisper between 10 and 30 seconds randomly
+      // Randomize next whisper between 10s and 30s
       const nextDelay = Math.floor(Math.random() * (30000 - 10000 + 1)) + 10000;
       setTimeout(speakAmbientWhisper, nextDelay);
     }
 
-    // First whisper triggers randomly between 6s and 10s after landing
+    // First whisper triggers between 6s and 10s after landing
     const initialDelay = Math.floor(Math.random() * 4000) + 6000;
     setTimeout(speakAmbientWhisper, initialDelay);
   }
