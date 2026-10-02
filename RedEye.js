@@ -315,10 +315,12 @@
         }, 4000);
       }
 
-      const nextDelay = Math.floor(Math.random() * (30000 - 10000 + 1)) + 10000;
+      // Random delay between 5,000ms (5s) and 20,000ms (20s)
+      const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
       setTimeout(speakAmbientWhisper, nextDelay);
     }
 
+    // Initial start delay when page loads (currently 6 to 10 seconds)
     const initialDelay = Math.floor(Math.random() * 4000) + 6000;
     setTimeout(speakAmbientWhisper, initialDelay);
   }
