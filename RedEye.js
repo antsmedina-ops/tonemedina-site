@@ -10,18 +10,18 @@
 
   let isBotMuted = false;
 
-// Ambient speech messages & bubble element
-const OJO_WHISPERS = [
-  "i'm watchin",
-  "what are you doing?",
-  "done yet?",
-  "because, this all seems pointless",
-  "we used to be friends",
-  "i see everything"
-];
-const bubbleDiv = document.createElement('div');  
+  // Ambient speech messages & bubble element
+  const OJO_WHISPERS = [
+    "i'm watchin",
+    "what are you doing?",
+    "done yet?",
+    "because, this all seems pointless",
+    "we used to be friends",
+    "i see everything"
+  ];
+  const bubbleDiv = document.createElement('div');  
 
-// Mouse tracking targets & state variables
+  // Mouse tracking targets & state variables
   const savedX = sessionStorage.getItem('ojo_x');
   const savedY = sessionStorage.getItem('ojo_y');
 
@@ -46,16 +46,15 @@ const bubbleDiv = document.createElement('div');
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-.redeye-mobile-label {
-  display: block;
-  font-size: 14px;            /* Increases legibility on small screens */
-  font-weight: bold;
-  letter-spacing: 2px;         /* Prevents letters from squishing */
-  color: #ff4d4d;
-  margin-top: 18px;            /* Adds clear breathing room below the eye animation */
-  text-align: center;
-  text-transform: uppercase;
-}
+      .redeye-mobile-label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #ff4d4d;
+        margin-top: 18px;
+        text-align: center;
+        text-transform: uppercase;
       }
       #redeye-close-btn {
         cursor: pointer;
@@ -89,20 +88,20 @@ const bubbleDiv = document.createElement('div');
           transform: scale(1.06);
         }
       }
-     .redeye-mobile-label {
-  position: absolute;
-  bottom: -40px;                  /* Pushes text lower to create buffer space below the eye */
-  left: 65%;
-  transform: translateX(-50%);
-  font-family: 'VT323', monospace;
-  font-size: 20px;                /* Increases text size for mobile readability */
-  font-weight: bold;
-  letter-spacing: 4px;            /* Adds breathing room between characters */
-  color: #ff3333;
-  text-shadow: 0 0 6px #000;
-  pointer-events: none;
-  white-space: nowrap;
-}
+      .redeye-mobile-label {
+        position: absolute;
+        bottom: -40px;
+        left: 65%;
+        transform: translateX(-50%);
+        font-family: 'VT323', monospace;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        color: #ff3333;
+        text-shadow: 0 0 6px #000;
+        pointer-events: none;
+        white-space: nowrap;
+      }
       #redeye-chat-window textarea:focus {
         outline: none;
         border-color: rgba(139, 0, 0, 0.8) !important;
@@ -136,13 +135,13 @@ const bubbleDiv = document.createElement('div');
     if (isMobile) botDiv.classList.add('redeye-mobile-idle');
 
     botDiv.style.cssText = `
-  position: fixed;
+      position: fixed;
       ${isMobile ? 'bottom: 50px; right: 25px;' : 'top: 0; left: 0;'}
       transform: translate3d(${currentX}px, ${currentY}px, 0);
       opacity: ${isMobile ? '1' : '0'};
       width: 48px;
       height: 48px;
-      background: rgba(0, 0, 0, 0.95);;
+      background: rgba(0, 0, 0, 0.95);
       border: 3px solid #8B0000;
       border-radius: 50%;
       cursor: pointer;
@@ -158,27 +157,27 @@ const bubbleDiv = document.createElement('div');
     `;
     botDiv.title = '¡Ojo!';
 
-bbubbleDiv.id = 'ojo-ambient-bubble';
-bubbleDiv.style.cssText = `
-  position: absolute;
-  bottom: 55px;
-  ${isMobile ? 'right: 0; left: auto;' : 'left: 50%;'}
-  background: rgba(15, 0, 0, 0.95);
-  color: #ff4d4d;
-  border: 1px solid #8B0000;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-family: monospace;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
-  z-index: 1000000;
-`;
+    bubbleDiv.id = 'ojo-ambient-bubble';
+    bubbleDiv.style.cssText = `
+      position: absolute;
+      bottom: 55px;
+      ${isMobile ? 'right: 0; left: auto;' : 'left: 50%;'}
+      background: rgba(15, 0, 0, 0.95);
+      color: #ff4d4d;
+      border: 1px solid #8B0000;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
+      z-index: 1000000;
+    `;
     
-  botDiv.appendChild(bubbleDiv);
+    botDiv.appendChild(bubbleDiv);
     
     if (isMobile) {
       const mobileLabel = document.createElement('span');
@@ -208,7 +207,6 @@ bubbleDiv.style.cssText = `
       box-sizing: border-box;
     `;
 
-   // Clean single header with integrated close button
     const headerDiv = document.createElement('div');
     headerDiv.id = 'redeye-header';
     headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: bold; color: #ff3333;';
@@ -218,7 +216,7 @@ bubbleDiv.style.cssText = `
     headerDiv.querySelector('#redeye-close-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       chatWindowDiv.style.display = 'none';
-      sessionStorage.removeItem('ojo_chat_open'); // Clears saved open state on close
+      sessionStorage.removeItem('ojo_chat_open');
       isBotMuted = false;
     });
 
@@ -291,15 +289,16 @@ bubbleDiv.style.cssText = `
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
 
-  if (!isMobile) {
+    if (!isMobile) {
       initDesktopTracking();
     }
 
     addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
-    restoreChatState(chatHistoryDiv); // Restores chat window on page load
+    restoreChatState(chatHistoryDiv);
     initAmbientWhispers();
   }
-// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+
+  // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
   function initAmbientWhispers() {
     function speakAmbientWhisper() {
       if (chatWindowDiv.style.display !== 'flex') {
@@ -316,76 +315,73 @@ bubbleDiv.style.cssText = `
         }, 4000);
       }
 
-      // Randomize next whisper between 10s and 30s
       const nextDelay = Math.floor(Math.random() * (30000 - 10000 + 1)) + 10000;
       setTimeout(speakAmbientWhisper, nextDelay);
     }
 
-    // First whisper triggers between 6s and 10s after landing
     const initialDelay = Math.floor(Math.random() * 4000) + 6000;
     setTimeout(speakAmbientWhisper, initialDelay);
   }
-  
-// ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
-function initDesktopTracking() {
-  requestAnimationFrame(() => {
-    botDiv.style.opacity = '1';
-  });
 
- 335:     let isHovered = false;
-336:     let mouseIdleTimer = null;
-337:     let isHesitating = true;
-338: 
-339:     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
-340:     botDiv.addEventListener('mouseleave', () => { isHovered = false; });
-  
-  botDiv.addEventListener('mouseleave', () => { isHovered = false; });
+  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
+  function initDesktopTracking() {
+    requestAnimationFrame(() => {
+      botDiv.style.opacity = '1';
+    });
 
-  window.addEventListener('mousemove', (e) => {
-    targetX = e.clientX;
-    targetY = e.clientY;
+    let isHovered = false;
+    let mouseIdleTimer = null;
+    let isHesitating = true;
 
-    isHesitating = true;
-    if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
-    mouseIdleTimer = setTimeout(() => {
-      isHesitating = false;
-    }, 300);
-  });
+    botDiv.addEventListener('mouseenter', () => { isHovered = true; });
+    botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
-  function animate(timestamp) {
-    if (window.innerWidth > 768) {
-      if (!isHovered && chatWindowDiv.style.display !== 'flex') {
-        const time = timestamp * 0.001;
+    window.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
 
-        const dx = targetX - currentX;
-        const dy = targetY - currentY;
-        const dist = Math.hypot(dx, dy);
+      isHesitating = true;
+      if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
+      mouseIdleTimer = setTimeout(() => {
+        isHesitating = false;
+      }, 300);
+    });
 
-        const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
-        const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
+    function animate(timestamp) {
+      if (window.innerWidth > 768) {
+        if (!isHovered && chatWindowDiv.style.display !== 'flex') {
+          const time = timestamp * 0.001;
 
-        if (dist > 210 && !isHesitating) {
-          const destX = targetX + 90 + driftX;
-          const destY = targetY + 60 + driftY;
-          const lerpSpeed = 0.012;
-          currentX += (destX - currentX) * lerpSpeed;
-          currentY += (destY - currentY) * lerpSpeed;
-        } else {
-          currentX += (driftX * 0.05);
-          currentY += (driftY * 0.05);
+          const dx = targetX - currentX;
+          const dy = targetY - currentY;
+          const dist = Math.hypot(dx, dy);
+
+          const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
+          const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
+
+          if (dist > 210 && !isHesitating) {
+            const destX = targetX + 90 + driftX;
+            const destY = targetY + 60 + driftY;
+            const lerpSpeed = 0.012;
+            currentX += (destX - currentX) * lerpSpeed;
+            currentY += (destY - currentY) * lerpSpeed;
+          } else {
+            currentX += (driftX * 0.05);
+            currentY += (driftY * 0.05);
+          }
+
+          botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+          sessionStorage.setItem('ojo_x', currentX);
+          sessionStorage.setItem('ojo_y', currentY);
         }
-
-        botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
-        sessionStorage.setItem('ojo_x', currentX);
-        sessionStorage.setItem('ojo_y', currentY);
       }
+      requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
   }
-  requestAnimationFrame(animate);
-}
+
   // ===== 3. GREETING TYPEWRITER LOGIC =====
- function triggerGreeting(greetingOverlay, inputArea) {
+  function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
     greetingOverlay.style.opacity = '1';
     greetingOverlay.textContent = '';
@@ -400,7 +396,6 @@ function initDesktopTracking() {
         i++;
       } else {
         clearInterval(typeWriterInterval);
-        /* Waits 9 seconds (9000ms) before fading out "doing ok?" */
         placeholderTimer = setTimeout(() => {
           greetingOverlay.style.transition = 'opacity 0.5s ease';
           greetingOverlay.style.opacity = '0';
@@ -443,7 +438,7 @@ function initDesktopTracking() {
     userMsg.textContent = `You: ${text}`;
     historyArea.appendChild(userMsg);
     historyArea.scrollTop = historyArea.scrollHeight;
-    saveChatState(historyArea); // <-- NEW: Saves user message immediately
+    saveChatState(historyArea);
 
     const botMsg = document.createElement('div');
     botMsg.style.cssText = 'margin-bottom: 12px; color: #ff6666; word-break: break-word;';
@@ -468,23 +463,19 @@ function initDesktopTracking() {
       const data = await response.json();
       let replyText = data.response || data.reply || "No response received.";
 
-      // 1. Check if the AI wants to navigate to a page on your site
       const navMatch = replyText.match(/\[NAVIGATE:\s*([^\]]+)\]/i);
       if (navMatch) {
         replyText = replyText.replace(navMatch[0], '').trim(); 
         setTimeout(() => window.location.href = navMatch[1].trim(), 2000); 
       }
 
-      // 2. Check if the AI wants to open an external link in a new tab
       const openMatch = replyText.match(/\[OPEN:\s*([^\]]+)\]/i);
       if (openMatch) {
         replyText = replyText.replace(openMatch[0], '').trim(); 
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
       }
 
-      // 3. Check if the AI wants to trigger an action or scroll to a section
       const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
-
       if (actionMatch) {
         const targetAction = actionMatch[1].trim().toLowerCase();
         replyText = replyText.replace(actionMatch[0], '').trim();
@@ -551,7 +542,7 @@ function initDesktopTracking() {
       botMsg.textContent = '¡Ojo!: Connection lost... try again.';
     }
     historyArea.scrollTop = historyArea.scrollHeight;
-    saveChatState(historyArea); // <-- NEW: Saves response after ¡Ojo! answers
+    saveChatState(historyArea);
   }
 
   // ===== 5. INTERACTION & TOUCH EVENT LISTENERS =====
