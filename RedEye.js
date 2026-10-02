@@ -297,8 +297,27 @@ bubbleDiv.id = 'ojo-ambient-bubble';
 
     addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
     restoreChatState(chatHistoryDiv); // Restores chat window on page load
+    initAmbientWhispers();
   }
+// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+  function initAmbientWhispers() {
+    function speakAmbientWhisper() {
+      if (chatWindowDiv.style.display === 'flex') return;
+      const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
+      bubbleDiv.textContent = text;
+      bubbleDiv.style.opacity = '1';
+      bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
 
+      setTimeout(() => {
+        bubbleDiv.style.opacity = '0';
+        bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+      }, 4000);
+    }
+
+    setTimeout(speakAmbientWhisper, 12000);
+    setInterval(speakAmbientWhisper, 30000);
+  }
+  
 // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
 function initDesktopTracking() {
   requestAnimationFrame(() => {
