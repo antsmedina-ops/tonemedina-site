@@ -54,6 +54,15 @@
     }
   }
 
+  function triggerPupilDilation() {
+    const pupil = document.getElementById('ojo-pupil');
+    if (!pupil) return;
+    pupil.classList.remove('ojo-shock');
+    void pupil.offsetWidth; // Force reflow
+    pupil.classList.add('ojo-shock');
+    setTimeout(() => pupil.classList.remove('ojo-shock'), 450);
+  }
+
   // Ambient speech messages & bubble element
   const OJO_WHISPERS = [
     "i'm watchin",
@@ -182,6 +191,14 @@
         background: rgba(139, 0, 0, 0.5);
         border-radius: 3px;
       }
+      @keyframes ojoShockDilation {
+        0% { scale: 0.35; background: #ff0000; }
+        40% { scale: 1.65; background: #ff3333; box-shadow: 0 0 14px #ff0000; }
+        100% { scale: 1; background: #cc0000; }
+      }
+      .ojo-shock {
+        animation: ojoShockDilation 0.45s ease-out forwards;
+      }
     `;
     document.head.appendChild(style);
   }
@@ -223,8 +240,28 @@
       transition: opacity 0.4s ease, box-shadow 0.3s ease;
       will-change: transform;
       -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
     `;
     botDiv.title = '¡Ojo!';
+
+    // Pupil Element
+    const pupilDiv = document.createElement('div');
+    pupilDiv.id = 'ojo-pupil';
+    pupilDiv.style.cssText = `
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      background: #cc0000;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff0000, inset 0 0 4px #000;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: background 0.2s ease;
+      will-change: transform;
+    `;
+    botDiv.appendChild(pupilDiv);
 
     bubbleDiv.id = 'ojo-ambient-bubble';
     bubbleDiv.style.cssText = `
@@ -417,6 +454,25 @@
           botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
           sessionStorage.setItem('ojo_x', currentX);
           sessionStorage.setItem('ojo_y', currentY);
+
+          // --- PUPIL TRACKING & PROXIMITY CONSTRICTION ---
+          const pupil = document.getElementById('ojo-pupil');
+          if (pupil && !pupil.classList.contains('ojo-shock')) {
+            const eyeCenterX = currentX + 24;
+            const eyeCenterY = currentY + 24;
+            const pdx = targetX - eyeCenterX;
+            const pdy = targetY - eyeCenterY;
+            const angle = Math.atan2(pdy, pdx);
+
+            const maxOffset = 9;
+            const offsetDist = Math.min(maxOffset, dist * 0.04);
+            const px = Math.cos(angle) * offsetDist;
+            const py = Math.sin(angle) * offsetDist;
+
+            const proximityScale = dist < 120 ? Math.max(0.6, dist / 120) : 1;
+
+            pupil.style.transform = `translate(calc(-50% + ${px.toFixed(1)}px), calc(-50% + ${py.toFixed(1)}px)) scale(${proximityScale.toFixed(2)})`;
+          }
         }
       }
       requestAnimationFrame(animate);
@@ -475,6 +531,7 @@
     const text = inputArea.value.trim();
     if (!text) return;
     playOjoSound('blip');
+    triggerPupilDilation();
 
     inputArea.value = '';
 
@@ -600,6 +657,7 @@
         e.stopPropagation();
       }
       playOjoSound('blip');
+      triggerPupilDilation();
       
       if (leaveTimer) clearTimeout(leaveTimer);
       const isOpening = chatWindowDiv.style.display !== 'flex';
@@ -651,6 +709,7 @@
     });
 
     const clearOverlayOnInteraction = () => {
+      triggerPupilDilation();
       if (greetingOverlay.style.display !== 'none') {
         if (typeWriterInterval) clearInterval(typeWriterInterval);
         if (placeholderTimer) clearTimeout(placeholderTimer);
