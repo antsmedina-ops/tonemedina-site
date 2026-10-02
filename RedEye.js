@@ -387,7 +387,7 @@
     greetingOverlay.style.display = 'block';
     greetingOverlay.style.opacity = '1';
     greetingOverlay.textContent = '';
-    const text = 'doing ok?';
+    const text = 'need help??';
     let i = 0;
 
     if (typeWriterInterval) clearInterval(typeWriterInterval);
@@ -403,7 +403,7 @@
           greetingOverlay.style.opacity = '0';
           setTimeout(() => {
             greetingOverlay.style.display = 'none';
-            inputArea.placeholder = "you can talk to me";
+            inputArea.placeholder = "talk to me";
           }, 500);
         }, 9000); 
       }
