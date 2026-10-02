@@ -9,6 +9,50 @@
   const botInputDiv = document.createElement('div');
 
   let isBotMuted = false;
+  let typeWriterInterval = null;
+  let placeholderTimer = null;
+
+  // Web Audio Synthesizer (Zero External Files)
+  let audioCtx = null;
+
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  function playOjoSound(type) {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      if (type === 'whisper') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(110, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(35, ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      } else if (type === 'blip') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.02, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      }
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + (type === 'whisper' ? 0.4 : 0.05));
+    } catch (e) {
+      // Autoplay fallback
+    }
+  }
 
   // Ambient speech messages & bubble element
   const OJO_WHISPERS = [
@@ -36,7 +80,7 @@
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
 
-// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+  // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
   function initAmbientWhispers() {
     function speakAmbientWhisper() {
       if (chatWindowDiv.style.display !== 'flex') {
@@ -44,39 +88,43 @@
         const isMobileScreen = window.innerWidth <= 768;
 
         bubbleDiv.textContent = text;
+        playOjoSound('whisper');
+
+        if (isMobileScreen) {
+          bubbleDiv.style.left = 'auto';
+          bubbleDiv.style.right = '0';
+          bubbleDiv.style.transform = 'translateY(-4px)';
+        } else {
+          bubbleDiv.style.left = '50%';
+          bubbleDiv.style.right = 'auto';
+          bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
+        }
+
         bubbleDiv.style.opacity = '1';
-        bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
 
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
-          bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
+          if (isMobileScreen) {
+            bubbleDiv.style.transform = 'translateY(0)';
+          } else {
+            bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+          }
         }, 4000);
       }
 
-      // Random delay between 5,000ms (5s) and 20,000ms (20s)
       const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
       setTimeout(speakAmbientWhisper, nextDelay);
     }
 
-    // Initial start delay when page loads (currently 6 to 10 seconds)
     const initialDelay = Math.floor(Math.random() * 4000) + 6000;
     setTimeout(speakAmbientWhisper, initialDelay);
   }
+
   function injectCursorStyle() {
     if (document.getElementById('redeye-cursor-style')) return;
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-      .redeye-mobile-label {
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        color: #ff4d4d;
-        margin-top: 18px;
-        text-align: center;
-        text-transform: uppercase;
-      }
       #redeye-close-btn {
         cursor: pointer;
         color: #ff4d4d;
@@ -158,7 +206,7 @@
     botDiv.style.cssText = `
       position: fixed;
       ${isMobile ? 'bottom: 50px; right: 25px;' : 'top: 0; left: 0;'}
-      transform: translate3d(${currentX}px, ${currentY}px, 0);
+      ${isMobile ? 'transform: none;' : `transform: translate3d(${currentX}px,${currentY}px, 0);`}
       opacity: ${isMobile ? '1' : '0'};
       width: 48px;
       height: 48px;
@@ -319,33 +367,6 @@
     initAmbientWhispers();
   }
 
-  // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
-  function initAmbientWhispers() {
-    function speakAmbientWhisper() {
-      if (chatWindowDiv.style.display !== 'flex') {
-        const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
-        const isMobileScreen = window.innerWidth <= 768;
-
-       bubbleDiv.textContent = text;
-       playOjoSound('whisper');
-       bubbleDiv.style.opacity = '1';
-       bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
-        setTimeout(() => {
-          bubbleDiv.style.opacity = '0';
-          bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
-        }, 4000);
-      }
-
-      // Random delay between 5,000ms (5s) and 20,000ms (20s)
-      const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
-      setTimeout(speakAmbientWhisper, nextDelay);
-    }
-
-    // Initial start delay when page loads (currently 6 to 10 seconds)
-    const initialDelay = Math.floor(Math.random() * 4000) + 6000;
-    setTimeout(speakAmbientWhisper, initialDelay);
-  }
-
   // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
   function initDesktopTracking() {
     requestAnimationFrame(() => {
@@ -450,7 +471,7 @@
   }
 
   // ===== 4. WORKER API CALL =====
-    async function sendInputToWorker(inputArea, historyArea) {
+  async function sendInputToWorker(inputArea, historyArea) {
     const text = inputArea.value.trim();
     if (!text) return;
     playOjoSound('blip');
@@ -574,11 +595,11 @@
 
   function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn, headerDiv) {
     const toggleChat = (e) => {
-       if (e) {
-       e.preventDefault();
-       e.stopPropagation();
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
       }
-       playOjoSound('blip');
+      playOjoSound('blip');
       
       if (leaveTimer) clearTimeout(leaveTimer);
       const isOpening = chatWindowDiv.style.display !== 'flex';
