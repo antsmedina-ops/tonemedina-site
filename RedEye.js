@@ -8,75 +8,60 @@
   const chatWindowDiv = document.createElement('div');
   const botInputDiv = document.createElement('div');
 
-  let isBotMuted = false;
+ let isBotMuted = false;
+let typeWriterInterval = null;
+let placeholderTimer = null;
 
-  // Ambient speech messages & bubble element
-  const OJO_WHISPERS = [
-    "i'm watchin",
-    "what are you doing?",
-    "done yet?",
-    "this all seems pointless",
-    "we're not friends",
-    "i see everything"
-  ];
-  const bubbleDiv = document.createElement('div');  
+// Web Audio Synthesizer (Zero External Files)
+let audioCtx = null;
 
-  // Mouse tracking targets & state variables
-  const savedX = sessionStorage.getItem('ojo_x');
-  const savedY = sessionStorage.getItem('ojo_y');
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
 
-  let currentX = savedX !== null ? parseFloat(savedX) : window.innerWidth / 2;
-  let currentY = savedY !== null ? parseFloat(savedY) : window.innerHeight / 2;
-  let targetX = currentX;
-  let targetY = currentY;
+function playOjoSound(type) {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
 
-  // Movement Config
-  const LERP_SPEED = 0.015;
-  const BASE_OFFSET = 400; 
-  let time = 0;
-  let effectiveOffset = BASE_OFFSET;
-
-// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
-  function initAmbientWhispers() {
-    function speakAmbientWhisper() {
-      if (chatWindowDiv.style.display !== 'flex') {
-        const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
-        const isMobileScreen = window.innerWidth <= 768;
-
-        bubbleDiv.textContent = text;
-        bubbleDiv.style.opacity = '1';
-        bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
-
-        setTimeout(() => {
-          bubbleDiv.style.opacity = '0';
-          bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
-        }, 4000);
-      }
-
-      // Random delay between 5,000ms (5s) and 20,000ms (20s)
-      const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
-      setTimeout(speakAmbientWhisper, nextDelay);
+    if (type === 'whisper') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(110, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(35, ctx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    } else if (type === 'blip') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.02, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
     }
 
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + (type === 'whisper' ? 0.4 : 0.05));
+  } catch (e) {
+    // Autoplay fallback
+  }
+}
     // Initial start delay when page loads (currently 6 to 10 seconds)
     const initialDelay = Math.floor(Math.random() * 4000) + 6000;
     setTimeout(speakAmbientWhisper, initialDelay);
   }
-  function injectCursorStyle() {
+ function injectCursorStyle() {
     if (document.getElementById('redeye-cursor-style')) return;
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-      .redeye-mobile-label {
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        color: #ff4d4d;
-        margin-top: 18px;
-        text-align: center;
-        text-transform: uppercase;
-      }
       #redeye-close-btn {
         cursor: pointer;
         color: #ff4d4d;
