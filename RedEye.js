@@ -332,28 +332,13 @@ function initDesktopTracking() {
     botDiv.style.opacity = '1';
   });
 
-  let isHovered = false;
-  let mouseIdleTimer = null;
-  let isHesitating = true;
-
-  // Unprompted ambient whispers
-  function speakAmbientWhisper() {
-    if (chatWindowDiv.style.display === 'flex') return;
-    const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
-    bubbleDiv.textContent = text;
-    bubbleDiv.style.opacity = '1';
-    bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
-
-    setTimeout(() => {
-      bubbleDiv.style.opacity = '0';
-      bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
-    }, 4000);
-  }
-
-  setTimeout(speakAmbientWhisper, 12000);
-  setInterval(speakAmbientWhisper, 30000);
-
-  botDiv.addEventListener('mouseenter', () => { isHovered = true; });
+ 335:     let isHovered = false;
+336:     let mouseIdleTimer = null;
+337:     let isHesitating = true;
+338: 
+339:     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
+340:     botDiv.addEventListener('mouseleave', () => { isHovered = false; });
+  
   botDiv.addEventListener('mouseleave', () => { isHovered = false; });
 
   window.addEventListener('mousemove', (e) => {
