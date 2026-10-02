@@ -543,36 +543,41 @@ iframe[src*="calendar.google.com"]:hover {
 }
 
 /* ==========================================================================
-   CONTACT & CALENDAR SECTION (CONTAINED SITE GRID)
+   CONTACT & CALENDAR SECTION (LOCKED TO SITE GRID)
    ========================================================================== */
+#contact {
+  width: 100% !important;
+  max-width: 1200px !important; /* Locks layout to standard header/nav width */
+  margin: 0 auto !important;    /* Centers section in viewport */
+  padding: 0 1.5rem !important;  /* Matches standard site page margins */
+  box-sizing: border-box !important;
+}
+
 #contact .grid {
   display: grid !important;
-  grid-template-columns: 1fr 2fr !important; /* 1/3 Contact, 2/3 Calendar */
-  gap: 1.75rem !important;
+  grid-template-columns: 1fr 1.8fr !important; /* Contact = ~35%, Calendar = ~65% */
+  gap: 2rem !important;
   width: 100% !important;
-  max-width: 100% !important;
   box-sizing: border-box !important;
   align-items: stretch;
 }
 
-/* Contact Card Frame (1 Part) */
+/* Contact Card (Left) */
 #contactCard {
   width: 100% !important;
+  min-width: 0 !important;
   box-sizing: border-box !important;
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Calendar Card Frame (2 Parts - Prominent) */
+/* Calendar Card (Right) */
 #calendarCard {
   width: 100% !important;
+  min-width: 0 !important;
   box-sizing: border-box !important;
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
   transform-origin: center center;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
@@ -584,7 +589,7 @@ iframe[src*="calendar.google.com"]:hover {
   z-index: 10 !important;
 }
 
-/* Calendar iFrame (Strictly Contained) */
+/* Calendar iFrame (Contained to Card Frame) */
 #calendarCard iframe {
   width: 100% !important;
   height: 100% !important;
@@ -597,13 +602,13 @@ iframe[src*="calendar.google.com"]:hover {
 
 /* Mobile Responsiveness (Stacked Vertically) */
 @media (max-width: 768px) {
+  #contact {
+    padding: 0 1rem !important;
+  }
+
   #contact .grid {
     grid-template-columns: 1fr !important;
     gap: 1.5rem !important;
-  }
-
-  #contactCard {
-    width: 100% !important;
   }
 
   #calendarCard iframe {
