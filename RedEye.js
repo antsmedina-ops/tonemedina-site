@@ -15,8 +15,8 @@
     "i'm watchin",
     "what are you doing?",
     "done yet?",
-    "because, this all seems pointless",
-    "we used to be friends",
+    "this all seems pointless",
+    "we're not friends",
     "i see everything"
   ];
   const bubbleDiv = document.createElement('div');  
