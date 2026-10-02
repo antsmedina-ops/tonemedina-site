@@ -15,8 +15,9 @@ const OJO_WHISPERS = [
   "i'm watchin",
   "what are you doing?",
   "done yet?",
-  "you know, this all seems pointless"
-  "one upon a time",
+  "because, this all seems pointless",
+  "when I knew you",
+  "we don't need you",
 ];
 const bubbleDiv = document.createElement('div');  
 
