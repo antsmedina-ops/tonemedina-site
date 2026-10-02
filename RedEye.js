@@ -86,18 +86,20 @@ const bubbleDiv = document.createElement('div');
           transform: scale(1.06);
         }
       }
-      .redeye-mobile-label {
-        position: absolute;
-        bottom: -22px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-family: 'VT323', monospace;
-        font-size: 14px;
-        color: #ff3333;
-        text-shadow: 0 0 4px #000;
-        pointer-events: none;
-        white-space: nowrap;
-      }
+     .redeye-mobile-label {
+  position: absolute;
+  bottom: -34px;                  /* Pushes text lower to create buffer space below the eye */
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'VT323', monospace;
+  font-size: 18px;                /* Increases text size for mobile readability */
+  font-weight: bold;
+  letter-spacing: 2px;            /* Adds breathing room between characters */
+  color: #ff3333;
+  text-shadow: 0 0 6px #000;
+  pointer-events: none;
+  white-space: nowrap;
+}
       #redeye-chat-window textarea:focus {
         outline: none;
         border-color: rgba(139, 0, 0, 0.8) !important;
