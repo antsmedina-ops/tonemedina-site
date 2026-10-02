@@ -543,78 +543,70 @@ iframe[src*="calendar.google.com"]:hover {
 }
 
 /* ==========================================================================
-   CONTACT & CALENDAR SECTION (LOCKED TO SITE GRID)
+   CONTACT & CALENDAR SECTION (STACKED / REVERSED ORDER)
    ========================================================================== */
 #contact {
   width: 100% !important;
-  max-width: 1200px !important; /* Locks layout to standard header/nav width */
-  margin: 0 auto !important;    /* Centers section in viewport */
-  padding: 0 1.5rem !important;  /* Matches standard site page margins */
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 1.5rem !important;
   box-sizing: border-box !important;
 }
 
 #contact .grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1.8fr !important; /* Contact = ~35%, Calendar = ~65% */
+  display: flex !important;
+  flex-direction: column !important; /* Stacked layout */
   gap: 2rem !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  align-items: stretch;
 }
 
-/* Contact Card (Left) */
-#contactCard {
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  position: relative;
-  z-index: 1;
-}
-
-/* Calendar Card (Right - Expandable Pop-Up Card) */
+/* 1. Art Calendar / Events Card (Top) */
 #calendarCard {
+  order: 1 !important; /* Alphabetically first */
   width: 100% !important;
-  min-width: 0 !important;
   box-sizing: border-box !important;
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  max-height: 480px; /* Default card height */
-  overflow: hidden;
-  transform-origin: center center;
-  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-/* Matching Contact Pop-Up & Neon Glow Effect on Hover */
-#calendarCard:hover {
-  max-height: 780px; /* Smoothly expands down to reveal full calendar */
-  transform: scale(1.02) translateY(-6px) !important; /* Pop effect matching Contact card */
-  border-color: #ff3333 !important;
-  box-shadow: 0 20px 40px rgba(255, 0, 0, 0.5), 0 0 25px rgba(255, 0, 0, 0.3) !important;
-  z-index: 99 !important; /* Floats over elements below */
-}
-
-/* Calendar iFrame Sizing */
 #calendarCard iframe {
   width: 100% !important;
-  height: 750px !important;
+  min-height: 480px;
   border: none;
   border-radius: 8px;
   box-sizing: border-box !important;
   display: block;
 }
 
-/* Mobile Responsiveness (Stacked Vertically + Touch Pop) */
+/* 2. Contact Card (Bottom - Pops Downward) */
+#contactCard {
+  order: 2 !important; /* Alphabetically second */
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+#contactCard:hover,
+#contactCard:active,
+#contactCard:focus-within {
+  transform: scale(1.02) translateY(-4px) !important;
+  border-color: #ff3333 !important;
+  box-shadow: 0 15px 35px rgba(255, 0, 0, 0.5), 0 0 25px rgba(255, 0, 0, 0.3) !important;
+  z-index: 10 !important;
+}
+
+/* Mobile Padding Adjustments */
 @media (max-width: 768px) {
   #contact {
     padding: 0 1rem !important;
   }
-
-  #contact .grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+  #calendarCard iframe {
+    min-height: 360px;
   }
+}
 
   #calendarCard {
     max-height: 380px;
