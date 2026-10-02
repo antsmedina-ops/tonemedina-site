@@ -543,38 +543,32 @@ iframe[src*="calendar.google.com"]:hover {
 }
 
 /* ==========================================================================
-   CONTACT & CALENDAR FLEX LAYOUT (DESKTOP + MOBILE)
+   CONTACT & CALENDAR GRID LAYOUT
    ========================================================================== */
 #contact .grid {
-  display: flex;
-  flex-direction: row;
+  display: grid !important;
+  grid-template-columns: 1fr 2fr !important; /* Contact = 1/3, Calendar = 2/3 */
   gap: 2rem;
   align-items: stretch;
   width: 100%;
 }
 
-/* Contact Card (1/3 Desktop Width) */
+/* Contact Card (Compact - 1/3 Width) */
 #contactCard {
-  flex: 1 1 0px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   box-sizing: border-box;
   position: relative;
   z-index: 1;
 }
 
-/* Calendar Card (2/3 Desktop Width - Prominent) */
+/* Calendar Card (Prominent - 2/3 Width) */
 #calendarCard {
-  flex: 2 1 0px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   box-sizing: border-box;
-  transform-origin: center center;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
   position: relative;
   z-index: 1;
+  transform-origin: center center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
 #calendarCard:hover {
@@ -584,46 +578,20 @@ iframe[src*="calendar.google.com"]:hover {
   z-index: 99 !important;
 }
 
-/* Calendar iFrame Sizing (Desktop) */
+/* Calendar iFrame Sizing */
 #calendarCard iframe {
   width: 100% !important;
   height: 100% !important;
-  min-height: 500px;
-  flex-grow: 1;
+  min-height: 480px;
   border: none;
   border-radius: 12px;
 }
 
-/* Mobile Layout & Touch Effects (Stacked) */
+/* Mobile Responsiveness (Stacked Vertically) */
 @media (max-width: 768px) {
   #contact .grid {
-    flex-direction: column;
+    grid-template-columns: 1fr !important; /* Stacks vertically */
     gap: 1.5rem;
-  }
-
-  /* Contact Card Mobile Full Width & Touch Pop */
-  #contactCard {
-    width: 100%;
-    flex: none;
-    padding: 1.75rem 1.5rem;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease !important;
-  }
-
-  #contactCard:hover,
-  #contactCard:active,
-  #contactCard:focus-within {
-    transform: scale(1.02) translateY(-4px) !important;
-    border-color: #ff3333 !important;
-    box-shadow: 0 15px 35px rgba(255, 0, 0, 0.5), 0 0 25px rgba(255, 0, 0, 0.3) !important;
-    z-index: 10 !important;
-  }
-
-  /* Calendar Card Mobile Full Width */
-  #calendarCard {
-    width: 100%;
-    flex: none;
   }
 
   #calendarCard iframe {
