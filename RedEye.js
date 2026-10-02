@@ -36,11 +36,32 @@
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
 
-  // State & Timer Variables for Typing Animation
-  let typeWriterInterval = null;
-  let placeholderTimer = null;
+// ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+  function initAmbientWhispers() {
+    function speakAmbientWhisper() {
+      if (chatWindowDiv.style.display !== 'flex') {
+        const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
+        const isMobileScreen = window.innerWidth <= 768;
 
-  // ===== Helper: Inject Cursor Blink Animation =====
+        bubbleDiv.textContent = text;
+        bubbleDiv.style.opacity = '1';
+        bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
+
+        setTimeout(() => {
+          bubbleDiv.style.opacity = '0';
+          bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
+        }, 4000);
+      }
+
+      // Random delay between 5,000ms (5s) and 20,000ms (20s)
+      const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
+      setTimeout(speakAmbientWhisper, nextDelay);
+    }
+
+    // Initial start delay when page loads (currently 6 to 10 seconds)
+    const initialDelay = Math.floor(Math.random() * 4000) + 6000;
+    setTimeout(speakAmbientWhisper, initialDelay);
+  }
   function injectCursorStyle() {
     if (document.getElementById('redeye-cursor-style')) return;
     const style = document.createElement('style');
@@ -305,10 +326,10 @@
         const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
         const isMobileScreen = window.innerWidth <= 768;
 
-        bubbleDiv.textContent = text;
-        bubbleDiv.style.opacity = '1';
-        bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
-
+       bubbleDiv.textContent = text;
+       playOjoSound('whisper');
+       bubbleDiv.style.opacity = '1';
+       bubbleDiv.style.transform = isMobileScreen ? 'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
           bubbleDiv.style.transform = isMobileScreen ? 'translateY(0)' : 'translateX(-50%) translateY(0)';
@@ -429,9 +450,10 @@
   }
 
   // ===== 4. WORKER API CALL =====
-  async function sendInputToWorker(inputArea, historyArea) {
+    async function sendInputToWorker(inputArea, historyArea) {
     const text = inputArea.value.trim();
     if (!text) return;
+    playOjoSound('blip');
 
     inputArea.value = '';
 
@@ -552,10 +574,12 @@
 
   function addRedeyeListeners(historyArea, inputArea, greetingOverlay, sendBtn, headerDiv) {
     const toggleChat = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+       if (e) {
+       e.preventDefault();
+       e.stopPropagation();
       }
+       playOjoSound('blip');
+      
       if (leaveTimer) clearTimeout(leaveTimer);
       const isOpening = chatWindowDiv.style.display !== 'flex';
       chatWindowDiv.style.display = isOpening ? 'flex' : 'none';
