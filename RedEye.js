@@ -497,6 +497,11 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [{ role: 'user', content: text }],
+          location: {
+            title: document.title,
+            pathname: window.location.pathname,
+            hash: window.location.hash || '#top'
+          },
           pageContext: (document.querySelector('main') || document.body).innerText.replace(/SEND/g, '').substring(0, 1500)
         })
       });
