@@ -215,6 +215,7 @@ bubbleDiv.id = 'ojo-ambient-bubble';
     headerDiv.querySelector('#redeye-close-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       chatWindowDiv.style.display = 'none';
+      sessionStorage.removeItem('ojo_chat_open'); // Clears saved open state on close
       isBotMuted = false;
     });
 
@@ -287,11 +288,12 @@ bubbleDiv.id = 'ojo-ambient-bubble';
     document.body.appendChild(botDiv);
     document.body.appendChild(chatWindowDiv);
 
-    if (!isMobile) {
+  if (!isMobile) {
       initDesktopTracking();
     }
 
     addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
+    restoreChatState(chatHistoryDiv); // Restores chat window on page load
   }
 
 // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
@@ -396,6 +398,24 @@ function initDesktopTracking() {
     }, 70);
   }
 
+  // ===== CHAT PERSISTENCE HELPERS =====
+  function saveChatState(historyArea) {
+    sessionStorage.setItem('ojo_chat_history', historyArea.innerHTML);
+    sessionStorage.setItem('ojo_chat_open', 'true');
+  }
+
+  function restoreChatState(historyArea) {
+    const savedHistory = sessionStorage.getItem('ojo_chat_history');
+    const wasOpen = sessionStorage.getItem('ojo_chat_open');
+    if (savedHistory) {
+      historyArea.innerHTML = savedHistory;
+      historyArea.scrollTop = historyArea.scrollHeight;
+    }
+    if (wasOpen === 'true') {
+      chatWindowDiv.style.display = 'flex';
+    }
+  }
+
   // ===== 4. WORKER API CALL =====
   async function sendInputToWorker(inputArea, historyArea) {
     const text = inputArea.value.trim();
@@ -408,6 +428,7 @@ function initDesktopTracking() {
     userMsg.textContent = `You: ${text}`;
     historyArea.appendChild(userMsg);
     historyArea.scrollTop = historyArea.scrollHeight;
+    saveChatState(historyArea); // <-- NEW: Saves user message immediately
 
     const botMsg = document.createElement('div');
     botMsg.style.cssText = 'margin-bottom: 12px; color: #ff6666; word-break: break-word;';
@@ -419,7 +440,7 @@ function initDesktopTracking() {
       const response = await fetch(BOT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({
+        body: JSON.stringify({
           messages: [{ role: 'user', content: text }],
           pageContext: (document.querySelector('main') || document.body).innerText.replace(/SEND/g, '').substring(0, 1500)
         })
@@ -446,7 +467,7 @@ function initDesktopTracking() {
         setTimeout(() => window.open(openMatch[1].trim(), '_blank'), 1200); 
       }
 
-// 3. Check if the AI wants to trigger an action or scroll to a section
+      // 3. Check if the AI wants to trigger an action or scroll to a section
       const actionMatch = replyText.match(/\[ACTION:\s*([^\]]+)\]/i);
 
       if (actionMatch) {
@@ -463,7 +484,6 @@ function initDesktopTracking() {
           if (matchedEl) {
             matchedEl.click();
           } else {
-           // Fallback: Search page elements and details accordions to open and smooth-scroll
             const targetEl = document.getElementById(targetAction) || Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, details')).find(el => {
               return el.textContent.trim().toLowerCase().includes(targetAction);
             });
@@ -475,42 +495,35 @@ function initDesktopTracking() {
               }
               targetEl.scrollIntoView({ behavior: 'smooth' });
             } else {
-const routeMap = {
-  'art': 'works.html',
-  'artwork': 'works.html',
-  'works': 'works.html',
-  'gallery': 'works.html',
-  'archive': 'works.html#archives',
-  'archives': 'works.html#archives',
-  'music': 'index.html',
-  'news': 'news.html',
-  'contact': 'contact.html',
-  'links': 'links.html',
-  'calendar': 'contact.html#calendar',
-  'social': 'links.html',
-  'socials': 'links.html',
-  'social media': 'links.html',
-  'instagram': 'https://www.instagram.com/tonemedina',
-  'bluesky': 'https://bsky.app/profile/tonemedina.bsky.social',
-  'wordpress': 'https://tonemedina.wordpress.com',
-  'bio': 'bio.html',
-  'biography': 'bio.html',
-  'home': 'index.html'
-};
-
-if (routeMap[targetAction]) {
-  if (routeMap[targetAction].startsWith('http')) {
-    window.open(routeMap[targetAction], '_blank');
-  } else {
-    window.location.href = routeMap[targetAction];
-  }
-}
-if (routeMap[targetAction]) {
-  window.location.href = routeMap[targetAction];
-}
+              const routeMap = {
+                'art': 'works.html',
+                'artwork': 'works.html',
+                'works': 'works.html',
+                'gallery': 'works.html',
+                'archive': 'works.html#archives',
+                'archives': 'works.html#archives',
+                'music': 'index.html',
+                'news': 'news.html',
+                'contact': 'contact.html',
+                'links': 'links.html',
+                'calendar': 'contact.html#calendar',
+                'social': 'links.html',
+                'socials': 'links.html',
+                'social media': 'links.html',
+                'instagram': 'https://www.instagram.com/tonemedina',
+                'bluesky': 'https://bsky.app/profile/tonemedina.bsky.social',
+                'wordpress': 'https://tonemedina.wordpress.com',
+                'bio': 'bio.html',
+                'biography': 'bio.html',
+                'home': 'index.html'
+              };
 
               if (routeMap[targetAction]) {
-                window.location.href = routeMap[targetAction];
+                if (routeMap[targetAction].startsWith('http')) {
+                  window.open(routeMap[targetAction], '_blank');
+                } else {
+                  window.location.href = routeMap[targetAction];
+                }
               }
             }
           }
@@ -523,6 +536,7 @@ if (routeMap[targetAction]) {
       botMsg.textContent = '¡Ojo!: Connection lost... try again.';
     }
     historyArea.scrollTop = historyArea.scrollHeight;
+    saveChatState(historyArea); // <-- NEW: Saves response after ¡Ojo! answers
   }
 
   // ===== 5. INTERACTION & TOUCH EVENT LISTENERS =====
