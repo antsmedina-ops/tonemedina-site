@@ -1006,3 +1006,53 @@ body.neon-dead::before {
   object-fit: cover !important; /* Crops images cleanly without stretching */
   border-radius: 8px;
 }
+
+/* =========================================
+   EPHEMERAL ART / ARCHIVES CARD
+   ========================================= */
+
+/* Separates the section from the Recent Projects grid */
+.archive-card-wrapper {
+  margin-top: 40px; 
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+/* Styles the clickable summary like an interactive card */
+.archive-action-card {
+  background-color: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 30px 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  display: block; /* Removes default details arrow in some browsers */
+}
+
+/* The hover physics (lift and subtle red glow to match ¡Ojo!) */
+.archive-action-card:hover {
+  transform: translateY(-5px);
+  border-color: #555;
+  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.15);
+}
+
+/* Removes the default HTML accordion triangle */
+.archive-action-card::-webkit-details-marker {
+  display: none;
+}
+
+/* Styles the "Enter Ephemeral Art" text */
+.enter-prompt {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 0.85em;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: color 0.3s ease;
+}
+
+.archive-action-card:hover .enter-prompt {
+  color: #fff;
+}
