@@ -1042,7 +1042,7 @@ body.neon-dead::before {
   display: none;
 }
 
-/* Styles the "Enter Ephemeral Art" text */
+/* Styles the "Enter" text */
 .enter-prompt {
   display: inline-block;
   margin-top: 15px;
