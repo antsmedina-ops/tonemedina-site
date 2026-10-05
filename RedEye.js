@@ -61,7 +61,7 @@
     "done yet?",
     "this all seems pointless",
     "are we friends?",
-    "OJO sees everything"
+    "OJO sees everything",
     "chalk fades but the memories remain"
   ];
   const bubbleDiv = document.createElement('div');  
