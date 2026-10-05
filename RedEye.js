@@ -736,6 +736,8 @@ const NAV_DESCRIPTIONS = {
   'biography': 'About Tone.'
 };
 
+let navLeaveTimeout = null;
+
 function attachNavGuide() {
   // Target both the Brand title and Navigation links
   const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
@@ -751,13 +753,29 @@ function attachNavGuide() {
     if (infoText) {
       // Trigger when user hovers/rolls over the link or brand title
       link.addEventListener('mouseenter', () => {
+        // Cancel reset timer so ¡Ojo! stays at the navbar when sliding between links
+        if (navLeaveTimeout) {
+          clearTimeout(navLeaveTimeout);
+          navLeaveTimeout = null;
+        }
+
         const rect = link.getBoundingClientRect();
         
+        // Target coordinates: centered below the hovered link
+        let targetLeft = rect.left + (rect.width / 2) - 24;
+        let targetTop = rect.bottom + 12;
+
+        // Keep ¡Ojo! from drifting off the right side of the screen
+        const maxLeft = window.innerWidth - 80;
+        if (targetLeft > maxLeft) {
+          targetLeft = maxLeft;
+        }
+
         // Glide ¡Ojo! near the hovered item
         redeyeContainer.style.position = 'fixed';
-        redeyeContainer.style.top = `${rect.bottom + 12}px`;
-        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 24}px`;
-        redeyeContainer.style.transition = 'all 0.3s ease';
+        redeyeContainer.style.top = `${targetTop}px`;
+        redeyeContainer.style.left = `${targetLeft}px`;
+        redeyeContainer.style.transition = 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
         
         // Display summary in speech bubble
         redeyeSpeech.textContent = infoText;
@@ -767,10 +785,13 @@ function attachNavGuide() {
 
       // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
-        redeyeSpeech.style.display = 'none';
-        redeyeSpeech.style.opacity = '0';
-        redeyeContainer.style.top = '';
-        redeyeContainer.style.left = '';
+        // Short delay before resetting so ¡Ojo! stays up at the navbar while hovering nearby items
+        navLeaveTimeout = setTimeout(() => {
+          redeyeSpeech.style.display = 'none';
+          redeyeSpeech.style.opacity = '0';
+          redeyeContainer.style.top = '';
+          redeyeContainer.style.left = '';
+        }, 350);
       });
     }
   });
