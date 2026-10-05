@@ -688,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
-        bubbleDiv.textContent = "They fade from the pavement, but the memory stays.";
+        bubbleDiv.textContent = "it may fade away, but the memory will remain.";
         bubbleDiv.style.opacity = '1';
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
