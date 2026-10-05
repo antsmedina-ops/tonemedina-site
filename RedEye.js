@@ -56,13 +56,12 @@
 
   // Ambient speech messages & bubble element
   const OJO_WHISPERS = [
-    "i'm watchin you",
-    "still here?",
+    "i'm watchin",
+    "what are you doing?",
     "done yet?",
     "this all seems pointless",
-    "are we friends?",
-    "OJO sees everything"
-    "chalk fades but the memories remain"
+    "we're not friends",
+    "i see everything"
   ];
   const bubbleDiv = document.createElement('div');  
 
@@ -688,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
-        bubbleDiv.textContent = "it may fade away, but the memory will remain.";
+        bubbleDiv.textContent = "They fade from the pavement, but the memory stays.";
         bubbleDiv.style.opacity = '1';
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
