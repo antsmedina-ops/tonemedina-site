@@ -391,9 +391,7 @@
       }, 300);
     });
 
-    function animate(timestamp) {
-      if (window.innerWidth > 768) {
-      function animate(timestamp) {
+   function animate(timestamp) {
     if (window.innerWidth > 768) {
       // Pause tracking physics when user is hovering over <nav>
       if (!isHovered && !isHoveringNav && chatWindowDiv.style.display !== 'flex') {
