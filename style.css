@@ -1068,9 +1068,14 @@ section h2,
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #1DB954 !important; /* Spotify Accent Green */
+  color: #ffffff;
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+/* Spotify Header Accent Override */
+#spotifyModal .now-playing {
+  color: #1DB954 !important;
 }
 
 /* Styled Subheaders, Bio Text, & News Excerpts */
@@ -1091,4 +1096,32 @@ section h2,
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+}
+
+/* Horizontal Blue Beam Effect (Recent Projects) */
+#recentProjectsCard,
+.card-scanner {
+  position: relative;
+  overflow: hidden;
+}
+
+#recentProjectsCard::after,
+.card-scanner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00d2ff, transparent);
+  animation: scanBeam 4s infinite linear;
+}
+
+@keyframes scanBeam {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
 }
