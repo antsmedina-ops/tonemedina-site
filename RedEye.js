@@ -420,6 +420,7 @@
     }
     requestAnimationFrame(animate);
   }
+ } //   
 
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
