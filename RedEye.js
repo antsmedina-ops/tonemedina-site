@@ -742,15 +742,14 @@ function attachNavGuide() {
 
   if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
-  // 1. Move ¡Ojo! up to stand by near the navbar as soon as cursor enters ANY part of <nav>
+  // 1. Pause tracking loop and dock ¡Ojo! at top right when mouse enters <nav>
   navContainer.addEventListener('mouseenter', () => {
+    isHoveringNav = true; 
     const navRect = navContainer.getBoundingClientRect();
 
-    // Position ¡Ojo! ~1 inch below and to the right of the navbar
     const targetLeft = Math.min(navRect.right - 60, window.innerWidth - 80);
     const targetTop = navRect.bottom + 16;
 
-    // Lock ¡Ojo! in place and override tracking physics
     redeyeContainer.style.transform = 'none';
     redeyeContainer.style.position = 'fixed';
     redeyeContainer.style.top = `${targetTop}px`;
@@ -758,7 +757,7 @@ function attachNavGuide() {
     redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
   });
 
-  // 2. When hovering specific links, update the description text and focus position
+  // 2. Update speech bubble and glide ¡Ojo! on hovering links
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
@@ -767,7 +766,6 @@ function attachNavGuide() {
       link.addEventListener('mouseenter', () => {
         const linkRect = link.getBoundingClientRect();
         
-        // Glide ¡Ojo! right next to the active link
         let targetLeft = linkRect.right + 20;
         if (targetLeft > window.innerWidth - 80) {
           targetLeft = window.innerWidth - 80;
@@ -782,19 +780,22 @@ function attachNavGuide() {
       });
 
       link.addEventListener('mouseleave', () => {
-        // Hide speech bubble, but keep ¡Ojo! standing by at top bar
         redeyeSpeech.style.display = 'none';
         redeyeSpeech.style.opacity = '0';
       });
     }
   });
 
-  // 3. Return ¡Ojo! to standard tracking ONLY when leaving the entire <nav> bar header
+  // 3. Resume normal tracking only when leaving the entire <nav> header
   navContainer.addEventListener('mouseleave', () => {
+    isHoveringNav = false; 
     redeyeSpeech.style.display = 'none';
     redeyeSpeech.style.opacity = '0';
     
-    // Reset position back to standard tracking
+    const rect = redeyeContainer.getBoundingClientRect();
+    if (typeof currentX !== 'undefined') currentX = rect.left;
+    if (typeof currentY !== 'undefined') currentY = rect.top;
+
     redeyeContainer.style.top = '';
     redeyeContainer.style.left = '';
     redeyeContainer.style.transition = '';
