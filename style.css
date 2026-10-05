@@ -1057,10 +1057,11 @@ body.neon-dead::before {
   color: #fff;
 }
 
-/* Modern Card Headers (Applies to both h2 and h3) */
+/* Modern Card Headers (Applies to Cards, Bio, & News Titles) */
 .card h2,
 .card h3,
-section h2 {
+section h2,
+.article-title {
   font-family: 'Orbitron', 'Oswald', sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -1071,13 +1072,22 @@ section h2 {
   margin-bottom: 0.5rem;
 }
 
-/* Styled Subheaders & Bio Text */
+/* Styled Subheaders, Bio Text, & News Excerpts */
 .card .subtitle,
-.card p {
+.card p,
+.article-excerpt {
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   font-style: italic;
   letter-spacing: 0.05em;
   color: #a5adba;
   line-height: 1.6;
+}
+
+/* Modern Publication Badges (CBS Colorado, Denver Post, etc.) */
+.pub-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
