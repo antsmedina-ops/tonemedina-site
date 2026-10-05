@@ -725,4 +725,55 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize timer when page loads
   resetInactivityTimer();
 
+// Nav Bar Guide Descriptions for ¡Ojo! (4-5 words each)
+const NAV_DESCRIPTIONS = {
+  'Music': 'What tone is listening to now.',
+  'Art Work': 'Current and older art pieces.',
+  'News': 'Press features and news articles.',
+  'Contact': 'The easiest way to connect.',
+  'Links': 'Social channels & useful links.',
+  'Biography': 'About tone.'
+};
+
+// Function to move ¡Ojo! near the nav link and show explanation
+function attachNavGuide() {
+  const navLinks = document.querySelectorAll('nav .links a');
+  const redeyeContainer = document.getElementById('redeye-container');
+  const redeyeSpeech = document.getElementById('redeye-speech');
+
+  if (!redeyeContainer || !redeyeSpeech) return;
+
+  navLinks.forEach(link => {
+    const text = link.textContent.trim();
+    const infoText = NAV_DESCRIPTIONS[text];
+
+    if (infoText) {
+      link.addEventListener('mouseenter', () => {
+        const rect = link.getBoundingClientRect();
+        
+        // Position ¡Ojo! floating right under the hovered link
+        redeyeContainer.style.position = 'fixed';
+        redeyeContainer.style.top = `${rect.bottom + 12}px`;
+        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 30}px`;
+        
+        // Show description speech bubble
+        redeyeSpeech.textContent = infoText;
+        redeyeSpeech.style.display = 'block';
+      });
+
+      link.addEventListener('mouseleave', () => {
+        // Hide speech bubble and return ¡Ojo! to bottom corner
+        redeyeSpeech.style.display = 'none';
+        redeyeContainer.style.top = '';
+        redeyeContainer.style.left = '';
+      });
+    }
+  });
+}
+
+// Initialize Nav Guide after DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+  attachNavGuide();
+});
+  
 })();
