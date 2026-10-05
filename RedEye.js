@@ -190,13 +190,13 @@
   function createBotUi() {
     injectCursorStyle();
 
-    if (!document.getElementById('wopr-font')) {
-      const fontLink = document.createElement('link');
-      fontLink.id = 'wopr-font';
-      fontLink.rel = 'stylesheet';
-      fontLink.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
-      document.head.appendChild(fontLink);
-    }
+  if (!document.getElementById('typewriter-font')) {
+    const fontLink = document.createElement('link');
+    fontLink.id = 'typewriter-font';
+    fontLink.rel = 'stylesheet';
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap';
+    document.head.appendChild(fontLink);
+}
 
     const isMobile = window.innerWidth <= 768;
 
@@ -304,8 +304,8 @@
       top: 8px;
       left: 8px;
       color: #aaa;
-      font-family: 'VT323', monospace;
-      font-size: 1rem;
+      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+      font-size: 0.95rem;
       letter-spacing: 0.05em;
       pointer-events: none;
       white-space: pre-wrap;
