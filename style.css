@@ -409,14 +409,14 @@ iframe[src*="calendar.google.com"]:hover {
    6. TYPEWRITER EFFECT & ANIMATIONS
    ========================================================================== */
 .typewriter-container h3 {
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  width: 0;
-  line-height: 1.6;
-  font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
+  margin: 0; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  width: 0; 
+  line-height: 1.6; 
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem); /* Increased size */
   font-family: 'Courier Prime', 'Courier New', Courier, monospace; 
-  border-right: 2px solid transparent;
+  border-right: 2px solid transparent; 
 }
 
 .line-1 {
