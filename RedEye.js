@@ -707,6 +707,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (historyArea) {
       historyArea.innerHTML = '';
     }
+    // Clear session storage so old history doesn't return on page refresh/navigation
+    sessionStorage.removeItem('ojo_chat_history');
   }
 
   // Function to reset the inactivity timer
