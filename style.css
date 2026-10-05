@@ -1057,17 +1057,18 @@ body.neon-dead::before {
   color: #fff;
 }
 
-/* Modern Card Headers (Applies to Cards, Bio, & News Titles) */
+/* Modern Card Headers (Applies to Cards, Bio, News Titles, & Music Modal) */
 .card h2,
 .card h3,
 section h2,
-.article-title {
+.article-title,
+#spotifyModal .now-playing {
   font-family: 'Orbitron', 'Oswald', sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #ffffff;
+  color: #1DB954 !important; /* Spotify Accent Green */
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
