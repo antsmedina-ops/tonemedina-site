@@ -56,12 +56,13 @@
 
   // Ambient speech messages & bubble element
   const OJO_WHISPERS = [
-    "i'm watchin",
-    "what are you doing?",
+    "i'm watchin you",
+    "still here?",
     "done yet?",
     "this all seems pointless",
-    "we're not friends",
-    "i see everything"
+    "are we friends?",
+    "OJO sees everything"
+    "chalk fades but the memories remain"
   ];
   const bubbleDiv = document.createElement('div');  
 
