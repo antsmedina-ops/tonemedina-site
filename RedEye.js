@@ -712,7 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(dissolveStyle);
 
- // ===== THE HIGH-FIDELITY CHALK DUST DISSOLVE =====
+// ===== THE HIGH-FIDELITY CHALK DUST DISSOLVE =====
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Inject the core glowing spiral style
   const dissolveStyle = document.createElement('style');
@@ -833,7 +833,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (archiveTrigger) {
       archiveTrigger.addEventListener('mouseenter', triggerChalkDissolve);
       archiveTrigger.addEventListener('click', triggerChalkDissolve);
-}
+    }
   }
 });
-})();
