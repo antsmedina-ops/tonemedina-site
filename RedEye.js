@@ -731,71 +731,75 @@ const NAV_DESCRIPTIONS = {
   'music': 'tone has good taste.',
   'art work': 'New art & old art.',
   'news': 'TV features and news articles.',
-  'contact': 'The best way to connect with him.',
+  'contact': 'Connect with him.',
   'links': 'Socials & useful links.',
   'biography': 'About Tone.'
 };
 
-let navLeaveTimeout = null;
-
 function attachNavGuide() {
-  // Target both the Brand title and Navigation links
+  const navContainer = document.querySelector('nav');
   const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
   const redeyeContainer = document.getElementById('redeye-bot');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
 
-  if (!redeyeContainer || !redeyeSpeech) return;
+  if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
+  // 1. Move ¡Ojo! up to stand by near the navbar as soon as cursor enters ANY part of <nav>
+  navContainer.addEventListener('mouseenter', () => {
+    const navRect = navContainer.getBoundingClientRect();
+
+    // Position ¡Ojo! ~1 inch below and to the right of the navbar
+    const targetLeft = Math.min(navRect.right - 60, window.innerWidth - 80);
+    const targetTop = navRect.bottom + 16;
+
+    // Lock ¡Ojo! in place and override tracking physics
+    redeyeContainer.style.transform = 'none';
+    redeyeContainer.style.position = 'fixed';
+    redeyeContainer.style.top = `${targetTop}px`;
+    redeyeContainer.style.left = `${targetLeft}px`;
+    redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
+  });
+
+  // 2. When hovering specific links, update the description text and focus position
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
 
     if (infoText) {
-      // Trigger when user hovers/rolls over the link or brand title
       link.addEventListener('mouseenter', () => {
-        // Cancel reset timer so ¡Ojo! stays at the navbar when sliding between links
-        if (navLeaveTimeout) {
-          clearTimeout(navLeaveTimeout);
-          navLeaveTimeout = null;
-        }
-
-        const rect = link.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
         
-        // Target coordinates centered under the link
-        let targetLeft = rect.left + (rect.width / 2) - 24;
-        let targetTop = rect.bottom + 12;
-
-        // Hard clamp to prevent drifting off the right edge of the screen
-        const maxLeft = window.innerWidth - 70;
-        if (targetLeft > maxLeft) {
-          targetLeft = maxLeft;
+        // Glide ¡Ojo! right next to the active link
+        let targetLeft = linkRect.right + 20;
+        if (targetLeft > window.innerWidth - 80) {
+          targetLeft = window.innerWidth - 80;
         }
 
-        // Lock ¡Ojo! in place and override tracking physics
-        redeyeContainer.style.transform = 'none';
-        redeyeContainer.style.position = 'fixed';
-        redeyeContainer.style.top = `${targetTop}px`;
+        redeyeContainer.style.top = `${linkRect.bottom + 12}px`;
         redeyeContainer.style.left = `${targetLeft}px`;
-        redeyeContainer.style.transition = 'top 0.25s ease, left 0.25s ease';
-        
-        // Display summary text
+
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
       });
 
-      // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
-        // Delay resetting so ¡Ojo! stays docked while hovering nearby links
-        navLeaveTimeout = setTimeout(() => {
-          redeyeSpeech.style.display = 'none';
-          redeyeSpeech.style.opacity = '0';
-          redeyeContainer.style.top = '';
-          redeyeContainer.style.left = '';
-          redeyeContainer.style.transition = '';
-        }, 350);
+        // Hide speech bubble, but keep ¡Ojo! standing by at top bar
+        redeyeSpeech.style.display = 'none';
+        redeyeSpeech.style.opacity = '0';
       });
     }
+  });
+
+  // 3. Return ¡Ojo! to standard tracking ONLY when leaving the entire <nav> bar header
+  navContainer.addEventListener('mouseleave', () => {
+    redeyeSpeech.style.display = 'none';
+    redeyeSpeech.style.opacity = '0';
+    
+    // Reset position back to standard tracking
+    redeyeContainer.style.top = '';
+    redeyeContainer.style.left = '';
+    redeyeContainer.style.transition = '';
   });
 }
 
