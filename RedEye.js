@@ -804,5 +804,3 @@ function attachNavGuide() {
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
 });
-  
-})();
