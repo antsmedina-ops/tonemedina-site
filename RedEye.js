@@ -73,6 +73,7 @@
   let currentY = savedY !== null ? parseFloat(savedY) : window.innerHeight / 2;
   let targetX = currentX;
   let targetY = currentY;
+  let isHoveringNav = false;
 
   // Movement Config
   const LERP_SPEED = 0.015;
@@ -393,7 +394,7 @@
 
     function animate(timestamp) {
       if (window.innerWidth > 768) {
-        if (!isHovered && chatWindowDiv.style.display !== 'flex') {
+        if (!isHovered && !isHoveringNav && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
 
           const dx = targetX - currentX;
@@ -737,42 +738,71 @@ const NAV_DESCRIPTIONS = {
 };
 
 function attachNavGuide() {
-  // Target both the Brand title and Navigation links
+  const navContainer = document.querySelector('nav');
   const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
   const redeyeContainer = document.getElementById('redeye-bot');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
 
-  if (!redeyeContainer || !redeyeSpeech) return;
+  if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
+  // 1. Pause tracking loop and dock ¡Ojo! at top right when mouse enters <nav>
+  navContainer.addEventListener('mouseenter', () => {
+    isHoveringNav = true; // Flips the switch to pause the physics engine
+    const navRect = navContainer.getBoundingClientRect();
+
+    const targetLeft = Math.min(navRect.right - 60, window.innerWidth - 80);
+    const targetTop = navRect.bottom + 16;
+
+    redeyeContainer.style.transform = 'none';
+    redeyeContainer.style.position = 'fixed';
+    redeyeContainer.style.top = `${targetTop}px`;
+    redeyeContainer.style.left = `${targetLeft}px`;
+    redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
+  });
+
+  // 2. Update speech bubble and glide ¡Ojo! on hovering links
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
 
     if (infoText) {
-      // Trigger when user hovers/rolls over the link or brand title
       link.addEventListener('mouseenter', () => {
-        const rect = link.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
         
-        // Glide ¡Ojo! near the hovered item
-        redeyeContainer.style.position = 'fixed';
-        redeyeContainer.style.top = `${rect.bottom + 12}px`;
-        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 24}px`;
-        redeyeContainer.style.transition = 'all 0.3s ease';
-        
-        // Display summary in speech bubble
+        let targetLeft = linkRect.right + 20;
+        if (targetLeft > window.innerWidth - 80) {
+          targetLeft = window.innerWidth - 80;
+        }
+
+        redeyeContainer.style.top = `${linkRect.bottom + 12}px`;
+        redeyeContainer.style.left = `${targetLeft}px`;
+
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
       });
 
-      // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
         redeyeSpeech.style.display = 'none';
         redeyeSpeech.style.opacity = '0';
-        redeyeContainer.style.top = '';
-        redeyeContainer.style.left = '';
       });
     }
+  });
+
+  // 3. Resume normal tracking only when leaving the entire <nav> header
+  navContainer.addEventListener('mouseleave', () => {
+    isHoveringNav = false; // Flips the switch to resume physics
+    redeyeSpeech.style.display = 'none';
+    redeyeSpeech.style.opacity = '0';
+    
+    // Smoothly hand coordinates back to the physics engine
+    const rect = redeyeContainer.getBoundingClientRect();
+    if (typeof currentX !== 'undefined') currentX = rect.left;
+    if (typeof currentY !== 'undefined') currentY = rect.top;
+
+    redeyeContainer.style.top = '';
+    redeyeContainer.style.left = '';
+    redeyeContainer.style.transition = '';
   });
 }
 
