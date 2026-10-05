@@ -679,22 +679,73 @@
     createBotUi();
   }
 
-// ¡Ojo! Archive Easter Egg Hover
+// ===== THE CHALK DUST DISSOLVE EASTER EGG =====
 document.addEventListener('DOMContentLoaded', () => {
-  const archiveTrigger = document.querySelector('.archive-trigger');
-  
-  if (archiveTrigger) {
-    archiveTrigger.addEventListener('mouseenter', () => {
-      // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
+  // 1. Inject the fiery CSS animations
+  const dissolveStyle = document.createElement('style');
+  dissolveStyle.textContent = `
+    @keyframes chalkDissolve {
+      0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.8); filter: blur(0px); }
+      20% { opacity: 1; transform: translateX(-50%) translateY(0px) scale(1); filter: blur(0px); text-shadow: 0 0 10px #ff4500, 0 0 20px #ff0000; }
+      70% { opacity: 1; transform: translateX(-50%) translateY(-15px) scale(1.1); filter: blur(2px); text-shadow: 0 0 20px #ff4500, 0 0 40px #ff0000; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(1.3); filter: blur(8px); text-shadow: none; color: transparent; }
+    }
+    .ojo-glyph {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      color: #ff4500;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000001;
+    }
+    .ojo-glyph.dissolve-active {
+      animation: chalkDissolve 3s ease-out forwards;
+    }
+    .redeye-agitated {
+      box-shadow: 0 0 30px 15px rgba(255, 69, 0, 0.9), inset 0 0 15px rgba(255, 0, 0, 1) !important;
+      border-color: #ff4500 !important;
+      transition: all 0.2s ease !important;
+    }
+  `;
+  document.head.appendChild(dissolveStyle);
+
+  // 2. Create the floating glyph element
+  const botDiv = document.getElementById('redeye-bot');
+  if (botDiv) {
+    const glyphDiv = document.createElement('div');
+    glyphDiv.className = 'ojo-glyph';
+    glyphDiv.innerHTML = '꩜'; // Ancient spiral symbol
+    botDiv.appendChild(glyphDiv);
+
+    // 3. The Trigger Function
+    function triggerChalkDissolve() {
+      if (glyphDiv.classList.contains('dissolve-active')) return; // Prevent spamming
+
+      botDiv.classList.add('redeye-agitated'); // Orb flares up
+      glyphDiv.classList.add('dissolve-active'); // Glyph appears and blows away
+      
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
-        bubbleDiv.textContent = "it may fade away, but the memory will remain.";
+        bubbleDiv.textContent = "this too, shall pass";
         bubbleDiv.style.opacity = '1';
-        setTimeout(() => {
-          bubbleDiv.style.opacity = '0';
-        }, 4000);
       }
-    });
+
+      // Reset everything after the animation (3 seconds)
+      setTimeout(() => {
+        botDiv.classList.remove('redeye-agitated');
+        glyphDiv.classList.remove('dissolve-active');
+        if (bubbleDiv) bubbleDiv.style.opacity = '0';
+      }, 3000);
+    }
+
+    // 4. Attach it to the "Where Ghosts Live" subtitle!
+    const archiveTrigger = document.querySelector('.archive-trigger');
+    if (archiveTrigger) {
+      archiveTrigger.addEventListener('mouseenter', triggerChalkDissolve);
+    }
   }
 });
   
