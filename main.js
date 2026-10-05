@@ -143,3 +143,18 @@ setTimeout(() => {
   document.body.classList.add('neon-dead');
 }, 12000);
 
+// ¡Ojo! Archive Easter Egg Hover
+document.addEventListener('DOMContentLoaded', () => {
+  const archiveTrigger = document.querySelector('.archive-trigger');
+  
+  if (archiveTrigger) {
+    archiveTrigger.addEventListener('mouseenter', () => {
+      // Find ¡Ojo!'s chat response container (adjust class name to match your widget if needed)
+      const ojoChatBubble = document.querySelector('.ojo-response-text'); 
+      
+      if (ojoChatBubble) {
+        ojoChatBubble.textContent = "They fade from the pavement, but the memory stays.";
+      }
+    });
+  }
+});
