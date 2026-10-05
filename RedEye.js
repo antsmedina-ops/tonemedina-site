@@ -712,20 +712,52 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(dissolveStyle);
 
-  // 2. Create the floating glyph element
+ // ===== THE HIGH-FIDELITY CHALK DUST DISSOLVE =====
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Inject the core glowing spiral style
+  const dissolveStyle = document.createElement('style');
+  dissolveStyle.textContent = `
+    @keyframes glyphEmerge {
+      0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.8); }
+      30% { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.1); text-shadow: 0 0 15px #ff4500, 0 0 30px #ff0000; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(1.1); text-shadow: 0 0 15px #ff4500; }
+    }
+    .ojo-glyph {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 55px;
+      color: #ff4500;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000001;
+    }
+    .ojo-glyph.dissolve-active {
+      animation: glyphEmerge 2.5s ease-out forwards;
+    }
+    .redeye-agitated {
+      box-shadow: 0 0 40px 20px rgba(255, 69, 0, 0.9), inset 0 0 20px rgba(255, 0, 0, 1) !important;
+      border-color: #ff4500 !important;
+      transition: all 0.2s ease !important;
+    }
+  `;
+  document.head.appendChild(dissolveStyle);
+
   const botDiv = document.getElementById('redeye-bot');
   if (botDiv) {
+    // Add the spiral glyph
     const glyphDiv = document.createElement('div');
     glyphDiv.className = 'ojo-glyph';
-    glyphDiv.innerHTML = '꩜'; // Ancient spiral symbol
+    glyphDiv.innerHTML = '꩜'; 
     botDiv.appendChild(glyphDiv);
 
-    // 3. The Trigger Function
     function triggerChalkDissolve() {
-      if (glyphDiv.classList.contains('dissolve-active')) return; // Prevent spamming
+      if (glyphDiv.classList.contains('dissolve-active')) return; 
 
-      botDiv.classList.add('redeye-agitated'); // Orb flares up
-      glyphDiv.classList.add('dissolve-active'); // Glyph appears and blows away
+      // Trigger bot flare and spiral emerge
+      botDiv.classList.add('redeye-agitated'); 
+      glyphDiv.classList.add('dissolve-active'); 
       
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
@@ -733,18 +765,74 @@ document.addEventListener('DOMContentLoaded', () => {
         bubbleDiv.style.opacity = '1';
       }
 
-      // Reset everything after the animation (3 seconds)
+      // --- THE PARTICLE SYSTEM EXPLOSION ---
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 300;
+      canvas.style.cssText = 'position:absolute; bottom: 20px; left: 50%; transform: translateX(-50%); pointer-events:none; z-index:1000002;';
+      botDiv.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+
+      let particles = [];
+      // Generate 120 particles
+      for(let i=0; i<120; i++) {
+        particles.push({
+          x: 150, // Center of canvas
+          y: 220, // Starting height (near the orb)
+          vx: (Math.random() - 0.5) * 6, // Explode left/right
+          vy: (Math.random() * -6) - 2,  // Explode upwards
+          life: Math.random() * 0.8 + 0.5,
+          size: Math.random() * 4 + 1.5,
+          color: ['#ff4500', '#ff0000', '#ff8c00', '#ff3333'][Math.floor(Math.random() * 4)]
+        });
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, 300, 300);
+        let allDead = true;
+        
+        particles.forEach(p => {
+          if (p.life > 0) {
+            allDead = false;
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.fill();
+            
+            // Apply physics: drift, rise, shrink, and fade
+            p.x += p.vx + (Math.sin(p.life * 10) * 0.5); // Slight wind effect
+            p.y += p.vy;
+            p.life -= 0.015; // Speed of fade
+            p.size *= 0.94;  // Speed of shrinking
+          }
+        });
+
+        if (!allDead) {
+          requestAnimationFrame(animateParticles);
+        } else {
+          canvas.remove(); // Cleanup when finished
+        }
+      }
+      
+      // Delay the particle explosion by a fraction of a second so the spiral emerges first
+      setTimeout(() => { requestAnimationFrame(animateParticles); }, 300);
+
+      // Reset bot state
       setTimeout(() => {
         botDiv.classList.remove('redeye-agitated');
         glyphDiv.classList.remove('dissolve-active');
         if (bubbleDiv) bubbleDiv.style.opacity = '0';
-      }, 3000);
+      }, 3500);
     }
 
-    // 4. Attach it to the "Where Ghosts Live" subtitle!
+    // Attach to subtitle
     const archiveTrigger = document.querySelector('.archive-trigger');
     if (archiveTrigger) {
       archiveTrigger.addEventListener('mouseenter', triggerChalkDissolve);
+      archiveTrigger.addEventListener('click', triggerChalkDissolve);
     }
   }
 });
