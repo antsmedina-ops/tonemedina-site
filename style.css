@@ -455,7 +455,7 @@ iframe[src*="calendar.google.com"]:hover {
 
 @media (max-width: 768px) {
   .typewriter-container h3 {
-    font-size: clamp(0.75rem, 3.8vw, 0.95rem) !important;
+    font-size: clamp(1.0rem, 4.5vw, 1.3rem) !important;
     white-space: nowrap !important;
     overflow: hidden !important;
   }
