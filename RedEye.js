@@ -761,23 +761,24 @@ function attachNavGuide() {
 
         const rect = link.getBoundingClientRect();
         
-        // Target coordinates: centered below the hovered link
+        // Target coordinates centered under the link
         let targetLeft = rect.left + (rect.width / 2) - 24;
         let targetTop = rect.bottom + 12;
 
-        // Keep ¡Ojo! from drifting off the right side of the screen
-        const maxLeft = window.innerWidth - 80;
+        // Hard clamp to prevent drifting off the right edge of the screen
+        const maxLeft = window.innerWidth - 70;
         if (targetLeft > maxLeft) {
           targetLeft = maxLeft;
         }
 
-        // Glide ¡Ojo! near the hovered item
+        // Lock ¡Ojo! in place and override tracking physics
+        redeyeContainer.style.transform = 'none';
         redeyeContainer.style.position = 'fixed';
         redeyeContainer.style.top = `${targetTop}px`;
         redeyeContainer.style.left = `${targetLeft}px`;
-        redeyeContainer.style.transition = 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+        redeyeContainer.style.transition = 'top 0.25s ease, left 0.25s ease';
         
-        // Display summary in speech bubble
+        // Display summary text
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
@@ -785,12 +786,13 @@ function attachNavGuide() {
 
       // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
-        // Short delay before resetting so ¡Ojo! stays up at the navbar while hovering nearby items
+        // Delay resetting so ¡Ojo! stays docked while hovering nearby links
         navLeaveTimeout = setTimeout(() => {
           redeyeSpeech.style.display = 'none';
           redeyeSpeech.style.opacity = '0';
           redeyeContainer.style.top = '';
           redeyeContainer.style.left = '';
+          redeyeContainer.style.transition = '';
         }, 350);
       });
     }
