@@ -745,13 +745,13 @@ function attachNavGuide() {
 
   if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
-  // 1. Pause tracking loop and dock ¡Ojo! at top right when mouse enters <nav>
+  // 1. Dock ¡Ojo! well below the header in the open background artwork
   navContainer.addEventListener('mouseenter', () => {
-    isHoveringNav = true; // Flips the switch to pause the physics engine
+    isHoveringNav = true; 
     const navRect = navContainer.getBoundingClientRect();
 
-    const targetLeft = Math.min(navRect.right - 60, window.innerWidth - 80);
-    const targetTop = navRect.bottom + 16;
+    const targetLeft = Math.min(navRect.right - 100, window.innerWidth - 100);
+    const targetTop = navRect.bottom + 120; // Pushed down 120px below the nav bar
 
     redeyeContainer.style.transform = 'none';
     redeyeContainer.style.position = 'fixed';
@@ -760,7 +760,7 @@ function attachNavGuide() {
     redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
   });
 
-  // 2. Update speech bubble and glide ¡Ojo! on hovering links
+  // 2. Keep the speech bubble positioned cleanly below the links
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
@@ -769,12 +769,14 @@ function attachNavGuide() {
       link.addEventListener('mouseenter', () => {
         const linkRect = link.getBoundingClientRect();
         
-        let targetLeft = linkRect.right + 20;
-        if (targetLeft > window.innerWidth - 80) {
-          targetLeft = window.innerWidth - 80;
+        let targetLeft = linkRect.left;
+        let targetTop = linkRect.bottom + 120; // Matches the lower vertical drop
+
+        if (targetLeft > window.innerWidth - 150) {
+          targetLeft = window.innerWidth - 150;
         }
 
-        redeyeContainer.style.top = `${linkRect.bottom + 12}px`;
+        redeyeContainer.style.top = `${targetTop}px`;
         redeyeContainer.style.left = `${targetLeft}px`;
 
         redeyeSpeech.textContent = infoText;
@@ -789,13 +791,12 @@ function attachNavGuide() {
     }
   });
 
-  // 3. Resume normal tracking only when leaving the entire <nav> header
+  // 3. Resume normal tracking when leaving the entire <nav> header
   navContainer.addEventListener('mouseleave', () => {
-    isHoveringNav = false; // Flips the switch to resume physics
+    isHoveringNav = false; 
     redeyeSpeech.style.display = 'none';
     redeyeSpeech.style.opacity = '0';
     
-    // Smoothly hand coordinates back to the physics engine
     const rect = redeyeContainer.getBoundingClientRect();
     if (typeof currentX !== 'undefined') currentX = rect.left;
     if (typeof currentY !== 'undefined') currentY = rect.top;
