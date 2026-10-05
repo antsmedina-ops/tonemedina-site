@@ -393,7 +393,35 @@
 
     function animate(timestamp) {
       if (window.innerWidth > 768) {
-        if (!isHovered && chatWindowDiv.style.display !== 'flex') {
+      function animate(timestamp) {
+    if (window.innerWidth > 768) {
+      // Pause tracking physics when user is hovering over <nav>
+      if (!isHovered && !isHoveringNav && chatWindowDiv.style.display !== 'flex') {
+        const time = timestamp * 0.001;
+        const dx = targetX - currentX;
+        const dy = targetY - currentY;
+        const dist = Math.hypot(dx, dy);
+        const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
+        const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
+
+        if (dist > 210 && !isHesitating) {
+          const destX = targetX + 90 + driftX;
+          const destY = targetY + 60 + driftY;
+          const lerpSpeed = 0.012;
+          currentX += (destX - currentX) * lerpSpeed;
+          currentY += (destY - currentY) * lerpSpeed;
+        } else {
+          currentX += (driftX * 0.05);
+          currentY += (driftY * 0.05);
+        }
+
+        botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+        sessionStorage.setItem('ojo_x', currentX);
+        sessionStorage.setItem('ojo_y', currentY);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
           const time = timestamp * 0.001;
 
           const dx = targetX - currentX;
