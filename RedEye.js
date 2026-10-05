@@ -677,4 +677,24 @@
   } else {
     createBotUi();
   }
+
+// ¡Ojo! Archive Easter Egg Hover
+document.addEventListener('DOMContentLoaded', () => {
+  const archiveTrigger = document.querySelector('.archive-trigger');
+  
+  if (archiveTrigger) {
+    archiveTrigger.addEventListener('mouseenter', () => {
+      // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
+      const bubbleDiv = document.getElementById('ojo-ambient-bubble');
+      if (bubbleDiv) {
+        bubbleDiv.textContent = "They fade from the pavement, but the memory stays.";
+        bubbleDiv.style.opacity = '1';
+        setTimeout(() => {
+          bubbleDiv.style.opacity = '0';
+        }, 4000);
+      }
+    });
+  }
+});
+  
 })();
