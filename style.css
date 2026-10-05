@@ -1056,3 +1056,26 @@ body.neon-dead::before {
 .archive-action-card:hover .enter-prompt {
   color: #fff;
 }
+
+/* Modern Card Headers */
+.card h3 {
+  font-family: 'Orbitron', 'Oswald', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Styled Subheaders & Metadata */
+.card .subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: #888888;
+  margin-top: 6px;
+  margin-bottom: 1.25rem;
+}
