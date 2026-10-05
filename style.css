@@ -1057,8 +1057,10 @@ body.neon-dead::before {
   color: #fff;
 }
 
-/* Modern Card Headers */
-.card h3 {
+/* Modern Card Headers (Applies to both h2 and h3) */
+.card h2,
+.card h3,
+section h2 {
   font-family: 'Orbitron', 'Oswald', sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -1066,16 +1068,16 @@ body.neon-dead::before {
   letter-spacing: 0.1em;
   color: #ffffff;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
-/* Styled Subheaders & Metadata */
-.card .subtitle {
+/* Styled Subheaders & Bio Text */
+.card .subtitle,
+.card p {
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-style: italic;
-  letter-spacing: 0.08em;
-  color: #888888;
-  margin-top: 6px;
-  margin-bottom: 1.25rem;
+  letter-spacing: 0.05em;
+  color: #a5adba;
+  line-height: 1.6;
 }
