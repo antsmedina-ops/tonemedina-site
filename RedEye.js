@@ -725,17 +725,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize timer when page loads
   resetInactivityTimer();
 
-// Nav Bar Guide Descriptions for ¡Ojo! (4-5 words each)
+// Nav Bar Descriptions for ¡Ojo! on Rollover (4-5 words each)
 const NAV_DESCRIPTIONS = {
-  'Music': 'What tone is listening to now.',
-  'Art Work': 'Current and older art pieces.',
-  'News': 'Press features and news articles.',
-  'Contact': 'The easiest way to connect.',
-  'Links': 'Social channels & useful links.',
-  'Biography': 'About tone.'
+  'music': 'Curated Spotify playlists and tracks.',
+  'art work': 'Physical gallery and chalk archives.',
+  'news': 'Press features and news articles.',
+  'contact': 'Direct email and phone details.',
+  'links': 'Social channels and web profiles.',
+  'biography': 'Artist background and local projects.'
 };
 
-// Function to move ¡Ojo! near the nav link and show explanation
 function attachNavGuide() {
   const navLinks = document.querySelectorAll('nav .links a');
   const redeyeContainer = document.getElementById('redeye-container');
@@ -744,26 +743,30 @@ function attachNavGuide() {
   if (!redeyeContainer || !redeyeSpeech) return;
 
   navLinks.forEach(link => {
-    const text = link.textContent.trim();
-    const infoText = NAV_DESCRIPTIONS[text];
+    const key = link.textContent.trim().toLowerCase();
+    const infoText = NAV_DESCRIPTIONS[key];
 
     if (infoText) {
+      // Trigger when cursor rolls over (hovers) the link
       link.addEventListener('mouseenter', () => {
         const rect = link.getBoundingClientRect();
         
-        // Position ¡Ojo! floating right under the hovered link
+        // Glide ¡Ojo! smoothly up near the hovered link
         redeyeContainer.style.position = 'fixed';
         redeyeContainer.style.top = `${rect.bottom + 12}px`;
         redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 30}px`;
+        redeyeContainer.style.transition = 'all 0.3s ease';
         
-        // Show description speech bubble
+        // Display summary speech bubble
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
+        redeyeSpeech.style.opacity = '1';
       });
 
+      // Reset when cursor rolls off the link
       link.addEventListener('mouseleave', () => {
-        // Hide speech bubble and return ¡Ojo! to bottom corner
         redeyeSpeech.style.display = 'none';
+        redeyeSpeech.style.opacity = '0';
         redeyeContainer.style.top = '';
         redeyeContainer.style.left = '';
       });
@@ -771,7 +774,7 @@ function attachNavGuide() {
   });
 }
 
-// Initialize Nav Guide after DOM loads
+// Initialize rollover tracking after DOM content loads
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
 });
