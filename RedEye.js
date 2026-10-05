@@ -696,5 +696,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-  
+
+// Set inactivity limit (3 minutes = 180,000 milliseconds)
+  const INACTIVITY_LIMIT = 3 * 60 * 1000; 
+  let inactivityTimer = null;
+
+  // Function to clear chat messages from ¡Ojo!'s history window
+  function clearChatUI() {
+    const historyArea = document.getElementById('redeye-history');
+    if (historyArea) {
+      historyArea.innerHTML = '';
+    }
+  }
+
+  // Function to reset the inactivity timer
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(clearChatUI, INACTIVITY_LIMIT);
+  }
+
+  // Track user interactions to reset the timer when active
+  ['click', 'mousemove', 'keypress', 'touchstart'].forEach(eventType => {
+    document.addEventListener(eventType, resetInactivityTimer, false);
+  });
+
+  // Initialize timer when page loads
+  resetInactivityTimer();
+
 })();
