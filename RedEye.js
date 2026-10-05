@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
-        bubbleDiv.textContent = "They fade way, but the memory stays.";
+        bubbleDiv.textContent = "lives forever in the experience.";
         bubbleDiv.style.opacity = '1';
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
@@ -725,20 +725,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize timer when page loads
   resetInactivityTimer();
 
-// Nav Bar Descriptions for ¡Ojo! on Rollover (4-5 words each)
+// Nav Descriptions for ¡Ojo! (including Brand Home Link)
 const NAV_DESCRIPTIONS = {
-  'music': 'Curated Spotify playlists and tracks.',
-  'art work': 'Physical gallery and chalk archives.',
-  'news': 'Press features and news articles.',
-  'contact': 'Direct email and phone details.',
-  'links': 'Social channels and web profiles.',
-  'biography': 'Artist background and local projects.'
+  'tone medina': 'Home <3.',
+  'music': 'tone has good taste.',
+  'art work': 'New art & old art.',
+  'news': 'TV features and news articles.',
+  'contact': 'The best way to connect with him.',
+  'links': 'Socials & useful links.',
+  'biography': 'About Tone.'
 };
 
 function attachNavGuide() {
-  const navLinks = document.querySelectorAll('nav .links a');
-  const redeyeContainer = document.getElementById('redeye-container');
-  const redeyeSpeech = document.getElementById('redeye-speech');
+  // Target both the Brand title and Navigation links
+  const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
+  const redeyeContainer = document.getElementById('redeye-bot');
+  const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
 
   if (!redeyeContainer || !redeyeSpeech) return;
 
@@ -747,23 +749,23 @@ function attachNavGuide() {
     const infoText = NAV_DESCRIPTIONS[key];
 
     if (infoText) {
-      // Trigger when cursor rolls over (hovers) the link
+      // Trigger when user hovers/rolls over the link or brand title
       link.addEventListener('mouseenter', () => {
         const rect = link.getBoundingClientRect();
         
-        // Glide ¡Ojo! smoothly up near the hovered link
+        // Glide ¡Ojo! near the hovered item
         redeyeContainer.style.position = 'fixed';
         redeyeContainer.style.top = `${rect.bottom + 12}px`;
-        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 30}px`;
+        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 24}px`;
         redeyeContainer.style.transition = 'all 0.3s ease';
         
-        // Display summary speech bubble
+        // Display summary in speech bubble
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
       });
 
-      // Reset when cursor rolls off the link
+      // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
         redeyeSpeech.style.display = 'none';
         redeyeSpeech.style.opacity = '0';
@@ -774,7 +776,7 @@ function attachNavGuide() {
   });
 }
 
-// Initialize rollover tracking after DOM content loads
+// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
 });
