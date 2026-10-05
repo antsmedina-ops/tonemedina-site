@@ -415,7 +415,7 @@ iframe[src*="calendar.google.com"]:hover {
   width: 0;
   line-height: 1.6;
   font-size: clamp(0.9rem, 1.7vw, 1.15rem); 
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace; 
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace; 
   border-right: 2px solid transparent;
 }
 
