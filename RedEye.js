@@ -834,5 +834,5 @@ document.addEventListener('DOMContentLoaded', () => {
       archiveTrigger.addEventListener('mouseenter', triggerChalkDissolve);
       archiveTrigger.addEventListener('click', triggerChalkDissolve);
     }
-  }
+
 });
