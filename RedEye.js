@@ -391,36 +391,38 @@
       }, 300);
     });
 
-   function animate(timestamp) {
-    if (window.innerWidth > 768) {
-      // Pause tracking physics when user is hovering over <nav>
-      if (!isHovered && !isHoveringNav && chatWindowDiv.style.display !== 'flex') {
-        const time = timestamp * 0.001;
-        const dx = targetX - currentX;
-        const dy = targetY - currentY;
-        const dist = Math.hypot(dx, dy);
-        const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
-        const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
+    function animate(timestamp) {
+      if (window.innerWidth > 768) {
+        if (!isHovered && chatWindowDiv.style.display !== 'flex') {
+          const time = timestamp * 0.001;
 
-        if (dist > 210 && !isHesitating) {
-          const destX = targetX + 90 + driftX;
-          const destY = targetY + 60 + driftY;
-          const lerpSpeed = 0.012;
-          currentX += (destX - currentX) * lerpSpeed;
-          currentY += (destY - currentY) * lerpSpeed;
-        } else {
-          currentX += (driftX * 0.05);
-          currentY += (driftY * 0.05);
+          const dx = targetX - currentX;
+          const dy = targetY - currentY;
+          const dist = Math.hypot(dx, dy);
+
+          const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
+          const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
+
+          if (dist > 210 && !isHesitating) {
+            const destX = targetX + 90 + driftX;
+            const destY = targetY + 60 + driftY;
+            const lerpSpeed = 0.012;
+            currentX += (destX - currentX) * lerpSpeed;
+            currentY += (destY - currentY) * lerpSpeed;
+          } else {
+            currentX += (driftX * 0.05);
+            currentY += (driftY * 0.05);
+          }
+
+          botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+          sessionStorage.setItem('ojo_x', currentX);
+          sessionStorage.setItem('ojo_y', currentY);
         }
-
-        botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
-        sessionStorage.setItem('ojo_x', currentX);
-        sessionStorage.setItem('ojo_y', currentY);
       }
+      requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
   }
- } //   
 
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
@@ -729,76 +731,48 @@ const NAV_DESCRIPTIONS = {
   'music': 'tone has good taste.',
   'art work': 'New art & old art.',
   'news': 'TV features and news articles.',
-  'contact': 'Connect with him.',
+  'contact': 'The best way to connect with him.',
   'links': 'Socials & useful links.',
   'biography': 'About Tone.'
 };
 
 function attachNavGuide() {
-  const navContainer = document.querySelector('nav');
+  // Target both the Brand title and Navigation links
   const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
   const redeyeContainer = document.getElementById('redeye-bot');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
 
-  if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
+  if (!redeyeContainer || !redeyeSpeech) return;
 
-  // 1. Pause tracking loop and dock ¡Ojo! at top right when mouse enters <nav>
-  navContainer.addEventListener('mouseenter', () => {
-    isHoveringNav = true; 
-    const navRect = navContainer.getBoundingClientRect();
-
-    const targetLeft = Math.min(navRect.right - 60, window.innerWidth - 80);
-    const targetTop = navRect.bottom + 16;
-
-    redeyeContainer.style.transform = 'none';
-    redeyeContainer.style.position = 'fixed';
-    redeyeContainer.style.top = `${targetTop}px`;
-    redeyeContainer.style.left = `${targetLeft}px`;
-    redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
-  });
-
-  // 2. Update speech bubble and glide ¡Ojo! on hovering links
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
 
     if (infoText) {
+      // Trigger when user hovers/rolls over the link or brand title
       link.addEventListener('mouseenter', () => {
-        const linkRect = link.getBoundingClientRect();
+        const rect = link.getBoundingClientRect();
         
-        let targetLeft = linkRect.right + 20;
-        if (targetLeft > window.innerWidth - 80) {
-          targetLeft = window.innerWidth - 80;
-        }
-
-        redeyeContainer.style.top = `${linkRect.bottom + 12}px`;
-        redeyeContainer.style.left = `${targetLeft}px`;
-
+        // Glide ¡Ojo! near the hovered item
+        redeyeContainer.style.position = 'fixed';
+        redeyeContainer.style.top = `${rect.bottom + 12}px`;
+        redeyeContainer.style.left = `${rect.left + (rect.width / 2) - 24}px`;
+        redeyeContainer.style.transition = 'all 0.3s ease';
+        
+        // Display summary in speech bubble
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
       });
 
+      // Reset when cursor leaves
       link.addEventListener('mouseleave', () => {
         redeyeSpeech.style.display = 'none';
         redeyeSpeech.style.opacity = '0';
+        redeyeContainer.style.top = '';
+        redeyeContainer.style.left = '';
       });
     }
-  });
-
-  // 3. Resume normal tracking only when leaving the entire <nav> header
-  navContainer.addEventListener('mouseleave', () => {
-    isHoveringNav = false; 
-    redeyeSpeech.style.display = 'none';
-    redeyeSpeech.style.opacity = '0';
-    
-    const rect = redeyeContainer.getBoundingClientRect();
-    if (typeof currentX !== 'undefined') currentX = rect.left;
-    if (typeof currentY !== 'undefined') currentY = rect.top;
-
-    redeyeContainer.style.top = '';
-    redeyeContainer.style.left = '';
-    redeyeContainer.style.transition = '';
   });
 }
 
@@ -806,3 +780,5 @@ function attachNavGuide() {
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
 });
+  
+})();
