@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Nav Descriptions for ¡Ojo! (including Brand Home Link)
 const NAV_DESCRIPTIONS = {
-  'tone medina': 'Home <3.',
+  'tone medina': 'Home.',
   'music': 'tone has good taste.',
   'art work': 'New art & old art.',
   'news': 'TV features and news articles.',
