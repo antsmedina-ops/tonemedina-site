@@ -801,27 +801,9 @@ function attachNavGuide() {
     if (typeof currentX !== 'undefined') currentX = rect.left;
     if (typeof currentY !== 'undefined') currentY = rect.top;
 
-    // 3. Resume normal tracking smoothly when leaving the entire <nav> header
-  navContainer.addEventListener('mouseleave', () => {
-    isHoveringNav = false; 
-    redeyeSpeech.style.display = 'none';
-    redeyeSpeech.style.opacity = '0';
-    
-    const rect = redeyeContainer.getBoundingClientRect();
-    if (typeof currentX !== 'undefined') currentX = rect.left;
-    if (typeof currentY !== 'undefined') currentY = rect.top;
-
-    // Give it a smooth transition to glide away purposefully
-    redeyeContainer.style.transition = 'top 0.4s ease, left 0.4s ease';
-    redeyeContainer.style.top = `${currentY}px`;
-    redeyeContainer.style.left = `${currentX}px`;
-
-    // Clean up the transition style after the glide finishes so physics take back over
-    setTimeout(() => {
-      redeyeContainer.style.top = '';
-      redeyeContainer.style.left = '';
-      redeyeContainer.style.transition = '';
-    }, 400);
+    redeyeContainer.style.top = '';
+    redeyeContainer.style.left = '';
+    redeyeContainer.style.transition = '';
   });
 }
 
@@ -829,3 +811,5 @@ function attachNavGuide() {
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
 });
+  
+})();
