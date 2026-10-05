@@ -833,8 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (archiveTrigger) {
       archiveTrigger.addEventListener('mouseenter', triggerChalkDissolve);
       archiveTrigger.addEventListener('click', triggerChalkDissolve);
- 836     }
-837   }
-838 });
-839 }
-840 })();
+}
+  }
+});
+})();
