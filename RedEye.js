@@ -398,8 +398,8 @@ function animate(timestamp) {
 
           let activeTargetX = targetX;
           let activeTargetY = targetY;
-          let targetOffsetX = 90;
-          let targetOffsetY = 60;
+          let targetOffsetX = 290;
+          let targetOffsetY = 100;
 
           // If hovering a link, glide to the dock coordinates perfectly centered
           if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
