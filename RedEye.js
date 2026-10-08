@@ -433,7 +433,9 @@ function animate(timestamp) {
       }
       requestAnimationFrame(animate);
     }
-    
+    requestAnimationFrame(animate); // <--- This starts the loop
+  } // <--- This closes initDesktopTracking()
+
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
