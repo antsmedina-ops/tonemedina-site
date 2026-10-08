@@ -391,40 +391,49 @@
         isHesitating = false;
       }, 300);
     });
-
-    function animate(timestamp) {
+function animate(timestamp) {
       if (window.innerWidth > 768) {
-        if (!isHovered && !isHoveringNav && chatWindowDiv.style.display !== 'flex') {
+        if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
 
-          const dx = targetX - currentX;
-          const dy = targetY - currentY;
-          const dist = Math.hypot(dx, dy);
+          let activeTargetX = targetX;
+          let activeTargetY = targetY;
+          let targetOffsetX = 90;
+          let targetOffsetY = 60;
 
-          const driftX = Math.sin(time * 1.2) * 12 + Math.cos(time * 0.7) * 6;
-          const driftY = Math.cos(time * 0.9) * 12 + Math.sin(time * 0.4) * 6;
-
-          if (dist > 210 && !isHesitating) {
-            const destX = targetX + 90 + driftX;
-            const destY = targetY + 60 + driftY;
-            const lerpSpeed = 0.012;
-            currentX += (destX - currentX) * lerpSpeed;
-            currentY += (destY - currentY) * lerpSpeed;
-          } else {
-            currentX += (driftX * 0.05);
-            currentY += (driftY * 0.05);
+          // If hovering a link, glide to the dock coordinates perfectly centered
+          if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
+            activeTargetX = window.redeyeDockX;
+            activeTargetY = window.redeyeDockY;
+            targetOffsetX = -24; // Centers ¡Ojo! (half of his 48px width)
+            targetOffsetY = -24; // Centers ¡Ojo! (half of his 48px height)
+          } else if (isHoveringNav) {
+            // General offset if in the nav area but not on a specific link
+            targetOffsetX = 40;
+            targetOffsetY = 20;
           }
 
+          const driftX = Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4;
+          const driftY = Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4;
+
+          const destX = activeTargetX + targetOffsetX + driftX;
+          const destY = activeTargetY + targetOffsetY + driftY;
+
+          // Slightly faster lerp speed to make the glide into position feel responsive
+          const lerpSpeed = isHoveringNav ? 0.045 : 0.02;
+
+          currentX += (destX - currentX) * lerpSpeed;
+          currentY += (destY - currentY) * lerpSpeed;
+
           botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+
           sessionStorage.setItem('ojo_x', currentX);
           sessionStorage.setItem('ojo_y', currentY);
         }
       }
       requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
-  }
-
+    
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
@@ -745,22 +754,12 @@ function attachNavGuide() {
 
   if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
-  // 1. Dock ¡Ojo! well below the header in the open background artwork
+  // 1. Tell the animation loop we are in the navigation area
   navContainer.addEventListener('mouseenter', () => {
     isHoveringNav = true; 
-    const navRect = navContainer.getBoundingClientRect();
-
-    const targetLeft = Math.min(navRect.right - 100, window.innerWidth - 100);
-    const targetTop = navRect.bottom + 120; // Pushed down 120px below the nav bar
-
-    redeyeContainer.style.transform = 'none';
-    redeyeContainer.style.position = 'fixed';
-    redeyeContainer.style.top = `${targetTop}px`;
-    redeyeContainer.style.left = `${targetLeft}px`;
-    redeyeContainer.style.transition = 'top 0.3s ease, left 0.3s ease';
   });
 
-  // 2. Keep the speech bubble positioned cleanly below the links
+  // 2. Set the dock coordinates for the smooth glide
   navLinks.forEach(link => {
     const key = link.textContent.trim().toLowerCase();
     const infoText = NAV_DESCRIPTIONS[key];
@@ -769,15 +768,17 @@ function attachNavGuide() {
       link.addEventListener('mouseenter', () => {
         const linkRect = link.getBoundingClientRect();
         
-        let targetLeft = linkRect.left;
-        let targetTop = linkRect.bottom + 120; // Matches the lower vertical drop
+        // Calculate exact center below the link
+        let dockLeft = linkRect.left + (linkRect.width / 2);
+        let dockTop = linkRect.bottom + 120; // 120px below nav
 
-        if (targetLeft > window.innerWidth - 150) {
-          targetLeft = window.innerWidth - 150;
+        if (dockLeft > window.innerWidth - 100) {
+          dockLeft = window.innerWidth - 100;
         }
 
-        redeyeContainer.style.top = `${targetTop}px`;
-        redeyeContainer.style.left = `${targetLeft}px`;
+        // Pass these coordinates to the animate loop
+        window.redeyeDockX = dockLeft;
+        window.redeyeDockY = dockTop;
 
         redeyeSpeech.textContent = infoText;
         redeyeSpeech.style.display = 'block';
@@ -785,25 +786,22 @@ function attachNavGuide() {
       });
 
       link.addEventListener('mouseleave', () => {
+        // Clear the dock coordinates when leaving the link
+        window.redeyeDockX = null;
+        window.redeyeDockY = null;
         redeyeSpeech.style.display = 'none';
         redeyeSpeech.style.opacity = '0';
       });
     }
   });
 
-  // 3. Resume normal tracking when leaving the entire <nav> header
+  // 3. Resume normal tracking when leaving the header entirely
   navContainer.addEventListener('mouseleave', () => {
     isHoveringNav = false; 
+    window.redeyeDockX = null;
+    window.redeyeDockY = null;
     redeyeSpeech.style.display = 'none';
     redeyeSpeech.style.opacity = '0';
-    
-    const rect = redeyeContainer.getBoundingClientRect();
-    if (typeof currentX !== 'undefined') currentX = rect.left;
-    if (typeof currentY !== 'undefined') currentY = rect.top;
-
-    redeyeContainer.style.top = '';
-    redeyeContainer.style.left = '';
-    redeyeContainer.style.transition = '';
   });
 }
 
