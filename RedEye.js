@@ -393,14 +393,14 @@
       }, 300);
     });
 
-    function animate(timestamp) {
+   function animate(timestamp) {
       if (window.innerWidth > 768) {
         if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
 
           let activeTargetX = targetX;
           let activeTargetY = targetY;
-          let targetOffsetX = 320;
+          let targetOffsetX = 300;
           let targetOffsetY = 150;
 
           // If hovering a link, glide to the dock coordinates perfectly centered
@@ -415,8 +415,8 @@
             targetOffsetY = 20;
           }
 
-          // SMOOTH SETTLE: Gradually reduce drift to 0 when mouse is idle
-          driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.05;
+          // OPTION 1: Smoothly decay drift to 0 when the mouse stops moving
+          driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.15;
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
