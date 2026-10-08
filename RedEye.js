@@ -368,7 +368,7 @@
     initAmbientWhispers();
   }
 
-  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
+// ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
   function initDesktopTracking() {
     requestAnimationFrame(() => {
       botDiv.style.opacity = '1';
@@ -377,6 +377,7 @@
     let isHovered = false;
     let mouseIdleTimer = null;
     let isHesitating = true;
+    let driftDampener = 1; // <--- NEW: Controls how intensely he floats
 
     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
     botDiv.addEventListener('mouseleave', () => { isHovered = false; });
@@ -385,13 +386,14 @@
       targetX = e.clientX;
       targetY = e.clientY;
 
-      isHesitating = true;
+      isHesitating = true; // Mouse is moving
       if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
       mouseIdleTimer = setTimeout(() => {
-        isHesitating = false;
+        isHesitating = false; // Mouse stopped
       }, 300);
     });
-function animate(timestamp) {
+
+    function animate(timestamp) {
       if (window.innerWidth > 768) {
         if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
@@ -413,8 +415,11 @@ function animate(timestamp) {
             targetOffsetY = 20;
           }
 
-          const driftX = Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4;
-          const driftY = Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4;
+          // SMOOTH SETTLE: Gradually reduce drift to 0 when mouse is idle
+          driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.05;
+
+          const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
+          const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
           const destX = activeTargetX + targetOffsetX + driftX;
           const destY = activeTargetY + targetOffsetY + driftY;
@@ -433,8 +438,8 @@ function animate(timestamp) {
       }
       requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate); // <--- This starts the loop
-  } // <--- This closes initDesktopTracking()
+    requestAnimationFrame(animate);
+  }
 
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
