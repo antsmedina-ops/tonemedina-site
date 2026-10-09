@@ -70,6 +70,24 @@ section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
   transform: scale(1.02);
 }
 
+/* Rollover expansion effect for Ephemeral Art / Cards */
+.archive-gallery .card {
+  overflow: visible;
+  position: relative;
+}
+
+.archive-gallery .card img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.archive-gallery .card:hover img {
+  transform: scale(1.15);
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
 @media (max-width: 768px) {
   .grid {
     column-count: 1;
