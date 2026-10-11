@@ -400,8 +400,8 @@
 
           let activeTargetX = targetX;
           let activeTargetY = targetY;
-          let targetOffsetX = 300;
-          let targetOffsetY = 150;
+          let targetOffsetX = 400;
+          let targetOffsetY = 250;
 
           // If hovering a link, glide to the dock coordinates perfectly centered
           if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
@@ -425,7 +425,7 @@
           const destY = activeTargetY + targetOffsetY + driftY;
 
           // Slightly faster lerp speed to make the glide into position feel responsive
-          const lerpSpeed = isHoveringNav ? 0.045 : 0.02;
+          const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
 
           currentX += (destX - currentX) * lerpSpeed;
           currentY += (destY - currentY) * lerpSpeed;
