@@ -60,8 +60,9 @@
     "To see nothingness clearly is to begin to see everything.",
     "done yet?",
     "this all seems pointless",
-    "The eye with which I see the void is the same eye with which the void sees me",
-    "i like you anyway"
+    "in the heart of nothingness, everything is quiet",
+    "i like you",
+    "how long do we have to do this?"
   ];
   const bubbleDiv = document.createElement('div');  
 
