@@ -57,11 +57,11 @@
   // Ambient speech messages & bubble element
   const OJO_WHISPERS = [
     "i'm watchin",
-    "what are you doing?",
+    "To see nothingness clearly is to begin to see everything.",
     "done yet?",
     "this all seems pointless",
-    "we're not friends",
-    "i see everything"
+    "The eye with which I see the void is the same eye with which the void sees me",
+    "i like you anyway"
   ];
   const bubbleDiv = document.createElement('div');  
 
@@ -76,7 +76,7 @@
   let isHoveringNav = false;
 
   // Movement Config
-  const LERP_SPEED = 0.015;
+  const LERP_SPEED = 0.005;
   const BASE_OFFSET = 400; 
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
