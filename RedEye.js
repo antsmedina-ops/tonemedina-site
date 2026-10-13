@@ -60,7 +60,7 @@
     "To see nothingness clearly is to begin to see everything.",
     "done yet?",
     "this all seems pointless",
-    "in the heart of nothingness, everything is quiet",
+    "it's quiet",
     "i like you",
     "how long do we have to do this?"
   ];
@@ -78,7 +78,7 @@
 
   // Movement Config
   const LERP_SPEED = 0.005;
-  const BASE_OFFSET = 400; 
+  const BASE_OFFSET = 200; 
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
 
