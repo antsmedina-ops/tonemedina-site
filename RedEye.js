@@ -77,7 +77,7 @@
   let isHoveringNav = false;
 
   // Movement Config
-  const LERP_SPEED = 0.005;
+  const LERP_SPEED = 0.015;
   const BASE_OFFSET = 200; 
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
       const bubbleDiv = document.getElementById('ojo-ambient-bubble');
       if (bubbleDiv) {
-        bubbleDiv.textContent = "lives forever in the experience.";
+        bubbleDiv.textContent = "lives in the experience.";
         bubbleDiv.style.opacity = '1';
         setTimeout(() => {
           bubbleDiv.style.opacity = '0';
@@ -746,7 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Nav Descriptions for ¡Ojo! (including Brand Home Link)
 const NAV_DESCRIPTIONS = {
   'tone medina': 'home, duh',
-  'music': 'what tone is listning to right now',
+  'music': 'what we are listning to right now',
   'art work': 'new art, old art.',
   'news': 'tv features and news articles.',
   'contact': 'connect',
