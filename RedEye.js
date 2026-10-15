@@ -127,12 +127,39 @@
     const style = document.createElement('style');
     style.id = 'redeye-cursor-style';
     style.textContent = `
-      #redeye-close-btn {
+     #redeye-close-btn {
         cursor: pointer;
         color: #ff4d4d;
         font-size: 18px;
         padding: 0 4px;
       }
+
+      /* ===== BLACK HOLE / SOLAR ECLIPSE STYLES ===== */
+      #redeye-bot {
+        background: #000000 !important;
+        border: 2px solid #8B0000 !important;
+        box-shadow: 0 0 18px 4px rgba(255, 51, 0, 0.85), inset 0 0 14px rgba(139, 0, 0, 0.95), 0 0 35px 10px rgba(139, 0, 0, 0.45) !important;
+        position: fixed;
+        overflow: visible;
+      }
+
+      #redeye-bot::before {
+        content: '';
+        position: absolute;
+        top: -8px; left: -8px; right: -8px; bottom: -8px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, rgba(255, 51, 0, 0.85), rgba(139, 0, 0, 0.15), rgba(255, 102, 0, 0.9), rgba(0, 0, 0, 0.1));
+        z-index: -1;
+        filter: blur(4px);
+        animation: coronaSpin 8s linear infinite;
+        pointer-events: none;
+      }
+
+      @keyframes coronaSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
       @keyframes redeyeBlink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
@@ -151,11 +178,11 @@
       }
       @keyframes redeyePulse {
         0%, 100% {
-          box-shadow: 0 0 12px 3px rgba(255, 0, 0, 0.5), inset 0 0 8px rgba(139, 0, 0, 0.8);
+          box-shadow: 0 0 18px 5px rgba(255, 51, 0, 0.85), inset 0 0 12px rgba(139, 0, 0, 0.9) !important;
           transform: scale(1);
         }
         50% {
-          box-shadow: 0 0 22px 8px rgba(255, 0, 0, 0.85), inset 0 0 12px rgba(255, 50, 50, 0.9);
+          box-shadow: 0 0 30px 10px rgba(255, 102, 0, 0.95), inset 0 0 18px rgba(255, 50, 50, 0.95) !important;
           transform: scale(1.06);
         }
       }
