@@ -422,8 +422,14 @@
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
-          const destX = activeTargetX + targetOffsetX + driftX;
-          const destY = activeTargetY + targetOffsetY + driftY;
+         // 40px padding keeps the orb fully visible within window edges
+          const padding = 40;
+          
+          const rawDestX = activeTargetX + targetOffsetX + driftX;
+          const rawDestY = activeTargetY + targetOffsetY + driftY;
+          
+          const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
+          const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
 
           // Slightly faster lerp speed to make the glide into position feel responsive
           const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
