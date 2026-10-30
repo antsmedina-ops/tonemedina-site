@@ -819,6 +819,67 @@ function attachNavGuide() {
   });
 }
 
+// Dynamic Context Guide for everything on the page (Text, Headers, Images, Links)
+function attachContextualHover() {
+  // Target meaningful content: paragraphs, headers, non-nav links, and images
+  const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
+  const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
+
+  if (!redeyeSpeech) return;
+
+  pageElements.forEach(el => {
+    el.addEventListener('mouseenter', (e) => {
+      // Prevent overlapping elements from triggering Ojo multiple times simultaneously
+      e.stopPropagation();
+
+      let contentText = "";
+
+      // If the user hovers over an image, grab its alt text. Otherwise, grab the visible text.
+      if (el.tagName === 'IMG') {
+        contentText = el.alt ? el.alt.trim() : "";
+      } else {
+        contentText = el.innerText ? el.innerText.trim().split('\n')[0] : ""; 
+      }
+      
+      // Truncate to avoid massive speech bubbles covering the screen
+      if (contentText.length > 30) {
+        contentText = contentText.substring(0, 30) + '...';
+      }
+
+      // Only speak if there is actually a word to say
+      if (contentText.length > 2) {
+        const observations = [
+          `Curious about ${contentText}?`,
+          `Ah, ${contentText}.`,
+          `Thinking about ${contentText}?`,
+          `Looking at ${contentText}...`
+        ];
+        
+        const randomReply = observations[Math.floor(Math.random() * observations.length)];
+
+        redeyeSpeech.textContent = randomReply;
+        redeyeSpeech.style.display = 'block';
+        redeyeSpeech.style.opacity = '1';
+      }
+    });
+
+    el.addEventListener('mouseleave', () => {
+      redeyeSpeech.style.opacity = '0';
+      setTimeout(() => {
+        if (redeyeSpeech.style.opacity === '0') {
+          redeyeSpeech.style.display = 'none';
+        }
+      }, 400); 
+    });
+  });
+}
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  attachNavGuide();
+  attachContextualHover(); 
+});
+  
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
