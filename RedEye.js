@@ -378,19 +378,28 @@
     let isHovered = false;
     let mouseIdleTimer = null;
     let isHesitating = true;
-    let driftDampener = 1; // <--- NEW: Controls how intensely he floats
+    let driftDampener = 1; 
+    
+    // Track where ¡Ojo! should rest when the mouse is far away
+    let restingX = currentX;
+    let restingY = currentY;
 
     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
-    botDiv.addEventListener('mouseleave', () => { isHovered = false; });
+    botDiv.addEventListener('mouseleave', () => { 
+      isHovered = false; 
+      // Update resting position if you interact with him
+      restingX = currentX;
+      restingY = currentY;
+    });
 
     window.addEventListener('mousemove', (e) => {
       targetX = e.clientX;
       targetY = e.clientY;
 
-      isHesitating = true; // Mouse is moving
+      isHesitating = true; 
       if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
       mouseIdleTimer = setTimeout(() => {
-        isHesitating = false; // Mouse stopped
+        isHesitating = false; 
       }, 300);
     });
 
@@ -399,39 +408,54 @@
         if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
 
-          let activeTargetX = targetX;
-          let activeTargetY = targetY;
-          let targetOffsetX = 400;
-          let targetOffsetY = 250;
+          let activeTargetX;
+          let activeTargetY;
+          let targetOffsetX = 0;
+          let targetOffsetY = 0;
 
           // If hovering a link, glide to the dock coordinates perfectly centered
           if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
             activeTargetX = window.redeyeDockX;
             activeTargetY = window.redeyeDockY;
-            targetOffsetX = -24; // Centers ¡Ojo! (half of his 48px width)
-            targetOffsetY = -24; // Centers ¡Ojo! (half of his 48px height)
-          } else if (isHoveringNav) {
-            // General offset if in the nav area but not on a specific link
-            targetOffsetX = 40;
-            targetOffsetY = 20;
+            targetOffsetX = -24; // Centers ¡Ojo!
+            targetOffsetY = -24;
+            
+            // Keep resting position updated so he stays here when nav hover ends
+            restingX = activeTargetX + targetOffsetX;
+            restingY = activeTargetY + targetOffsetY;
+          } else {
+            // Magnetic Radius Logic
+            const distX = targetX - restingX;
+            const distY = targetY - restingY;
+            const distanceToMouse = Math.sqrt(distX * distX + distY * distY);
+            const magneticRadius = 300; // Pixel distance before ¡Ojo! reacts
+
+            if (distanceToMouse < magneticRadius) {
+               // Mouse is close: gently pull ¡Ojo! towards it (25% of the distance)
+               const pullStrength = 0.25; 
+               activeTargetX = restingX + (distX * pullStrength);
+               activeTargetY = restingY + (distY * pullStrength);
+            } else {
+               // Mouse is far: stay at the resting spot
+               activeTargetX = restingX;
+               activeTargetY = restingY;
+            }
           }
 
-          // OPTION 1: Smoothly decay drift to 0 when the mouse stops moving
+          // Smoothly decay drift to 0 when the mouse stops moving
           driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.15;
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
-         // 40px padding keeps the orb fully visible within window edges
+          // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
-          
           const rawDestX = activeTargetX + targetOffsetX + driftX;
           const rawDestY = activeTargetY + targetOffsetY + driftY;
           
           const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
           const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
 
-          // Slightly faster lerp speed to make the glide into position feel responsive
           const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
 
           currentX += (destX - currentX) * lerpSpeed;
