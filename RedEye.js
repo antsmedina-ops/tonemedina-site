@@ -367,8 +367,50 @@
     addRedeyeListeners(chatHistoryDiv, inputArea, greetingOverlay, sendBtn, headerDiv);
     restoreChatState(chatHistoryDiv);
     initAmbientWhispers();
+    initLibraryHover();
   }
+function initLibraryHover() {
+    let hoverTimer;
+    const hoverTargets = document.querySelectorAll('iframe, a, h2');
+    
+    hoverTargets.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            let identifier = el.tagName === 'IFRAME' && el.title 
+                ? el.title.replace(' - YouTube', '').trim() 
+                : el.innerText.trim();
 
+            const secretFact = window.OJO_KNOWLEDGE ? window.OJO_KNOWLEDGE[identifier] : null;
+            if (!secretFact) return; 
+
+            hoverTimer = setTimeout(async () => {
+                bubbleDiv.textContent = "searching the archives...";
+                bubbleDiv.style.opacity = '1';
+
+                try {
+                    const response = await fetch(BOT_ENDPOINT, {
+                        method: 'POST',
+                        body: JSON.stringify({ 
+                            prompt: `You are ¡Ojo!, a ghostly AI companion. The user is looking at this: "${secretFact}". Give a cryptic, 1-sentence observation or summary. No quotes.` 
+                        })
+                    });
+                    
+                    bubbleDiv.textContent = await response.text();
+                } catch (error) {
+                    bubbleDiv.textContent = "the archives are sealed...";
+                }
+            }, 1500);
+        });
+
+        el.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimer);
+            setTimeout(() => {
+                if (bubbleDiv.textContent !== "searching the archives...") {
+                    bubbleDiv.style.opacity = '0';
+                }
+            }, 4000);
+        });
+    });
+}
 // ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
   function initDesktopTracking() {
     requestAnimationFrame(() => {
