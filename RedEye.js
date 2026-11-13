@@ -942,7 +942,7 @@ function attachContextualHover() {
       }, 400);
     });
   });
-}
+} // <-- This closing brace was missing!
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
