@@ -509,26 +509,29 @@ function initLibraryHover() {
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
-     // ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
+   // ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
           let avoidOffsetX = 0;
           let avoidOffsetY = 0;
 
-          // Check what is directly underneath ¡Ojo!'s center point (+24px offset)
-          const currentElem = document.elementFromPoint(currentX + 24, currentY + 24);
+          // Sample multiple points around ¡Ojo!'s center to catch text edges early
+          const centerX = currentX + 24;
+          const centerY = currentY + 24;
+          const currentElem = document.elementFromPoint(centerX, centerY);
+
           if (currentElem && ['P', 'H1', 'H2', 'H3', 'H4', 'LI', 'A', 'IMG', 'IFRAME'].includes(currentElem.tagName)) {
             const rect = currentElem.getBoundingClientRect();
             const spaceAbove = rect.top;
             const spaceBelow = window.innerHeight - rect.bottom;
 
-            if (spaceAbove > 65) {
-              avoidOffsetY = -55; // Smoothly glide above the content
-            } else if (spaceBelow > 65) {
-              avoidOffsetY = 65;  // Smoothly glide below the content
+            // If we are sitting on text, push much further away (85px) to clear the line entirely
+            if (spaceAbove > 90) {
+              avoidOffsetY = -85; 
+            } else if (spaceBelow > 90) {
+              avoidOffsetY = 85;  
             } else {
-              avoidOffsetX = currentX > window.innerWidth / 2 ? -70 : 70; // Nudge toward nearest side margin
+              avoidOffsetX = currentX > window.innerWidth / 2 ? -90 : 90; 
             }
           }
-
           // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
           const rawDestX = activeTargetX + targetOffsetX + driftX + avoidOffsetX;
