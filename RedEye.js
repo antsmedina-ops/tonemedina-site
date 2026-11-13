@@ -569,7 +569,6 @@ function initLibraryHover() {
     }
     requestAnimationFrame(animate);
   }
-
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
