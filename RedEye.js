@@ -82,64 +82,57 @@
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
 
- // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
-function initAmbientWhispers() {
-  function speakAmbientWhisper() {
-    if (chatWindowDiv.style.display !== 'flex') {
-      
-      // 1. Figure out what page we are currently sitting on
-      const path = window.location.pathname.toLowerCase();
-      let pageKey = "default";
-      if (path.includes("link")) pageKey = "links";
-      else if (path.includes("work")) pageKey = "works";
-      else if (path.includes("bio")) pageKey = "bio";
-      else if (path.includes("news")) pageKey = "news";
-      else if (path.includes("contact")) pageKey = "contact";
+  // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+  function initAmbientWhispers() {
+    function speakAmbientWhisper() {
+      if (chatWindowDiv.style.display !== 'flex') {
+        const path = window.location.pathname.toLowerCase();
+        let pageKey = "default";
+        if (path.includes("link")) pageKey = "links";
+        else if (path.includes("work")) pageKey = "works";
+        else if (path.includes("bio")) pageKey = "bio";
+        else if (path.includes("news")) pageKey = "news";
+        else if (path.includes("contact")) pageKey = "contact";
 
-      // 2. Pull proactive thoughts from OjoContext.js (or fallback to old whispers)
-      let whisperPool = OJO_WHISPERS; 
-      if (window.OJO_KNOWLEDGE && window.OJO_KNOWLEDGE._PAGES) {
-        whisperPool = window.OJO_KNOWLEDGE._PAGES[pageKey] || window.OJO_KNOWLEDGE._PAGES.default || OJO_WHISPERS;
-      }
-
-      const text = whisperPool[Math.floor(Math.random() * whisperPool.length)];
-      const isMobileScreen = window.innerWidth <= 768;
-
-      bubbleDiv.textContent = text;
-      playOjoSound('whisper');
-
-      if (isMobileScreen) {
-        bubbleDiv.style.left = 'auto';
-        bubbleDiv.style.right = '0';
-        bubbleDiv.style.transform = 'translateY(-4px)';
-      } else {
-        bubbleDiv.style.left = '50%';
-        bubbleDiv.style.right = 'auto';
-        bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
-      }
-
-      bubbleDiv.style.opacity = '1';
-
-      // Keep the bubble visible a bit longer (6 seconds) so they can read the context
-      setTimeout(() => {
-        bubbleDiv.style.opacity = '0';
-        if (isMobileScreen) {
-          bubbleDiv.style.transform = 'translateY(0)';
-        } else {
-          bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+        let whisperPool = OJO_WHISPERS; 
+        if (window.OJO_KNOWLEDGE && window.OJO_KNOWLEDGE._PAGES) {
+          whisperPool = window.OJO_KNOWLEDGE._PAGES[pageKey] || window.OJO_KNOWLEDGE._PAGES.default || OJO_WHISPERS;
         }
-      }, 6000); 
+
+        const text = whisperPool[Math.floor(Math.random() * whisperPool.length)];
+        const isMobileScreen = window.innerWidth <= 768;
+
+        bubbleDiv.textContent = text;
+        playOjoSound('whisper');
+
+        if (isMobileScreen) {
+          bubbleDiv.style.left = 'auto';
+          bubbleDiv.style.right = '0';
+          bubbleDiv.style.transform = 'translateY(-4px)';
+        } else {
+          bubbleDiv.style.left = '50%';
+          bubbleDiv.style.right = 'auto';
+          bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
+        }
+
+        bubbleDiv.style.opacity = '1';
+
+        setTimeout(() => {
+          bubbleDiv.style.opacity = '0';
+          if (isMobileScreen) {
+            bubbleDiv.style.transform = 'translateY(0)';
+          } else {
+            bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+          }
+        }, 6000); 
+      }
+
+      const nextDelay = Math.floor(Math.random() * (18000 - 10000 + 1)) + 10000;
+      setTimeout(speakAmbientWhisper, nextDelay);
     }
 
-    // Drop a proactive thought every 10 to 18 seconds while they sit idle
-    const nextDelay = Math.floor(Math.random() * (18000 - 10000 + 1)) + 10000;
-    setTimeout(speakAmbientWhisper, nextDelay);
+    setTimeout(speakAmbientWhisper, 3000);
   }
-
-  // Start the first proactive thought quickly (3 seconds) after the page loads
-  const initialDelay = 3000;
-  setTimeout(speakAmbientWhisper, initialDelay);
-}
 
   function injectCursorStyle() {
     if (document.getElementById('redeye-cursor-style')) return;
@@ -211,13 +204,13 @@ function initAmbientWhispers() {
   function createBotUi() {
     injectCursorStyle();
 
-  if (!document.getElementById('typewriter-font')) {
-    const fontLink = document.createElement('link');
-    fontLink.id = 'typewriter-font';
-    fontLink.rel = 'stylesheet';
-    fontLink.href = 'https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap';
-    document.head.appendChild(fontLink);
-}
+    if (!document.getElementById('typewriter-font')) {
+      const fontLink = document.createElement('link');
+      fontLink.id = 'typewriter-font';
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap';
+      document.head.appendChild(fontLink);
+    }
 
     const isMobile = window.innerWidth <= 768;
 
@@ -388,7 +381,8 @@ function initAmbientWhispers() {
     initAmbientWhispers();
     initLibraryHover();
   }
-function initLibraryHover() {
+
+  function initLibraryHover() {
     let hoverTimer;
     const hoverTargets = document.querySelectorAll('iframe, a, h2');
     
@@ -429,8 +423,9 @@ function initLibraryHover() {
             }, 4000);
         });
     });
-}
-// ===== 2. DESKTOP MOUSE TRACKING PHYSICS =====
+  }
+
+  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS & COLLISION AVOIDANCE =====
   function initDesktopTracking() {
     requestAnimationFrame(() => {
       botDiv.style.opacity = '1';
@@ -441,14 +436,12 @@ function initLibraryHover() {
     let isHesitating = true;
     let driftDampener = 1; 
     
-    // Track where ¡Ojo! should rest when the mouse is far away
     let restingX = currentX;
     let restingY = currentY;
 
     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
     botDiv.addEventListener('mouseleave', () => { 
       isHovered = false; 
-      // Update resting position if you interact with him
       restingX = currentX;
       restingY = currentY;
     });
@@ -474,66 +467,35 @@ function initLibraryHover() {
           let targetOffsetX = 0;
           let targetOffsetY = 0;
 
-          // If hovering a link, glide to the dock coordinates perfectly centered
           if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
             activeTargetX = window.redeyeDockX;
             activeTargetY = window.redeyeDockY;
-            targetOffsetX = -24; // Centers ¡Ojo!
+            targetOffsetX = -24; 
             targetOffsetY = -24;
-            
-            // Keep resting position updated so he stays here when nav hover ends
             restingX = activeTargetX + targetOffsetX;
             restingY = activeTargetY + targetOffsetY;
           } else {
-            // Magnetic Radius Logic
             const distX = targetX - restingX;
             const distY = targetY - restingY;
             const distanceToMouse = Math.sqrt(distX * distX + distY * distY);
-            const magneticRadius = 300; // Pixel distance before ¡Ojo! reacts
+            const magneticRadius = 300; 
 
             if (distanceToMouse < magneticRadius) {
-               // Mouse is close: gently pull ¡Ojo! towards it (25% of the distance)
                const pullStrength = 0.25; 
                activeTargetX = restingX + (distX * pullStrength);
                activeTargetY = restingY + (distY * pullStrength);
             } else {
-               // Mouse is far: stay at the resting spot
                activeTargetX = restingX;
                activeTargetY = restingY;
             }
           }
 
-// Smoothly decay drift to 0 when the mouse stops moving
           driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.15;
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
-          // 40px padding keeps the orb fully visible within window edges
-          const padding = 40;
-          const rawDestX = activeTargetX + targetOffsetX + driftX;
-          const rawDestY = activeTargetY + targetOffsetY + driftY;
-          
-          const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
-          const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
-
-          const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
-
-          currentX += (destX - currentX) * lerpSpeed;
-          currentY += (destY - currentY) * lerpSpeed;
-
-          botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
-
-          sessionStorage.setItem('ojo_x', currentX);
-          sessionStorage.setItem('ojo_y', currentY);
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
-  }
-          
-// ===== SAFE SPATIAL COLLISION AVOIDANCE =====
+          // Safe Spatial Collision Avoidance Offset Calculation
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
             window._ojoAvoidY = 0;
@@ -573,13 +535,9 @@ function initLibraryHover() {
               targetAvoidY = 0;
             }
           } catch (err) {
-            // Failsafe: if DOM query fails, default to zero offset so physics never break
             targetAvoidX = 0;
             targetAvoidY = 0;
           }
-
-          window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
-          window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
 
           window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
           window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
@@ -600,7 +558,13 @@ function initLibraryHover() {
 
           sessionStorage.setItem('ojo_x', currentX);
           sessionStorage.setItem('ojo_y', currentY);
-          
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  }
+
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
@@ -855,198 +819,183 @@ function initLibraryHover() {
     createBotUi();
   }
 
-// ¡Ojo! Archive Easter Egg Hover
-document.addEventListener('DOMContentLoaded', () => {
-  const archiveTrigger = document.querySelector('.archive-trigger');
-  
-  if (archiveTrigger) {
-    archiveTrigger.addEventListener('mouseenter', () => {
-      // Targets ¡Ojo!'s ambient speech bubble to whisper the memory
-      const bubbleDiv = document.getElementById('ojo-ambient-bubble');
-      if (bubbleDiv) {
-        bubbleDiv.textContent = "lives in the experience.";
-        bubbleDiv.style.opacity = '1';
-        setTimeout(() => {
-          bubbleDiv.style.opacity = '0';
-        }, 4000);
-      }
-    });
-  }
-});
+  // ¡Ojo! Archive Easter Egg Hover
+  document.addEventListener('DOMContentLoaded', () => {
+    const archiveTrigger = document.querySelector('.archive-trigger');
+    
+    if (archiveTrigger) {
+      archiveTrigger.addEventListener('mouseenter', () => {
+        const bubbleDiv = document.getElementById('ojo-ambient-bubble');
+        if (bubbleDiv) {
+          bubbleDiv.textContent = "lives in the experience.";
+          bubbleDiv.style.opacity = '1';
+          setTimeout(() => {
+            bubbleDiv.style.opacity = '0';
+          }, 4000);
+        }
+      });
+    }
+  });
 
-// Set inactivity limit (3 minutes = 180,000 milliseconds)
+  // Set inactivity limit (3 minutes = 180,000 milliseconds)
   const INACTIVITY_LIMIT = 3 * 60 * 1000; 
   let inactivityTimer = null;
 
-  // Function to clear chat messages from ¡Ojo!'s history window
   function clearChatUI() {
     const historyArea = document.getElementById('redeye-history');
     if (historyArea) {
       historyArea.innerHTML = '';
     }
-    // Clear session storage so old history doesn't return on page refresh/navigation
     sessionStorage.removeItem('ojo_chat_history');
   }
 
-  // Function to reset the inactivity timer
   function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(clearChatUI, INACTIVITY_LIMIT);
   }
 
-  // Track user interactions to reset the timer when active
   ['click', 'mousemove', 'keypress', 'touchstart'].forEach(eventType => {
     document.addEventListener(eventType, resetInactivityTimer, false);
   });
 
-  // Initialize timer when page loads
   resetInactivityTimer();
 
-// Nav Descriptions for ¡Ojo! (including Brand Home Link)
-const NAV_DESCRIPTIONS = {
-  'tone medina': 'home, duh',
-  'music': 'what we are listning to now',
-  'art work': 'new art, old art.',
-  'news': 'tv features and news articles.',
-  'contact': 'connect',
-  'links': 'socials & useful links.',
-  'biography': 'about'
-};
+  // Nav Descriptions for ¡Ojo! (including Brand Home Link)
+  const NAV_DESCRIPTIONS = {
+    'tone medina': 'home, duh',
+    'music': 'what we are listning to now',
+    'art work': 'new art, old art.',
+    'news': 'tv features and news articles.',
+    'contact': 'connect',
+    'links': 'socials & useful links.',
+    'biography': 'about'
+  };
 
-function attachNavGuide() {
-  const navContainer = document.querySelector('nav');
-  const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
-  const redeyeContainer = document.getElementById('redeye-bot');
-  const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
+  function attachNavGuide() {
+    const navContainer = document.querySelector('nav');
+    const navLinks = document.querySelectorAll('nav .nav-brand, nav .links a');
+    const redeyeContainer = document.getElementById('redeye-bot');
+    const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
 
-  if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
+    if (!navContainer || !redeyeContainer || !redeyeSpeech) return;
 
-  // 1. Tell the animation loop we are in the navigation area
-  navContainer.addEventListener('mouseenter', () => {
-    isHoveringNav = true; 
-  });
+    navContainer.addEventListener('mouseenter', () => {
+      isHoveringNav = true; 
+    });
 
-  // 2. Set the dock coordinates for the smooth glide
-  navLinks.forEach(link => {
-    const key = link.textContent.trim().toLowerCase();
-    const infoText = NAV_DESCRIPTIONS[key];
+    navLinks.forEach(link => {
+      const key = link.textContent.trim().toLowerCase();
+      const infoText = NAV_DESCRIPTIONS[key];
 
-    if (infoText) {
-      link.addEventListener('mouseenter', () => {
-        const linkRect = link.getBoundingClientRect();
-        
-        // Calculate exact center below the link
-        let dockLeft = linkRect.left + (linkRect.width / 2);
-        let dockTop = linkRect.bottom + 120; // 120px below nav
+      if (infoText) {
+        link.addEventListener('mouseenter', () => {
+          const linkRect = link.getBoundingClientRect();
+          
+          let dockLeft = linkRect.left + (linkRect.width / 2);
+          let dockTop = linkRect.bottom + 120;
 
-        if (dockLeft > window.innerWidth - 100) {
-          dockLeft = window.innerWidth - 100;
-        }
+          if (dockLeft > window.innerWidth - 100) {
+            dockLeft = window.innerWidth - 100;
+          }
 
-        // Pass these coordinates to the animate loop
-        window.redeyeDockX = dockLeft;
-        window.redeyeDockY = dockTop;
+          window.redeyeDockX = dockLeft;
+          window.redeyeDockY = dockTop;
 
-        redeyeSpeech.textContent = infoText;
-        redeyeSpeech.style.display = 'block';
-        redeyeSpeech.style.opacity = '1';
-      });
+          redeyeSpeech.textContent = infoText;
+          redeyeSpeech.style.display = 'block';
+          redeyeSpeech.style.opacity = '1';
+        });
 
-      link.addEventListener('mouseleave', () => {
-        // Clear the dock coordinates when leaving the link
-        window.redeyeDockX = null;
-        window.redeyeDockY = null;
-        redeyeSpeech.style.display = 'none';
-        redeyeSpeech.style.opacity = '0';
-      });
-    }
-  });
+        link.addEventListener('mouseleave', () => {
+          window.redeyeDockX = null;
+          window.redeyeDockY = null;
+          redeyeSpeech.style.display = 'none';
+          redeyeSpeech.style.opacity = '0';
+        });
+      }
+    });
 
-  // 3. Resume normal tracking when leaving the header entirely
-  navContainer.addEventListener('mouseleave', () => {
-    isHoveringNav = false; 
-    window.redeyeDockX = null;
-    window.redeyeDockY = null;
-    redeyeSpeech.style.display = 'none';
-    redeyeSpeech.style.opacity = '0';
-  });
-}
-
-// Dynamic Context Guide for everything on the page (Text, Headers, Images, Links)
-function attachContextualHover() {
-  const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
-  if (!redeyeSpeech) {
-    // Retry shortly if the ambient bubble hasn't mounted yet
-    setTimeout(attachContextualHover, 300);
-    return;
+    navContainer.addEventListener('mouseleave', () => {
+      isHoveringNav = false; 
+      window.redeyeDockX = null;
+      window.redeyeDockY = null;
+      redeyeSpeech.style.display = 'none';
+      redeyeSpeech.style.opacity = '0';
+    });
   }
 
-  const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
-  pageElements.forEach(el => {
-    if (el.dataset.ojoBound) return; // Prevent duplicate binding
-    el.dataset.ojoBound = "true";
+  function attachContextualHover() {
+    const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
+    if (!redeyeSpeech) {
+      setTimeout(attachContextualHover, 300);
+      return;
+    }
 
-    el.addEventListener('mouseenter', (e) => {
-      e.stopPropagation();
-      let contentText = "";
+    const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
+    pageElements.forEach(el => {
+      if (el.dataset.ojoBound) return;
+      el.dataset.ojoBound = "true";
 
-      if (el.tagName === 'IMG') {
-        contentText = el.alt ? el.alt.trim() : "";
-      } else {
-        contentText = el.innerText ? el.innerText.trim().split('\n')[0] : "";
-      }
+      el.addEventListener('mouseenter', (e) => {
+        e.stopPropagation();
+        let contentText = "";
 
-      if (contentText.length > 2) {
-        let matchedInfo = "";
+        if (el.tagName === 'IMG') {
+          contentText = el.alt ? el.alt.trim() : "";
+        } else {
+          contentText = el.innerText ? el.innerText.trim().split('\n')[0] : "";
+        }
 
-        if (window.OJO_KNOWLEDGE) {
-          if (window.OJO_KNOWLEDGE[contentText]) {
-            matchedInfo = window.OJO_KNOWLEDGE[contentText];
-          } else {
-            const foundKey = Object.keys(window.OJO_KNOWLEDGE).find(
-              key => !key.startsWith("_") && contentText.includes(key)
-            );
-            if (foundKey) {
-              matchedInfo = window.OJO_KNOWLEDGE[foundKey];
+        if (contentText.length > 2) {
+          let matchedInfo = "";
+
+          if (window.OJO_KNOWLEDGE) {
+            if (window.OJO_KNOWLEDGE[contentText]) {
+              matchedInfo = window.OJO_KNOWLEDGE[contentText];
+            } else {
+              const foundKey = Object.keys(window.OJO_KNOWLEDGE).find(
+                key => !key.startsWith("_") && contentText.includes(key)
+              );
+              if (foundKey) {
+                matchedInfo = window.OJO_KNOWLEDGE[foundKey];
+              }
             }
           }
-        }
 
-        if (matchedInfo) {
-          redeyeSpeech.textContent = matchedInfo;
-        } else {
-          const fallbacks = window.OJO_KNOWLEDGE?._FALLBACKS || [
-            "Worth a click if you're digging into the local scene.",
-            "One of Tone's vetted connections—go ahead and explore."
-          ];
-          redeyeSpeech.textContent = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-        }
+          if (matchedInfo) {
+            redeyeSpeech.textContent = matchedInfo;
+          } else {
+            const fallbacks = window.OJO_KNOWLEDGE?._FALLBACKS || [
+              "Worth a click if you're digging into the local scene.",
+              "One of Tone's vetted connections—go ahead and explore."
+            ];
+            redeyeSpeech.textContent = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+          }
 
-        redeyeSpeech.style.display = 'block';
-        redeyeSpeech.style.opacity = '1';
-      }
+          redeyeSpeech.style.display = 'block';
+          redeyeSpeech.style.opacity = '1';
+        }
+      });
+
+      el.addEventListener('mouseleave', () => {
+        redeyeSpeech.style.opacity = '0';
+        setTimeout(() => {
+          if (redeyeSpeech.style.opacity === '0') {
+            redeyeSpeech.style.display = 'none';
+          }
+        }, 400);
+      });
     });
+  }
 
-    el.addEventListener('mouseleave', () => {
-      redeyeSpeech.style.opacity = '0';
-      setTimeout(() => {
-        if (redeyeSpeech.style.opacity === '0') {
-          redeyeSpeech.style.display = 'none';
-        }
-      }, 400);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      attachNavGuide();
+      attachContextualHover();
     });
-  });
-}
-
-// Initialize on DOM load with safety check
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+  } else {
     attachNavGuide();
     attachContextualHover();
-  });
-} else {
-  attachNavGuide();
-  attachContextualHover();
-}
+  }
 
 })();
