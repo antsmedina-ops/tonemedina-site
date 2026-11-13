@@ -509,10 +509,30 @@ function initLibraryHover() {
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
 
+     // ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
+          let avoidOffsetX = 0;
+          let avoidOffsetY = 0;
+
+          // Check what is directly underneath ¡Ojo!'s center point (+24px offset)
+          const currentElem = document.elementFromPoint(currentX + 24, currentY + 24);
+          if (currentElem && ['P', 'H1', 'H2', 'H3', 'H4', 'LI', 'A', 'IMG', 'IFRAME'].includes(currentElem.tagName)) {
+            const rect = currentElem.getBoundingClientRect();
+            const spaceAbove = rect.top;
+            const spaceBelow = window.innerHeight - rect.bottom;
+
+            if (spaceAbove > 65) {
+              avoidOffsetY = -55; // Smoothly glide above the content
+            } else if (spaceBelow > 65) {
+              avoidOffsetY = 65;  // Smoothly glide below the content
+            } else {
+              avoidOffsetX = currentX > window.innerWidth / 2 ? -70 : 70; // Nudge toward nearest side margin
+            }
+          }
+
           // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
-          const rawDestX = activeTargetX + targetOffsetX + driftX;
-          const rawDestY = activeTargetY + targetOffsetY + driftY;
+          const rawDestX = activeTargetX + targetOffsetX + driftX + avoidOffsetX;
+          const rawDestY = activeTargetY + targetOffsetY + driftY + avoidOffsetY;
           
           const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
           const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
