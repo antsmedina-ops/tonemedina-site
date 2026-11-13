@@ -82,45 +82,64 @@
   let time = 0;
   let effectiveOffset = BASE_OFFSET;
 
-  // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
-  function initAmbientWhispers() {
-    function speakAmbientWhisper() {
-      if (chatWindowDiv.style.display !== 'flex') {
-        const text = OJO_WHISPERS[Math.floor(Math.random() * OJO_WHISPERS.length)];
-        const isMobileScreen = window.innerWidth <= 768;
+ // ===== AMBIENT WHISPERS (MOBILE & DESKTOP) =====
+function initAmbientWhispers() {
+  function speakAmbientWhisper() {
+    if (chatWindowDiv.style.display !== 'flex') {
+      
+      // 1. Figure out what page we are currently sitting on
+      const path = window.location.pathname.toLowerCase();
+      let pageKey = "default";
+      if (path.includes("link")) pageKey = "links";
+      else if (path.includes("work")) pageKey = "works";
+      else if (path.includes("bio")) pageKey = "bio";
+      else if (path.includes("news")) pageKey = "news";
+      else if (path.includes("contact")) pageKey = "contact";
 
-        bubbleDiv.textContent = text;
-        playOjoSound('whisper');
-
-        if (isMobileScreen) {
-          bubbleDiv.style.left = 'auto';
-          bubbleDiv.style.right = '0';
-          bubbleDiv.style.transform = 'translateY(-4px)';
-        } else {
-          bubbleDiv.style.left = '50%';
-          bubbleDiv.style.right = 'auto';
-          bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
-        }
-
-        bubbleDiv.style.opacity = '1';
-
-        setTimeout(() => {
-          bubbleDiv.style.opacity = '0';
-          if (isMobileScreen) {
-            bubbleDiv.style.transform = 'translateY(0)';
-          } else {
-            bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
-          }
-        }, 4000);
+      // 2. Pull proactive thoughts from OjoContext.js (or fallback to old whispers)
+      let whisperPool = OJO_WHISPERS; 
+      if (window.OJO_KNOWLEDGE && window.OJO_KNOWLEDGE._PAGES) {
+        whisperPool = window.OJO_KNOWLEDGE._PAGES[pageKey] || window.OJO_KNOWLEDGE._PAGES.default || OJO_WHISPERS;
       }
 
-      const nextDelay = Math.floor(Math.random() * (20000 - 5000 + 1)) + 5000;
-      setTimeout(speakAmbientWhisper, nextDelay);
+      const text = whisperPool[Math.floor(Math.random() * whisperPool.length)];
+      const isMobileScreen = window.innerWidth <= 768;
+
+      bubbleDiv.textContent = text;
+      playOjoSound('whisper');
+
+      if (isMobileScreen) {
+        bubbleDiv.style.left = 'auto';
+        bubbleDiv.style.right = '0';
+        bubbleDiv.style.transform = 'translateY(-4px)';
+      } else {
+        bubbleDiv.style.left = '50%';
+        bubbleDiv.style.right = 'auto';
+        bubbleDiv.style.transform = 'translateX(-50%) translateY(-4px)';
+      }
+
+      bubbleDiv.style.opacity = '1';
+
+      // Keep the bubble visible a bit longer (6 seconds) so they can read the context
+      setTimeout(() => {
+        bubbleDiv.style.opacity = '0';
+        if (isMobileScreen) {
+          bubbleDiv.style.transform = 'translateY(0)';
+        } else {
+          bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+        }
+      }, 6000); 
     }
 
-    const initialDelay = Math.floor(Math.random() * 4000) + 6000;
-    setTimeout(speakAmbientWhisper, initialDelay);
+    // Drop a proactive thought every 10 to 18 seconds while they sit idle
+    const nextDelay = Math.floor(Math.random() * (18000 - 10000 + 1)) + 10000;
+    setTimeout(speakAmbientWhisper, nextDelay);
   }
+
+  // Start the first proactive thought quickly (3 seconds) after the page loads
+  const initialDelay = 3000;
+  setTimeout(speakAmbientWhisper, initialDelay);
+}
 
   function injectCursorStyle() {
     if (document.getElementById('redeye-cursor-style')) return;
