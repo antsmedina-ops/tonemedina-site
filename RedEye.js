@@ -887,11 +887,18 @@ function attachNavGuide() {
 
 // Dynamic Context Guide for everything on the page (Text, Headers, Images, Links)
 function attachContextualHover() {
-  const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
-  if (!redeyeSpeech) return;
+  if (!redeyeSpeech) {
+    // Retry shortly if the ambient bubble hasn't mounted yet
+    setTimeout(attachContextualHover, 300);
+    return;
+  }
 
+  const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
   pageElements.forEach(el => {
+    if (el.dataset.ojoBound) return; // Prevent duplicate binding
+    el.dataset.ojoBound = "true";
+
     el.addEventListener('mouseenter', (e) => {
       e.stopPropagation();
       let contentText = "";
@@ -944,8 +951,13 @@ function attachContextualHover() {
   });
 }
 
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize on DOM load with safety check
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    attachNavGuide();
+    attachContextualHover();
+  });
+} else {
   attachNavGuide();
   attachContextualHover();
-});
+}
