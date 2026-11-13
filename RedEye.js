@@ -509,11 +509,17 @@ function initLibraryHover() {
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
           
-// ===== TRUE SPATIAL AWARENESS & COLLISION AVOIDANCE =====
-          let avoidOffsetX = 0;
-          let avoidOffsetY = 0;
+// ===== SMOOTH SPATIAL COLLISION AVOIDANCE (NO JITTER) =====
+          // Maintain persistent avoidance offsets so they damp smoothly over frames
+          if (window._ojoAvoidX === undefined) {
+            window._ojoAvoidX = 0;
+            window._ojoAvoidY = 0;
+          }
 
-          // Gather all potential blocking elements on the page (text, cards, images, headers, nav)
+          let targetAvoidX = 0;
+          let targetAvoidY = 0;
+
+          // Gather blocking elements
           const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
           const ojoCenterX = currentX + 24;
           const ojoCenterY = currentY + 24;
@@ -521,35 +527,38 @@ function initLibraryHover() {
           for (const el of blockingElements) {
             const rect = el.getBoundingClientRect();
             
-            // Check if ¡Ojo!'s center point is sitting inside this element's bounding box
             if (
-              ojoCenterX >= rect.left - 15 &&
-              ojoCenterX <= rect.right + 15 &&
-              ojoCenterY >= rect.top - 15 &&
-              ojoCenterY <= rect.bottom + 15
+              ojoCenterX >= rect.left - 25 &&
+              ojoCenterX <= rect.right + 25 &&
+              ojoCenterY >= rect.top - 25 &&
+              ojoCenterY <= rect.bottom + 25
             ) {
               const spaceAbove = rect.top;
               const spaceBelow = window.innerHeight - rect.bottom;
 
-              // If we are near the top (like the header/nav area), NEVER squeeze above. Slide to the sides!
-              if (spaceAbove < 120) {
-                avoidOffsetY = 0; 
-                avoidOffsetX = currentX > window.innerWidth / 2 ? -130 : 130; 
-              } else if (spaceAbove > 90) {
-                avoidOffsetY = -95; // Glide above content blocks lower down
-              } else if (spaceBelow > 90) {
-                avoidOffsetY = 95;  // Glide below
+              // If near the top header/nav, push smoothly to the side
+              if (spaceAbove < 140) {
+                targetAvoidY = 0;
+                targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
+              } else if (spaceAbove > 100) {
+                targetAvoidY = -110; 
+              } else if (spaceBelow > 100) {
+                targetAvoidY = 110;  
               } else {
-                avoidOffsetX = currentX > window.innerWidth / 2 ? -120 : 120; // Nudge to side
+                targetAvoidX = currentX > window.innerWidth / 2 ? -130 : 130; 
               }
               break; 
             }
           }
 
+          // Smoothly interpolate (lerp) the avoidance so he never teleports or jitters
+          window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
+          window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
+
           // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
-          const rawDestX = activeTargetX + targetOffsetX + driftX + avoidOffsetX;
-          const rawDestY = activeTargetY + targetOffsetY + driftY + avoidOffsetY;
+          const rawDestX = activeTargetX + targetOffsetX + driftX + window._ojoAvoidX;
+          const rawDestY = activeTargetY + targetOffsetY + driftY + window._ojoAvoidY;
           
           const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
           const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
@@ -563,12 +572,6 @@ function initLibraryHover() {
 
           sessionStorage.setItem('ojo_x', currentX);
           sessionStorage.setItem('ojo_y', currentY);
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
-  }
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
