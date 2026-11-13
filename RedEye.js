@@ -503,7 +503,7 @@ function initLibraryHover() {
             }
           }
 
-          // Smoothly decay drift to 0 when the mouse stops moving
+// Smoothly decay drift to 0 when the mouse stops moving
           driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.15;
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
