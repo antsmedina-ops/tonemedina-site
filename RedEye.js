@@ -818,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Nav Descriptions for ¡Ojo! (including Brand Home Link)
 const NAV_DESCRIPTIONS = {
   'tone medina': 'home, duh',
-  'music': 'what we are listning to right now',
+  'music': 'what we are listning to now',
   'art work': 'new art, old art.',
   'news': 'tv features and news articles.',
   'contact': 'connect',
@@ -942,7 +942,7 @@ function attachContextualHover() {
       }, 400);
     });
   });
-} // <-- This closing brace was missing!
+}
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
