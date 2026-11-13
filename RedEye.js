@@ -533,7 +533,7 @@ function initLibraryHover() {
     requestAnimationFrame(animate);
   }
           
-// ===== SMOOTH SPATIAL COLLISION AVOIDANCE =====
+// ===== SAFE SPATIAL COLLISION AVOIDANCE =====
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
             window._ojoAvoidY = 0;
@@ -542,35 +542,44 @@ function initLibraryHover() {
           let targetAvoidX = 0;
           let targetAvoidY = 0;
 
-          const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
-          const ojoCenterX = currentX + 24;
-          const ojoCenterY = currentY + 24;
-          let isColliding = false;
+          try {
+            const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
+            const ojoCenterX = currentX + 24;
+            const ojoCenterY = currentY + 24;
+            let isColliding = false;
 
-          for (const el of blockingElements) {
-            const rect = el.getBoundingClientRect();
-            if (
-              ojoCenterX >= rect.left - 25 &&
-              ojoCenterX <= rect.right + 25 &&
-              ojoCenterY >= rect.top - 25 &&
-              ojoCenterY <= rect.bottom + 25
-            ) {
-              isColliding = true;
-              const spaceAbove = rect.top;
-              if (spaceAbove < 140) {
-                targetAvoidY = 0;
-                targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
-              } else {
-                targetAvoidY = -110;
+            for (const el of blockingElements) {
+              const rect = el.getBoundingClientRect();
+              if (
+                ojoCenterX >= rect.left - 25 &&
+                ojoCenterX <= rect.right + 25 &&
+                ojoCenterY >= rect.top - 25 &&
+                ojoCenterY <= rect.bottom + 25
+              ) {
+                isColliding = true;
+                const spaceAbove = rect.top;
+                if (spaceAbove < 140) {
+                  targetAvoidY = 0;
+                  targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
+                } else {
+                  targetAvoidY = -110;
+                }
+                break;
               }
-              break;
             }
-          }
 
-          if (!isColliding) {
+            if (!isColliding) {
+              targetAvoidX = 0;
+              targetAvoidY = 0;
+            }
+          } catch (err) {
+            // Failsafe: if DOM query fails, default to zero offset so physics never break
             targetAvoidX = 0;
             targetAvoidY = 0;
           }
+
+          window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
+          window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
 
           window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
           window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
