@@ -887,34 +887,28 @@ function attachNavGuide() {
 
 // Dynamic Context Guide for everything on the page (Text, Headers, Images, Links)
 function attachContextualHover() {
-  // Target meaningful content: paragraphs, headers, non-nav links, and images
   const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
   if (!redeyeSpeech) return;
 
   pageElements.forEach(el => {
     el.addEventListener('mouseenter', (e) => {
-      // Prevent overlapping elements from triggering Ojo multiple times simultaneously
       e.stopPropagation();
       let contentText = "";
 
-      // If the user hovers over an image, grab its alt text. Otherwise, grab the visible text.
       if (el.tagName === 'IMG') {
         contentText = el.alt ? el.alt.trim() : "";
       } else {
         contentText = el.innerText ? el.innerText.trim().split('\n')[0] : "";
       }
 
-      // Only evaluate if there is actually content
       if (contentText.length > 2) {
         let matchedInfo = "";
 
-        // 1. Check exact or partial match in your OjoContext dictionary
         if (window.OJO_KNOWLEDGE) {
           if (window.OJO_KNOWLEDGE[contentText]) {
             matchedInfo = window.OJO_KNOWLEDGE[contentText];
           } else {
-            // Find partial matches (e.g. card text containing a collaborator's name)
             const foundKey = Object.keys(window.OJO_KNOWLEDGE).find(
               key => !key.startsWith("_") && contentText.includes(key)
             );
@@ -924,7 +918,6 @@ function attachContextualHover() {
           }
         }
 
-        // 2. Use dictionary entry if found, otherwise use non-generic fallbacks
         if (matchedInfo) {
           redeyeSpeech.textContent = matchedInfo;
         } else {
