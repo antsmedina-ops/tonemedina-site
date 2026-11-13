@@ -513,8 +513,8 @@ function initLibraryHover() {
           let avoidOffsetX = 0;
           let avoidOffsetY = 0;
 
-          // Gather all potential blocking elements on the page (text, cards, images, headers)
-          const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article');
+          // Gather all potential blocking elements on the page (text, cards, images, headers, nav)
+          const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
           const ojoCenterX = currentX + 24;
           const ojoCenterY = currentY + 24;
 
@@ -523,23 +523,26 @@ function initLibraryHover() {
             
             // Check if ¡Ojo!'s center point is sitting inside this element's bounding box
             if (
-              ojoCenterX >= rect.left - 20 &&
-              ojoCenterX <= rect.right + 20 &&
-              ojoCenterY >= rect.top - 20 &&
-              ojoCenterY <= rect.bottom + 20
+              ojoCenterX >= rect.left - 15 &&
+              ojoCenterX <= rect.right + 15 &&
+              ojoCenterY >= rect.top - 15 &&
+              ojoCenterY <= rect.bottom + 15
             ) {
-              // He is over an element! Calculate where the open space is
               const spaceAbove = rect.top;
               const spaceBelow = window.innerHeight - rect.bottom;
 
-              if (spaceAbove > 90) {
-                avoidOffsetY = -95; // Glide above
+              // If we are near the top (like the header/nav area), NEVER squeeze above. Slide to the sides!
+              if (spaceAbove < 120) {
+                avoidOffsetY = 0; 
+                avoidOffsetX = currentX > window.innerWidth / 2 ? -130 : 130; 
+              } else if (spaceAbove > 90) {
+                avoidOffsetY = -95; // Glide above content blocks lower down
               } else if (spaceBelow > 90) {
                 avoidOffsetY = 95;  // Glide below
               } else {
-                avoidOffsetX = currentX > window.innerWidth / 2 ? -100 : 100; // Nudge to side
+                avoidOffsetX = currentX > window.innerWidth / 2 ? -120 : 120; // Nudge to side
               }
-              break; // Once we dodge one collision, apply the move
+              break; 
             }
           }
 
