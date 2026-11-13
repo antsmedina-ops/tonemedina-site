@@ -508,45 +508,41 @@ function initLibraryHover() {
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
-// ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
+          
+// ===== TRUE SPATIAL AWARENESS & COLLISION AVOIDANCE =====
           let avoidOffsetX = 0;
           let avoidOffsetY = 0;
 
-          // Check 4 points around ¡Ojo!'s perimeter (top, bottom, left, right) for text elements
-          const radius = 26;
-          const pointsToCheck = [
-            { x: currentX + 24, y: currentY + 24 }, // Center
-            { x: currentX + 24, y: currentY + 5 },  // Top edge
-            { x: currentX + 24, y: currentY + 43 }, // Bottom edge
-            { x: currentX + 5,  y: currentY + 24 }, // Left edge
-            { x: currentX + 43, y: currentY + 24 }  // Right edge
-          ];
+          // Gather all potential blocking elements on the page (text, cards, images, headers)
+          const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article');
+          const ojoCenterX = currentX + 24;
+          const ojoCenterY = currentY + 24;
 
-          let hitText = false;
-          let targetRect = null;
+          for (const el of blockingElements) {
+            const rect = el.getBoundingClientRect();
+            
+            // Check if ¡Ojo!'s center point is sitting inside this element's bounding box
+            if (
+              ojoCenterX >= rect.left - 20 &&
+              ojoCenterX <= rect.right + 20 &&
+              ojoCenterY >= rect.top - 20 &&
+              ojoCenterY <= rect.bottom + 20
+            ) {
+              // He is over an element! Calculate where the open space is
+              const spaceAbove = rect.top;
+              const spaceBelow = window.innerHeight - rect.bottom;
 
-          for (const pt of pointsToCheck) {
-            const el = document.elementFromPoint(pt.x, pt.y);
-            if (el && ['P', 'H1', 'H2', 'H3', 'H4', 'LI', 'A'].includes(el.tagName)) {
-              hitText = true;
-              targetRect = el.getBoundingClientRect();
-              break;
+              if (spaceAbove > 90) {
+                avoidOffsetY = -95; // Glide above
+              } else if (spaceBelow > 90) {
+                avoidOffsetY = 95;  // Glide below
+              } else {
+                avoidOffsetX = currentX > window.innerWidth / 2 ? -100 : 100; // Nudge to side
+              }
+              break; // Once we dodge one collision, apply the move
             }
           }
 
-          if (hitText && targetRect) {
-            const spaceAbove = targetRect.top;
-            const spaceBelow = window.innerHeight - targetRect.bottom;
-
-            // Instantly push ¡Ojo! clear of the text element's box
-            if (spaceAbove > 70) {
-              avoidOffsetY = -70; 
-            } else if (spaceBelow > 70) {
-              avoidOffsetY = 70;  
-            } else {
-              avoidOffsetX = currentX > window.innerWidth / 2 ? -80 : 80; 
-            }
-          }
           // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
           const rawDestX = activeTargetX + targetOffsetX + driftX + avoidOffsetX;
