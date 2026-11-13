@@ -508,28 +508,43 @@ function initLibraryHover() {
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
-
-   // ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
+// ===== SPATIAL AWARENESS & COLLISION AVOIDANCE =====
           let avoidOffsetX = 0;
           let avoidOffsetY = 0;
 
-          // Sample multiple points around ¡Ojo!'s center to catch text edges early
-          const centerX = currentX + 24;
-          const centerY = currentY + 24;
-          const currentElem = document.elementFromPoint(centerX, centerY);
+          // Check 4 points around ¡Ojo!'s perimeter (top, bottom, left, right) for text elements
+          const radius = 26;
+          const pointsToCheck = [
+            { x: currentX + 24, y: currentY + 24 }, // Center
+            { x: currentX + 24, y: currentY + 5 },  // Top edge
+            { x: currentX + 24, y: currentY + 43 }, // Bottom edge
+            { x: currentX + 5,  y: currentY + 24 }, // Left edge
+            { x: currentX + 43, y: currentY + 24 }  // Right edge
+          ];
 
-          if (currentElem && ['P', 'H1', 'H2', 'H3', 'H4', 'LI', 'A', 'IMG', 'IFRAME'].includes(currentElem.tagName)) {
-            const rect = currentElem.getBoundingClientRect();
-            const spaceAbove = rect.top;
-            const spaceBelow = window.innerHeight - rect.bottom;
+          let hitText = false;
+          let targetRect = null;
 
-            // If we are sitting on text, push much further away (85px) to clear the line entirely
-            if (spaceAbove > 90) {
-              avoidOffsetY = -85; 
-            } else if (spaceBelow > 90) {
-              avoidOffsetY = 85;  
+          for (const pt of pointsToCheck) {
+            const el = document.elementFromPoint(pt.x, pt.y);
+            if (el && ['P', 'H1', 'H2', 'H3', 'H4', 'LI', 'A'].includes(el.tagName)) {
+              hitText = true;
+              targetRect = el.getBoundingClientRect();
+              break;
+            }
+          }
+
+          if (hitText && targetRect) {
+            const spaceAbove = targetRect.top;
+            const spaceBelow = window.innerHeight - targetRect.bottom;
+
+            // Instantly push ¡Ojo! clear of the text element's box
+            if (spaceAbove > 70) {
+              avoidOffsetY = -70; 
+            } else if (spaceBelow > 70) {
+              avoidOffsetY = 70;  
             } else {
-              avoidOffsetX = currentX > window.innerWidth / 2 ? -90 : 90; 
+              avoidOffsetX = currentX > window.innerWidth / 2 ? -80 : 80; 
             }
           }
           // 40px padding keeps the orb fully visible within window edges
