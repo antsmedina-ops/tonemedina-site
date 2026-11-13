@@ -464,7 +464,7 @@ function initLibraryHover() {
       }, 300);
     });
 
-   function animate(timestamp) {
+    function animate(timestamp) {
       if (window.innerWidth > 768) {
         if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
@@ -508,6 +508,30 @@ function initLibraryHover() {
 
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
+
+          // 40px padding keeps the orb fully visible within window edges
+          const padding = 40;
+          const rawDestX = activeTargetX + targetOffsetX + driftX;
+          const rawDestY = activeTargetY + targetOffsetY + driftY;
+          
+          const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
+          const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
+
+          const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
+
+          currentX += (destX - currentX) * lerpSpeed;
+          currentY += (destY - currentY) * lerpSpeed;
+
+          botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+
+          sessionStorage.setItem('ojo_x', currentX);
+          sessionStorage.setItem('ojo_y', currentY);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  }
           
 // ===== SMOOTH SPATIAL COLLISION AVOIDANCE =====
           if (window._ojoAvoidX === undefined) {
