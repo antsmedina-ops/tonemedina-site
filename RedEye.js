@@ -510,7 +510,6 @@ function initLibraryHover() {
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
           
 // ===== SMOOTH SPATIAL COLLISION AVOIDANCE (NO JITTER) =====
-          // Maintain persistent avoidance offsets so they damp smoothly over frames
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
             window._ojoAvoidY = 0;
@@ -524,6 +523,8 @@ function initLibraryHover() {
           const ojoCenterX = currentX + 24;
           const ojoCenterY = currentY + 24;
 
+          let isColliding = false;
+
           for (const el of blockingElements) {
             const rect = el.getBoundingClientRect();
             
@@ -533,10 +534,10 @@ function initLibraryHover() {
               ojoCenterY >= rect.top - 25 &&
               ojoCenterY <= rect.bottom + 25
             ) {
+              isColliding = true;
               const spaceAbove = rect.top;
               const spaceBelow = window.innerHeight - rect.bottom;
 
-              // If near the top header/nav, push smoothly to the side
               if (spaceAbove < 140) {
                 targetAvoidY = 0;
                 targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
@@ -551,7 +552,13 @@ function initLibraryHover() {
             }
           }
 
-          // Smoothly interpolate (lerp) the avoidance so he never teleports or jitters
+          // If not colliding with anything, decay avoidance back to 0 so he moves freely
+          if (!isColliding) {
+            targetAvoidX = 0;
+            targetAvoidY = 0;
+          }
+
+          // Smoothly interpolate (lerp) the avoidance
           window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
           window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
 
@@ -572,6 +579,7 @@ function initLibraryHover() {
 
           sessionStorage.setItem('ojo_x', currentX);
           sessionStorage.setItem('ojo_y', currentY);
+          
   // ===== 3. GREETING TYPEWRITER LOGIC =====
   function triggerGreeting(greetingOverlay, inputArea) {
     greetingOverlay.style.display = 'block';
