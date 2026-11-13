@@ -890,40 +890,51 @@ function attachContextualHover() {
   // Target meaningful content: paragraphs, headers, non-nav links, and images
   const pageElements = document.querySelectorAll('p, h1, h2, h3, a:not(nav a):not(header a), img');
   const redeyeSpeech = document.getElementById('ojo-ambient-bubble');
-
   if (!redeyeSpeech) return;
 
   pageElements.forEach(el => {
     el.addEventListener('mouseenter', (e) => {
       // Prevent overlapping elements from triggering Ojo multiple times simultaneously
       e.stopPropagation();
-
       let contentText = "";
 
       // If the user hovers over an image, grab its alt text. Otherwise, grab the visible text.
       if (el.tagName === 'IMG') {
         contentText = el.alt ? el.alt.trim() : "";
       } else {
-        contentText = el.innerText ? el.innerText.trim().split('\n')[0] : ""; 
-      }
-      
-      // Truncate to avoid massive speech bubbles covering the screen
-      if (contentText.length > 30) {
-        contentText = contentText.substring(0, 30) + '...';
+        contentText = el.innerText ? el.innerText.trim().split('\n')[0] : "";
       }
 
-      // Only speak if there is actually a word to say
+      // Only evaluate if there is actually content
       if (contentText.length > 2) {
-        const observations = [
-          `Curious about ${contentText}?`,
-          `Ah, ${contentText}.`,
-          `Thinking about ${contentText}?`,
-          `Looking at ${contentText}...`
-        ];
-        
-        const randomReply = observations[Math.floor(Math.random() * observations.length)];
+        let matchedInfo = "";
 
-        redeyeSpeech.textContent = randomReply;
+        // 1. Check exact or partial match in your OjoContext dictionary
+        if (window.OJO_KNOWLEDGE) {
+          if (window.OJO_KNOWLEDGE[contentText]) {
+            matchedInfo = window.OJO_KNOWLEDGE[contentText];
+          } else {
+            // Find partial matches (e.g. card text containing a collaborator's name)
+            const foundKey = Object.keys(window.OJO_KNOWLEDGE).find(
+              key => !key.startsWith("_") && contentText.includes(key)
+            );
+            if (foundKey) {
+              matchedInfo = window.OJO_KNOWLEDGE[foundKey];
+            }
+          }
+        }
+
+        // 2. Use dictionary entry if found, otherwise use non-generic fallbacks
+        if (matchedInfo) {
+          redeyeSpeech.textContent = matchedInfo;
+        } else {
+          const fallbacks = window.OJO_KNOWLEDGE?._FALLBACKS || [
+            "Worth a click if you're digging into the local scene.",
+            "One of Tone's vetted connections—go ahead and explore."
+          ];
+          redeyeSpeech.textContent = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
         redeyeSpeech.style.display = 'block';
         redeyeSpeech.style.opacity = '1';
       }
@@ -935,7 +946,7 @@ function attachContextualHover() {
         if (redeyeSpeech.style.opacity === '0') {
           redeyeSpeech.style.display = 'none';
         }
-      }, 400); 
+      }, 400);
     });
   });
 }
@@ -943,12 +954,5 @@ function attachContextualHover() {
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   attachNavGuide();
-  attachContextualHover(); 
+  attachContextualHover();
 });
-  
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
-  attachNavGuide();
-});
-  
-})();
