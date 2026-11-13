@@ -961,3 +961,5 @@ if (document.readyState === 'loading') {
   attachNavGuide();
   attachContextualHover();
 }
+
+})();
