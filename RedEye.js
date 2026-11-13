@@ -509,7 +509,7 @@ function initLibraryHover() {
           const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
           const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
           
-// ===== SMOOTH SPATIAL COLLISION AVOIDANCE (NO JITTER) =====
+// ===== SMOOTH SPATIAL COLLISION AVOIDANCE =====
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
             window._ojoAvoidY = 0;
@@ -518,16 +518,13 @@ function initLibraryHover() {
           let targetAvoidX = 0;
           let targetAvoidY = 0;
 
-          // Gather blocking elements
           const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
           const ojoCenterX = currentX + 24;
           const ojoCenterY = currentY + 24;
-
           let isColliding = false;
 
           for (const el of blockingElements) {
             const rect = el.getBoundingClientRect();
-            
             if (
               ojoCenterX >= rect.left - 25 &&
               ojoCenterX <= rect.right + 25 &&
@@ -536,33 +533,24 @@ function initLibraryHover() {
             ) {
               isColliding = true;
               const spaceAbove = rect.top;
-              const spaceBelow = window.innerHeight - rect.bottom;
-
               if (spaceAbove < 140) {
                 targetAvoidY = 0;
                 targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
-              } else if (spaceAbove > 100) {
-                targetAvoidY = -110; 
-              } else if (spaceBelow > 100) {
-                targetAvoidY = 110;  
               } else {
-                targetAvoidX = currentX > window.innerWidth / 2 ? -130 : 130; 
+                targetAvoidY = -110;
               }
-              break; 
+              break;
             }
           }
 
-          // If not colliding with anything, decay avoidance back to 0 so he moves freely
           if (!isColliding) {
             targetAvoidX = 0;
             targetAvoidY = 0;
           }
 
-          // Smoothly interpolate (lerp) the avoidance
           window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
           window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
 
-          // 40px padding keeps the orb fully visible within window edges
           const padding = 40;
           const rawDestX = activeTargetX + targetOffsetX + driftX + window._ojoAvoidX;
           const rawDestY = activeTargetY + targetOffsetY + driftY + window._ojoAvoidY;
