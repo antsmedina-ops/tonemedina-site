@@ -431,17 +431,23 @@
       botDiv.style.opacity = '1';
     });
 
+    // Start in open negative space (upper-right area of the canvas), never (0,0)
+    currentX = window.innerWidth * 0.75;
+    currentY = window.innerHeight * 0.35;
+    targetX = currentX;
+    targetY = currentY;
+
     let isHovered = false;
     let mouseIdleTimer = null;
     let isHesitating = true;
-    let driftDampener = 1; 
-    
+    let driftDampener = 1;
+
     let restingX = currentX;
     let restingY = currentY;
 
     botDiv.addEventListener('mouseenter', () => { isHovered = true; });
-    botDiv.addEventListener('mouseleave', () => { 
-      isHovered = false; 
+    botDiv.addEventListener('mouseleave', () => {
+      isHovered = false;
       restingX = currentX;
       restingY = currentY;
     });
@@ -450,10 +456,10 @@
       targetX = e.clientX;
       targetY = e.clientY;
 
-      isHesitating = true; 
+      isHesitating = true;
       if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
       mouseIdleTimer = setTimeout(() => {
-        isHesitating = false; 
+        isHesitating = false;
       }, 400);
     });
 
@@ -462,38 +468,25 @@
         if (!isHovered && chatWindowDiv.style.display !== 'flex') {
           const time = timestamp * 0.001;
 
-          let activeTargetX;
-          let activeTargetY;
-          let targetOffsetX = 0;
-          let targetOffsetY = 0;
+          // Free-floating personal space repulsion (no nav docking)
+          const distX = targetX - restingX;
+          const distY = targetY - restingY;
+          const distanceToMouse = Math.sqrt(distX * distX + distY * distY) || 1;
+          const personalSpaceRadius = 240;
 
-          if (isHoveringNav && window.redeyeDockX !== undefined && window.redeyeDockX !== null) {
-            activeTargetX = window.redeyeDockX;
-            activeTargetY = window.redeyeDockY;
-            targetOffsetX = -24; 
-            targetOffsetY = -24;
-            restingX = activeTargetX + targetOffsetX;
-            restingY = activeTargetY + targetOffsetY;
-          } else {
-            const distX = targetX - restingX;
-            const distY = targetY - restingY;
-            const distanceToMouse = Math.sqrt(distX * distX + distY * distY);
-            const magneticRadius = 260; 
+          let activeTargetX = restingX;
+          let activeTargetY = restingY;
 
-            if (distanceToMouse < magneticRadius) {
-               const pushFactor = (1 - (distanceToMouse / magneticRadius)) * 35;
-               activeTargetX = restingX - (distX / distanceToMouse) * pushFactor;
-               activeTargetY = restingY - (distY / distanceToMouse) * pushFactor;
-            } else {
-               activeTargetX = restingX;
-               activeTargetY = restingY;
-            }
+          if (distanceToMouse < personalSpaceRadius) {
+            const pushFactor = (1 - (distanceToMouse / personalSpaceRadius)) * 45;
+            activeTargetX = restingX - (distX / distanceToMouse) * pushFactor;
+            activeTargetY = restingY - (distY / distanceToMouse) * pushFactor;
           }
 
           driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.1;
 
-          const driftX = (Math.sin(time * 0.8) * 12 + Math.cos(time * 0.5) * 6) * driftDampener;
-          const driftY = (Math.cos(time * 0.6) * 12 + Math.sin(time * 0.3) * 4) * driftDampener;
+          const driftX = (Math.sin(time * 0.8) * 14 + Math.cos(time * 0.5) * 6) * driftDampener;
+          const driftY = (Math.cos(time * 0.6) * 14 + Math.sin(time * 0.3) * 5) * driftDampener;
 
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
@@ -504,19 +497,25 @@
           let targetAvoidY = 0;
 
           try {
-            const blockingElements = document.querySelectorAll('.card, article, img, iframe');
+            // Avoid nav bar, headers, artwork cards, and iframes—without twitching on every word
+            const blockingElements = document.querySelectorAll('nav, header, h1, h2, .card, article, img, iframe');
             const ojoCenterX = currentX + 24;
             const ojoCenterY = currentY + 24;
 
             for (const el of blockingElements) {
               const rect = el.getBoundingClientRect();
               if (
-                ojoCenterX >= rect.left &&
-                ojoCenterX <= rect.right &&
-                ojoCenterY >= rect.top &&
-                ojoCenterY <= rect.bottom
+                ojoCenterX >= rect.left - 15 &&
+                ojoCenterX <= rect.right + 15 &&
+                ojoCenterY >= rect.top - 15 &&
+                ojoCenterY <= rect.bottom + 15
               ) {
-                targetAvoidY = rect.top > window.innerHeight / 2 ? -70 : 70;
+                // If overlapping the top nav/header, glide downward into open space
+                if (rect.top < 100) {
+                  targetAvoidY = 90;
+                } else {
+                  targetAvoidY = rect.top > window.innerHeight / 2 ? -80 : 80;
+                }
                 break;
               }
             }
@@ -528,26 +527,24 @@
           window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.05;
           window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.05;
 
-          const padding = 30;
-          const rawDestX = activeTargetX + targetOffsetX + driftX + window._ojoAvoidX;
-          const rawDestY = activeTargetY + targetOffsetY + driftY + window._ojoAvoidY;
-          
+          const padding = 60;
+          const rawDestX = activeTargetX + driftX + window._ojoAvoidX;
+          const rawDestY = activeTargetY + driftY + window._ojoAvoidY;
+
           const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
           const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
 
-          const lerpSpeed = 0.035;
+          const lerpSpeed = 0.03;
 
           currentX += (destX - currentX) * lerpSpeed;
           currentY += (destY - currentY) * lerpSpeed;
 
           botDiv.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
-
-          sessionStorage.setItem('ojo_x', currentX);
-          sessionStorage.setItem('ojo_y', currentY);
         }
       }
       requestAnimationFrame(animate);
     }
+
     requestAnimationFrame(animate);
   }
 
