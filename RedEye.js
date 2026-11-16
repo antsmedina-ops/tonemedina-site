@@ -425,7 +425,7 @@
     });
   }
 
-  // ===== 2. DESKTOP MOUSE TRACKING PHYSICS & COLLISION AVOIDANCE =====
+ // ===== 2. DESKTOP MOUSE TRACKING PHYSICS & COLLISION AVOIDANCE (REFINED) =====
   function initDesktopTracking() {
     requestAnimationFrame(() => {
       botDiv.style.opacity = '1';
@@ -454,7 +454,7 @@
       if (mouseIdleTimer) clearTimeout(mouseIdleTimer);
       mouseIdleTimer = setTimeout(() => {
         isHesitating = false; 
-      }, 300);
+      }, 400); // Slightly smoother hesitation window
     });
 
     function animate(timestamp) {
@@ -478,24 +478,25 @@
             const distX = targetX - restingX;
             const distY = targetY - restingY;
             const distanceToMouse = Math.sqrt(distX * distX + distY * distY);
-            const magneticRadius = 300; 
+            const magneticRadius = 260; 
 
+            // Gentle repulsion / drift away from the cursor rather than harsh pulling
             if (distanceToMouse < magneticRadius) {
-               const pullStrength = 0.25; 
-               activeTargetX = restingX + (distX * pullStrength);
-               activeTargetY = restingY + (distY * pullStrength);
+               const pushFactor = (1 - (distanceToMouse / magneticRadius)) * 35;
+               activeTargetX = restingX - (distX / distanceToMouse) * pushFactor;
+               activeTargetY = restingY - (distY / distanceToMouse) * pushFactor;
             } else {
                activeTargetX = restingX;
                activeTargetY = restingY;
             }
           }
 
-          driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.15;
+          driftDampener += ((isHesitating ? 1 : 0) - driftDampener) * 0.1;
 
-          const driftX = (Math.sin(time * 1.2) * 8 + Math.cos(time * 0.7) * 4) * driftDampener;
-          const driftY = (Math.cos(time * 0.9) * 8 + Math.sin(time * 0.4) * 4) * driftDampener;
+          // Softer, breathing sinusoidal drift
+          const driftX = (Math.sin(time * 0.8) * 12 + Math.cos(time * 0.5) * 6) * driftDampener;
+          const driftY = (Math.cos(time * 0.6) * 12 + Math.sin(time * 0.3) * 6) * driftDampener;
 
-          // Safe Spatial Collision Avoidance Offset Calculation
           if (window._ojoAvoidX === undefined) {
             window._ojoAvoidX = 0;
             window._ojoAvoidY = 0;
@@ -505,51 +506,43 @@
           let targetAvoidY = 0;
 
           try {
-            const blockingElements = document.querySelectorAll('p, h1, h2, h3, h4, li, a, img, .card, article, nav, header');
+            // Check only core container blocks or active imagery to prevent twitching over every text line
+            const blockingElements = document.querySelectorAll('.card, article, img, iframe');
             const ojoCenterX = currentX + 24;
             const ojoCenterY = currentY + 24;
-            let isColliding = false;
 
             for (const el of blockingElements) {
               const rect = el.getBoundingClientRect();
+              // Only react if Ojo directly overlaps a major artwork or frame
               if (
-                ojoCenterX >= rect.left - 25 &&
-                ojoCenterX <= rect.right + 25 &&
-                ojoCenterY >= rect.top - 25 &&
-                ojoCenterY <= rect.bottom + 25
+                ojoCenterX >= rect.left &&
+                ojoCenterX <= rect.right &&
+                ojoCenterY >= rect.top &&
+                ojoCenterY <= rect.bottom
               ) {
-                isColliding = true;
-                const spaceAbove = rect.top;
-                if (spaceAbove < 140) {
-                  targetAvoidY = 0;
-                  targetAvoidX = currentX > window.innerWidth / 2 ? -150 : 150;
-                } else {
-                  targetAvoidY = -110;
-                }
+                // Glide gracefully toward whichever screen edge has more open breathing room
+                targetAvoidY = rect.top > window.innerHeight / 2 ? -70 : 70;
                 break;
               }
-            }
-
-            if (!isColliding) {
-              targetAvoidX = 0;
-              targetAvoidY = 0;
             }
           } catch (err) {
             targetAvoidX = 0;
             targetAvoidY = 0;
           }
 
-          window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.1;
-          window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.1;
+          // Butter-smooth interpolation for avoidance shifts
+          window._ojoAvoidX += (targetAvoidX - window._ojoAvoidX) * 0.05;
+          window._ojoAvoidY += (targetAvoidY - window._ojoAvoidY) * 0.05;
 
-          const padding = 40;
+          const padding = 30;
           const rawDestX = activeTargetX + targetOffsetX + driftX + window._ojoAvoidX;
           const rawDestY = activeTargetY + targetOffsetY + driftY + window._ojoAvoidY;
           
           const destX = Math.max(padding, Math.min(rawDestX, window.innerWidth - padding));
           const destY = Math.max(padding, Math.min(rawDestY, window.innerHeight - padding));
 
-          const lerpSpeed = isHoveringNav ? 0.015 : 0.02;
+          // Lower LERP speed for a floating, weightless, ghost-like drift
+          const lerpSpeed = 0.035;
 
           currentX += (destX - currentX) * lerpSpeed;
           currentY += (destY - currentY) * lerpSpeed;
