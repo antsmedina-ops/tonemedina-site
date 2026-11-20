@@ -66,6 +66,20 @@
   ];
   const bubbleDiv = document.createElement('div');  
 
+  let bubbleHideTimer = null;
+
+function scheduleBubbleHide(delayMs, isMobileScreen) {
+  clearTimeout(bubbleHideTimer);
+  bubbleHideTimer = setTimeout(() => {
+    bubbleDiv.style.opacity = '0';
+    if (isMobileScreen) {
+      bubbleDiv.style.transform = 'translateY(0)';
+    } else {
+      bubbleDiv.style.transform = 'translateX(-50%) translateY(0)';
+    }
+  }, delayMs);
+}
+
   // Mouse tracking targets & state variables
   const savedX = sessionStorage.getItem('ojo_x');
   const savedY = sessionStorage.getItem('ojo_y');
@@ -240,25 +254,29 @@
     `;
     botDiv.title = '¡Ojo!';
 
-    bubbleDiv.id = 'ojo-ambient-bubble';
-    bubbleDiv.style.cssText = `
-      position: absolute;
-      bottom: 55px;
-      ${isMobile ? 'right: 0; left: auto;' : 'left: 50%;'}
-      background: rgba(15, 0, 0, 0.95);
-      color: #ff4d4d;
-      border: 1px solid #8B0000;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-family: monospace;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      box-shadow: 0 0 10px rgba(139, 0, 0, 0.6);
-      z-index: 1000000;
-    `;
+  bubbleDiv.id = 'ojo-ambient-bubble';
+  bubbleDiv.style.cssText = `
+    position: absolute;
+    bottom: 58px;
+    ${isMobile ? 'right: 0; left: auto;' : 'left: 50%;'}
+    background: rgba(15, 0, 0, 0.96);
+    color: #ff5c5c;
+    border: 1px solid #8B0000;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: 'Courier Prime', monospace;
+    width: max-content;
+    max-width: 260px;
+    white-space: normal;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    box-shadow: 0 0 12px rgba(139, 0, 0, 0.7);
+    z-index: 1000000;
+  `;
     
     botDiv.appendChild(bubbleDiv);
     
@@ -810,11 +828,11 @@
       archiveTrigger.addEventListener('mouseenter', () => {
         const bubbleDiv = document.getElementById('ojo-ambient-bubble');
         if (bubbleDiv) {
-          bubbleDiv.textContent = "lives in the experience.";
+          bubbleDiv.textContent = "you need to experience it.";
           bubbleDiv.style.opacity = '1';
           setTimeout(() => {
             bubbleDiv.style.opacity = '0';
-          }, 4000);
+          }, 6000);
         }
       });
     }
